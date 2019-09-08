@@ -1,2 +1,5 @@
-FROM ruby:2.3
-RUN gem install jekyll bundler
+FROM ruby:2.5
+ADD Gemfile /Gemfile
+
+RUN gem install jekyll bundler;\
+    bundle install
