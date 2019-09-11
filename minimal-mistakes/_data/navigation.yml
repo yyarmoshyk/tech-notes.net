@@ -11,13 +11,9 @@ main:
   # - title: "Sitemap"
   #   url: /sitemap/
 docs:
-  - title: Getting Started
+  - title: Test nav
     children:
-      - title: "Quick-Start Guide"
-        url: /docs/quick-start-guide/
-      - title: "Structure"
-        url: /docs/structure/
-      - title: "Installation"
-        url: /docs/installation/
-      - title: "Upgrading"
-        url: /docs/upgrading/
+      - title: "Test1"
+        url: /docs/test-doc-1/
+      - title: "Test2"
+        url: /docs/test-doc-2/
