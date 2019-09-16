@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://0.0.0.0:4000/" rel="alternate" type="text/html" /><updated>2019-09-16T12:09:05+00:00</updated><id>http://0.0.0.0:4000/feed.xml</id><title type="html">Tech Notes</title><subtitle>Usefull Operations notes</subtitle><author><name>Yaroslav Yarmoshyk</name></author><entry><title type="html">Reading unique records from file</title><link href="http://0.0.0.0:4000/bash/unique-ips-from-apache-log/" rel="alternate" type="text/html" title="Reading unique records from file" /><published>2018-04-16T00:00:00+00:00</published><updated>2018-04-16T00:00:00+00:00</updated><id>http://0.0.0.0:4000/bash/unique-ips-from-apache-log</id><content type="html" xml:base="http://0.0.0.0:4000/bash/unique-ips-from-apache-log/">&lt;p&gt;The following command can be executed to read unique IPs from the apache access log. Different variations can be used to process records from any file:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cat &lt;/span&gt;access.log | awk &lt;span class=&quot;s1&quot;&gt;'{print $1}'&lt;/span&gt; | sort &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; | uniq &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; | sort &lt;span class=&quot;nt&quot;&gt;-nr&lt;/span&gt; | head &lt;span class=&quot;nt&quot;&gt;-20&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Yaroslav Yarmoshyk</name></author><category term="Bash" /><category term="Apache" /><category term="awk" /><summary type="html">How to quickly install and setup Minimal Mistakes for use with GitHub Pages.</summary></entry><entry><title type="html">Install Wireshark to Ubuntu 16.04/14.04</title><link href="http://0.0.0.0:4000/ubuntu%20desktop/install-wireshark-ubuntu-desktop/" rel="alternate" type="text/html" title="Install Wireshark to Ubuntu 16.04/14.04" /><published>2018-03-17T00:00:00+00:00</published><updated>2018-03-17T00:00:00+00:00</updated><id>http://0.0.0.0:4000/ubuntu%20desktop/install-wireshark-ubuntu-desktop</id><content type="html" xml:base="http://0.0.0.0:4000/ubuntu%20desktop/install-wireshark-ubuntu-desktop/">&lt;p&gt;&lt;a href=&quot;https://www.wireshark.org/&quot;&gt;WireShark&lt;/a&gt; is a great tool to analyze the network traffic. One day I discovered that it is not a trivial task to gegt it installed on Ubuntu.
+There is a surce package available for linux:
+&lt;a href=&quot;https://1.na.dl.wireshark.org/src/wireshark-3.1.0.tar.xz&quot;&gt;https://1.na.dl.wireshark.org/src/wireshark-3.1.0.tar.xz&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;However it is way easier to get it installed using the default package manager:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;add-apt-repository ppa:wireshark-dev/stable
+apt-get update
+apt-get install wireshark
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Yaroslav Yarmoshyk</name></author><category term="ubuntu" /><category term="wireshark" /><summary type="html">How to quickly install and setup Minimal Mistakes for use with GitHub Pages.</summary></entry><entry><title type="html">Sed crib</title><link href="http://0.0.0.0:4000/bash/sed-crib/" rel="alternate" type="text/html" title="Sed crib" /><published>2014-12-03T00:00:00+00:00</published><updated>2018-04-16T00:00:00+00:00</updated><id>http://0.0.0.0:4000/bash/sed-crib</id><content type="html" xml:base="http://0.0.0.0:4000/bash/sed-crib/">&lt;p&gt;Sed is a streaming text editor in UNIX-like OS’es that allows to quickly edit contents of the commands outputs and edit files in place.&lt;/p&gt;
+
+&lt;p&gt;The standart syntax is the following&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;options] commands &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;file name]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Next you can find a lot of examples of sed usage&lt;/p&gt;
+
+&lt;p&gt;Replace the word (root -&amp;gt; Admin):&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;s1&quot;&gt;'s/root/Admin/'&lt;/span&gt; file_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This command will print the contents of the &lt;code class=&quot;highlighter-rouge&quot;&gt;file_name&lt;/code&gt; into the &lt;code class=&quot;highlighter-rouge&quot;&gt;stdout&lt;/code&gt; replacing &lt;code class=&quot;highlighter-rouge&quot;&gt;root&lt;/code&gt; with &lt;code class=&quot;highlighter-rouge&quot;&gt;admin&lt;/code&gt;
+Please note that replacement will be applied only to the first occurrence.
+In order to update all records - use key &lt;code class=&quot;highlighter-rouge&quot;&gt;g&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;s1&quot;&gt;'s/root/Admin/g'&lt;/span&gt; file_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Usually &lt;code class=&quot;highlighter-rouge&quot;&gt;sed&lt;/code&gt; experssion consists of 2 parts devided with &lt;code class=&quot;highlighter-rouge&quot;&gt;/&lt;/code&gt;. You define what you need to be updated on the left, and the new value on the right.
+If you need to define multiple expressions then use &lt;code class=&quot;highlighter-rouge&quot;&gt;-e&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'s/root/Admin/g'&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'s/bash/sh/g'&lt;/span&gt; file_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Word replacement in the lines that contain particular word (replace &lt;code class=&quot;highlighter-rouge&quot;&gt;root&lt;/code&gt; with &lt;code class=&quot;highlighter-rouge&quot;&gt;Admin&lt;/code&gt; in the lines that contain keyword &lt;code class=&quot;highlighter-rouge&quot;&gt;user&lt;/code&gt;)&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;s1&quot;&gt;'/user/s/root/Admin/g'&lt;/span&gt; file_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you need to update file in place then use &lt;code class=&quot;highlighter-rouge&quot;&gt;-i&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/user/s/root/Admin/g'&lt;/span&gt; file_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Delete 5th line:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'5d'&lt;/span&gt; file_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In order to create the backup of the original file beforee replacement use &lt;code class=&quot;highlighter-rouge&quot;&gt;-i.bak&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt;.bak &lt;span class=&quot;s1&quot;&gt;'5d'&lt;/span&gt; file_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Remove the line that contains particular word (ex. &lt;code class=&quot;highlighter-rouge&quot;&gt;games&lt;/code&gt;):&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;s1&quot;&gt;'/games/d'&lt;/span&gt; file_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Remove all empty lines:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;s1&quot;&gt;'/^$/d'&lt;/span&gt; file_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Print the range of lines (in this example the lines lines between 1 and 5 will be printed)&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'1,5p'&lt;/span&gt; file_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;modifying-stdout&quot;&gt;Modifying stdout&lt;/h2&gt;
+&lt;p&gt;As I’ve mentioned before &lt;code class=&quot;highlighter-rouge&quot;&gt;sed&lt;/code&gt; can be used to modify the output of any command
+For example compare the output of the following command&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;fd &lt;span class=&quot;nt&quot;&gt;-kh&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;and its’ modified output:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;df &lt;span class=&quot;nt&quot;&gt;-kh&lt;/span&gt; |sed &lt;span class=&quot;s1&quot;&gt;'s/%/000000/g'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;special-chars&quot;&gt;Special chars&lt;/h2&gt;
+
+&lt;p&gt;You can use special chars:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;^&lt;/code&gt; - line beginning&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$&lt;/code&gt; - line end&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt; - any single character&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The complete set is unlimited. &lt;code class=&quot;highlighter-rouge&quot;&gt;Sed&lt;/code&gt; works great with regular expressions.&lt;/p&gt;
+
+&lt;p&gt;The following command will update the lines that start with &lt;code class=&quot;highlighter-rouge&quot;&gt;user&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;s1&quot;&gt;'/^user/s/root/Admin/g'&lt;/span&gt; file_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The following command will update the lines with trailing &lt;code class=&quot;highlighter-rouge&quot;&gt;data&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;s1&quot;&gt;'/data$/s/root/Admin/g'&lt;/span&gt; file_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you need to use some special character in &lt;code class=&quot;highlighter-rouge&quot;&gt;sed&lt;/code&gt; expresion then it needs to be escaped with &lt;code class=&quot;highlighter-rouge&quot;&gt;\&lt;/code&gt;.
+In the following expample the word &lt;code class=&quot;highlighter-rouge&quot;&gt;root&lt;/code&gt;+space after it will be replaced by &lt;code class=&quot;highlighter-rouge&quot;&gt;Admin:&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;s1&quot;&gt;'s/root\ /Admin:/g'&lt;/span&gt; file_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;В случае использования символа | (pipe) в качестве разделителя спецсимволы экранировать не нужно, но при этом регулярные выражения работать не будут
+One can use &lt;code class=&quot;highlighter-rouge&quot;&gt;|&lt;/code&gt; (pipe) or &lt;code class=&quot;highlighter-rouge&quot;&gt;:&lt;/code&gt; as an expression separator. In this case you don’t need to escape special chars but regular expressions will not work.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;s1&quot;&gt;'s|root |Admin:|g'&lt;/span&gt; file_name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;regular-expressions&quot;&gt;Regular expressions&lt;/h2&gt;
+&lt;p&gt;Remove all numbers from the output:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;s1&quot;&gt;'s/[0-9][0-9]//g'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;repeat-the-value&quot;&gt;Repeat the value:&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;s1&quot;&gt;'s/root/&amp;amp; &amp;amp;/g'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Check out the output of the following:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;123 abc&quot;&lt;/span&gt; | sed &lt;span class=&quot;s1&quot;&gt;'s/[0-9][0-9]*/&amp;amp;-&amp;amp;/'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Regular expression &lt;code class=&quot;highlighter-rouge&quot;&gt;&quot;[0-9]*&quot;&lt;/code&gt; defines 0 or more numbers
+Regular expression &lt;code class=&quot;highlighter-rouge&quot;&gt;&quot;[0-9]+&quot;&lt;/code&gt; defines 1 or more numbers&lt;/p&gt;
+
+&lt;p&gt;If you need to use the first word from the string - define it by escaped number.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;s1&quot;&gt;'s/\([a-z]*\).*/\1/'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Check this out:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;abcd qwer zxc 123&quot;&lt;/span&gt;| sed &lt;span class=&quot;s1&quot;&gt;'s/\([a-z]*\).*/\1/'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;swap-the-numbers&quot;&gt;Swap the numbers:&lt;/h3&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;s1&quot;&gt;'s/\([a-z]*\) \([a-z]*\)/\2 \1/'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The space in the left side of the expression can be replaces by any other separator.&lt;/p&gt;
+
+&lt;p&gt;Two tests:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;abcd qwer zxc 123&quot;&lt;/span&gt;| sed &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'s/([a-z]+) ([a-z]+)/\2 \1/'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;and&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;abcd_qwer_zxc_123&quot;&lt;/span&gt;| sed &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'s/([a-z]+)_([a-z]+)/\2_\1/'&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;abcd_qwer_zxc_123&quot;&lt;/span&gt;| sed &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'s/([a-z]+)_([a-z]+)/\2 \1/'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;replace-the-text-between-two-words&quot;&gt;Replace the text between two words&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;nt&quot;&gt;-ure&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'s/word1.+?word2/word1\ замена\ word2/g'&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; файл
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;using-variables-in-sed-expressions&quot;&gt;Using variables in sed expressions&lt;/h2&gt;
+&lt;p&gt;Everybody use variables in bash scripts. Sometimes you need to use &lt;code class=&quot;highlighter-rouge&quot;&gt;sed&lt;/code&gt; with the particular variable.
+The easieast way is to use &lt;code class=&quot;highlighter-rouge&quot;&gt;&quot;&lt;/code&gt; (double quotes) to wrap sed expressions&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;s2&quot;&gt;&quot;s/&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$var1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$var2&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/g&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;However double quotes don’t work if one of &lt;code class=&quot;highlighter-rouge&quot;&gt;$var1&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;$var2&lt;/code&gt; contains special chars. The proper work arround is to exclude variables from wrap (pay attention to single quotes arround the variables:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;s1&quot;&gt;'s/'&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$var1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$var2&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'/g'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Complete documentation can be read at &lt;a href=&quot;https://www.gnu.org/software/sed/manual/sed.html&quot;&gt;gnu.org&lt;/a&gt;&lt;/p&gt;</content><author><name>Yaroslav Yarmoshyk</name></author><category term="sed" /><summary type="html">Many examples of using sed.</summary></entry></feed>
