@@ -1,0 +1,17 @@
+main:
+  - title: "Posts"
+    url: /posts/
+  - title: "Categories"
+    url: /categories/
+  - title: "Tags"
+    url: /tags/
+  - title: "About"
+    url: /about/
+
+docs:
+  - title: Categories
+    children:
+    - title: "Blog"
+      url: /categories/#blog
+    - title: "Test"
+      url: /categories/#test
