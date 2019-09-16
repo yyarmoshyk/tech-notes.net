@@ -1,0 +1,22 @@
+{% if page.author_profile or layout.author_profile or page.sidebar %}
+  {% assign categories_max = 0 %}
+  {% for category in site.categories %}
+    {% if category[1].size > categories_max %}
+      {% assign categories_max = category[1].size %}
+    {% endif %}
+  {% endfor %}
+  <div class="sidebar sticky">
+  <span class="nav__sub-title">Categories</span>
+  {% for i in (1..categories_max) reversed %}
+    {% for category in site.categories %}
+      {% if category[1].size == i %}
+        <li>
+          <a href="/categories/#{{ category[0] | slugify }}">
+            <strong>{{ category[0] }}</strong> <span class="taxonomy__count">{{ i }}</span>
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+  </div>
+{% endif %}

@@ -3,6 +3,12 @@ permalink: /about/
 title: "About"
 ---
 
-Tempor velit sint sunt ipsum tempor enim ad qui ullamco. Est dolore anim ad velit duis dolore minim sunt aliquip amet commodo labore. Ut eu pariatur aute ea aute excepteur laborum. Esse ea esse excepteur minim mollit qui cillum excepteur ex dolore magna. Labore deserunt fugiat incididunt incididunt sint ea. Consequat dolore aute laboris quis proident quis non et est consectetur ex eiusmod sit culpa.
+This is the reload of the existing site. Initially all articles were written in Russian language but I was seeing traffic coming from other countries, so it was decided to re-brand the site into the international language that can be read by any developer or system engineer.
+The original site was running with `WordPress CMS` that is outside of my interests today, so there is no cense to pay $$ every month for cloud server with `php`, `nginx` and `mysql` that is required to run WordPress.
 
-Cupidatat ea do et in excepteur in. Ad nostrud ut est esse eu duis ea sunt eiusmod. Aliquip tempor veniam sint elit fugiat. Velit incididunt laboris amet incididunt labore dolore irure velit excepteur commodo deserunt laborum. Consectetur eu fugiat veniam veniam Lorem labore magna eiusmod. Ea occaecat reprehenderit pariatur consectetur minim labore ut aliquip.
+The decision was taken towards [jekyll](https://jekyllrb.com/) content management system.
+All posts in this blog are available in the internet, so I don't see any risks sharing the source via [github.com](https://github.com/yyarmoshyk/tech-notes.net)
+
+Right now I'm working on translation of most of the articles - I will not spend time on the posts that are not being read in the existing site.
+
+The further plan is to extend the existing base with the new articles related to cloud, Ci/CD and other recent experience.
