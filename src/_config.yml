@@ -24,6 +24,7 @@ github_username: username
 minimal_mistakes_skin: default
 search: true
 host: 0.0.0.0
+repository: yyarmoshyk/tech-notes.net
 
 # Build settings
 markdown: kramdown
