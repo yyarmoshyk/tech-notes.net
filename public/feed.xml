@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://0.0.0.0:4000/" rel="alternate" type="text/html" /><updated>2019-09-16T12:09:05+00:00</updated><id>http://0.0.0.0:4000/feed.xml</id><title type="html">Tech Notes</title><subtitle>Usefull Operations notes</subtitle><author><name>Yaroslav Yarmoshyk</name></author><entry><title type="html">Reading unique records from file</title><link href="http://0.0.0.0:4000/bash/unique-ips-from-apache-log/" rel="alternate" type="text/html" title="Reading unique records from file" /><published>2018-04-16T00:00:00+00:00</published><updated>2018-04-16T00:00:00+00:00</updated><id>http://0.0.0.0:4000/bash/unique-ips-from-apache-log</id><content type="html" xml:base="http://0.0.0.0:4000/bash/unique-ips-from-apache-log/">&lt;p&gt;The following command can be executed to read unique IPs from the apache access log. Different variations can be used to process records from any file:&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://0.0.0.0:4000/" rel="alternate" type="text/html" /><updated>2019-09-22T13:01:19+00:00</updated><id>http://0.0.0.0:4000/feed.xml</id><title type="html">Tech Notes</title><subtitle>Usefull Operations notes</subtitle><author><name>Yaroslav Yarmoshyk</name></author><entry><title type="html">Reading unique records from file</title><link href="http://0.0.0.0:4000/bash/unique-ips-from-apache-log/" rel="alternate" type="text/html" title="Reading unique records from file" /><published>2018-04-16T00:00:00+00:00</published><updated>2018-04-16T00:00:00+00:00</updated><id>http://0.0.0.0:4000/bash/unique-ips-from-apache-log</id><content type="html" xml:base="http://0.0.0.0:4000/bash/unique-ips-from-apache-log/">&lt;p&gt;The following command can be executed to read unique IPs from the apache access log. Different variations can be used to process records from any file:&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cat &lt;/span&gt;access.log | awk &lt;span class=&quot;s1&quot;&gt;'{print $1}'&lt;/span&gt; | sort &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; | uniq &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; | sort &lt;span class=&quot;nt&quot;&gt;-nr&lt;/span&gt; | head &lt;span class=&quot;nt&quot;&gt;-20&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Yaroslav Yarmoshyk</name></author><category term="Bash" /><category term="Apache" /><category term="awk" /><summary type="html">How to quickly install and setup Minimal Mistakes for use with GitHub Pages.</summary></entry><entry><title type="html">Install Wireshark to Ubuntu 16.04/14.04</title><link href="http://0.0.0.0:4000/ubuntu%20desktop/install-wireshark-ubuntu-desktop/" rel="alternate" type="text/html" title="Install Wireshark to Ubuntu 16.04/14.04" /><published>2018-03-17T00:00:00+00:00</published><updated>2018-03-17T00:00:00+00:00</updated><id>http://0.0.0.0:4000/ubuntu%20desktop/install-wireshark-ubuntu-desktop</id><content type="html" xml:base="http://0.0.0.0:4000/ubuntu%20desktop/install-wireshark-ubuntu-desktop/">&lt;p&gt;&lt;a href=&quot;https://www.wireshark.org/&quot;&gt;WireShark&lt;/a&gt; is a great tool to analyze the network traffic. One day I discovered that it is not a trivial task to gegt it installed on Ubuntu.
@@ -158,4 +158,279 @@ The easieast way is to use &lt;code class=&quot;highlighter-rouge&quot;&gt;&quot
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sed &lt;span class=&quot;s1&quot;&gt;'s/'&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$var1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$var2&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'/g'&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Complete documentation can be read at &lt;a href=&quot;https://www.gnu.org/software/sed/manual/sed.html&quot;&gt;gnu.org&lt;/a&gt;&lt;/p&gt;</content><author><name>Yaroslav Yarmoshyk</name></author><category term="sed" /><summary type="html">Many examples of using sed.</summary></entry></feed>
+&lt;p&gt;Complete documentation can be read at &lt;a href=&quot;https://www.gnu.org/software/sed/manual/sed.html&quot;&gt;gnu.org&lt;/a&gt;&lt;/p&gt;</content><author><name>Yaroslav Yarmoshyk</name></author><category term="sed" /><summary type="html">Many examples of using sed.</summary></entry><entry><title type="html">Enable Epel, Remi, Atrpms in RHEL/CentOS</title><link href="http://0.0.0.0:4000/centos/enable-additional-yum-repositories-in-centos/" rel="alternate" type="text/html" title="Enable Epel, Remi, Atrpms in RHEL/CentOS" /><published>2014-10-14T00:00:00+00:00</published><updated>2014-10-14T00:00:00+00:00</updated><id>http://0.0.0.0:4000/centos/enable-additional-yum-repositories-in-centos</id><content type="html" xml:base="http://0.0.0.0:4000/centos/enable-additional-yum-repositories-in-centos/">&lt;p&gt;CentOS and other RHEL-based systems are being shipped with the default configuration for &lt;code class=&quot;highlighter-rouge&quot;&gt;yum&lt;/code&gt; package manager. The default (official) repositories often don’t contain the required software or the latest versions of the perticular packages are not avaialble in these repositories.&lt;/p&gt;
+
+&lt;p&gt;In order to extend yum capabilities the additional repositories can be enabled. Next you can find the complete instructions ho to enable each of them with additional explanations about the purpose of each repository.&lt;/p&gt;
+
+&lt;h2 id=&quot;epel-extra-packages-for-enterprise-linux&quot;&gt;Epel (Extra Packages for Enterprise Linux):&lt;/h2&gt;
+&lt;h3 id=&quot;rhelcentos-7-64-bit&quot;&gt;RHEL/CentOS 7 64-Bit:&lt;/h3&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rpm &lt;span class=&quot;nt&quot;&gt;-ivh&lt;/span&gt; http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;rhelcentos-6-3264-bit&quot;&gt;RHEL/CentOS 6 32/64-Bit&lt;/h3&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rpm &lt;span class=&quot;nt&quot;&gt;-ivh&lt;/span&gt; http://dl.fedoraproject.org/pub/epel/6/x86_64/Packages/e/epel-release-6-8.noarch.rpm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;rhelcentos-5-3264-bit&quot;&gt;RHEL/CentOS 5 32/64-Bit&lt;/h3&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rpm &lt;span class=&quot;nt&quot;&gt;-ivh&lt;/span&gt; https://archives.fedoraproject.org/pub/archive/epel/5/i386/epel-release-5-4.noarch.rpm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;noarch&lt;/code&gt; meens that the package is insensitive to the system architecture (&lt;code class=&quot;highlighter-rouge&quot;&gt;x86_64&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;i386&lt;/code&gt;)&lt;/p&gt;
+
+&lt;h2 id=&quot;remi&quot;&gt;REMI&lt;/h2&gt;
+&lt;p&gt;Contains the latest &lt;code class=&quot;highlighter-rouge&quot;&gt;php&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;mysql&lt;/code&gt; versions. Depends on &lt;code class=&quot;highlighter-rouge&quot;&gt;Epel&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;rhelcentos-7-3264-bit&quot;&gt;RHEL/CentOS 7 32/64-Bit:&lt;/h3&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rpm &lt;span class=&quot;nt&quot;&gt;-ivh&lt;/span&gt; http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;rhelcentos-6-3264-bit-1&quot;&gt;RHEL/CentOS 6 32/64-Bit&lt;/h3&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rpm &lt;span class=&quot;nt&quot;&gt;-ivh&lt;/span&gt; http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;rhelcentos-5-3264-bit-1&quot;&gt;RHEL/CentOS 5 32/64-Bit&lt;/h3&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rpm &lt;span class=&quot;nt&quot;&gt;-ivh&lt;/span&gt; http://rpms.famillecollet.com/enterprise/remi-release-5.rpm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;rpmforge&quot;&gt;RPMForge&lt;/h2&gt;
+&lt;h3 id=&quot;rhelcentos-6-64-bit&quot;&gt;RHEL/CentOS 6 64-Bit:&lt;/h3&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rpm &lt;span class=&quot;nt&quot;&gt;-ivh&lt;/span&gt; http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;rhelcentos-6-32-bit&quot;&gt;RHEL/CentOS 6 32-Bit:&lt;/h3&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rpm &lt;span class=&quot;nt&quot;&gt;-ivh&lt;/span&gt; http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.i686.rpm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;rhelcentos-5-64-bit&quot;&gt;RHEL/CentOS 5 64-Bit&lt;/h3&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rpm &lt;span class=&quot;nt&quot;&gt;-ivh&lt;/span&gt; http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.3-1.el5.rf.x86_64.rpm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;rhelcentos-5-32-bit&quot;&gt;RHEL/CentOS 5 32-Bit&lt;/h3&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rpm &lt;span class=&quot;nt&quot;&gt;-ivh&lt;/span&gt; http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.3-1.el5.rf.i386.rpm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;elrepo&quot;&gt;ELRepo&lt;/h2&gt;
+&lt;h3 id=&quot;rhelcentos-7-3264-bit-1&quot;&gt;RHEL/CentOS 7 32/64-Bit:&lt;/h3&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rpm &lt;span class=&quot;nt&quot;&gt;-Uvh&lt;/span&gt; http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;rhelcentos-6-3264-bit-2&quot;&gt;RHEL/CentOS 6 32/64-Bit:&lt;/h3&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rpm &lt;span class=&quot;nt&quot;&gt;-Uvh&lt;/span&gt; http://www.elrepo.org/elrepo-release-6-6.el6.elrepo.noarch.rpm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;rhelcentos-6-3264-bit-3&quot;&gt;RHEL/CentOS 6 32/64-Bit:&lt;/h3&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rpm &lt;span class=&quot;nt&quot;&gt;-Uvh&lt;/span&gt; http://www.elrepo.org/elrepo-release-5-5.el5.elrepo.noarch.rpm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;sources&quot;&gt;Sources&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.unixmen.com/install-remi-repository-rhel-centos-scientific-linux-76-x5-x-fedora-201918/&quot;&gt;unixmen.com&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://wiki.centos.org/AdditionalResources/Repositories&quot;&gt;wiki.centos.org&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.tecmint.com/how-to-enable-epel-repository-for-rhel-centos-6-5/&quot;&gt;tecmint.com&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Yaroslav Yarmoshyk</name></author><category term="centos" /><category term="epel" /><category term="remi" /><category term="atrpms" /><summary type="html">How to enable additional repos in CentOS/RHEL.</summary></entry><entry><title type="html">Use lftp to work with files on ftp server in Linux</title><link href="http://0.0.0.0:4000/ftp/use-lftp-to-work-with-ftp-server/" rel="alternate" type="text/html" title="Use lftp to work with files on ftp server in Linux" /><published>2014-07-29T00:00:00+00:00</published><updated>2014-07-29T00:00:00+00:00</updated><id>http://0.0.0.0:4000/ftp/use-lftp-to-work-with-ftp-server</id><content type="html" xml:base="http://0.0.0.0:4000/ftp/use-lftp-to-work-with-ftp-server/">&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Lftp&lt;/code&gt; - is a CLI tool that allows to exchange files with ftp and http server. &lt;code class=&quot;highlighter-rouge&quot;&gt;Lftp&lt;/code&gt; supports mirroring that allows to upload/download files recursively. It also supports backward mirroring (&lt;code class=&quot;highlighter-rouge&quot;&gt;mirror -R&lt;/code&gt;) that allows to upload our update the folder recursively. Mirorring allows to synchronize the particular folder between 2 remote servers.&lt;/p&gt;
+
+&lt;p&gt;The syntax is the following:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mirror
+mirror options
+mirror &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt;
+mirror &lt;span class=&quot;nt&quot;&gt;-R&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;download-all-files-from-remote-server&quot;&gt;Download all files from remote server&lt;/h3&gt;
+&lt;p&gt;Make connection to the server:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp &amp;lt;strong&amp;gt;ftp.server.com&amp;lt;/strong&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Enter username and password:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp ftp.server.com:~&amp;gt; user username@ftp.server.com
+Password:
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The result should look like the following:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp username@ftp.server.com:~&amp;gt;
+Type &lt;span class=&quot;nb&quot;&gt;ls command &lt;/span&gt;to see a list of files:
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Enter &lt;code class=&quot;highlighter-rouge&quot;&gt;ls&lt;/code&gt; to list the files:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp ftp.server.com:~&amp;gt; &lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The output will look like the following:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;-rw-r--r--&lt;/span&gt;    1 80       www      36809419   Jun 24 23:59 file1.ext
+&lt;span class=&quot;nt&quot;&gt;-rw-r--r--&lt;/span&gt;    1 80       www      100912271 Jun 25 23:59 file2.ext
+&lt;span class=&quot;nt&quot;&gt;-rw-r--r--&lt;/span&gt;    1 80       www      102926055 Jun 26 23:59 file3.ext
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In order to download all files to the local PC use  &lt;code class=&quot;highlighter-rouge&quot;&gt;mirror&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp ftp.server.com:~&amp;gt; mirror
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can specify the source (origin of the files on the remote server) and target (local folder where you’d like to locate files) folders:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp ftp.server.com:~&amp;gt; mirror &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;target
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;or&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp ftp.server.com:~&amp;gt; mirror logs/ /data/wwwlogs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In this case all files from &lt;code class=&quot;highlighter-rouge&quot;&gt;logs&lt;/code&gt; folder on the remote server will be copied int &lt;code class=&quot;highlighter-rouge&quot;&gt;/data/wwwlogs&lt;/code&gt; folder on the current PC.&lt;/p&gt;
+
+&lt;p&gt;Please note that using trailing slash (&lt;code class=&quot;highlighter-rouge&quot;&gt;/&lt;/code&gt;) will copy all files from &lt;code class=&quot;highlighter-rouge&quot;&gt;logs&lt;/code&gt; folder to &lt;code class=&quot;highlighter-rouge&quot;&gt;/data/wwwlogs/logs&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp ftp.server.com:~&amp;gt; mirror logs/ /data/wwwlogs/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;It is recommended to use &lt;code class=&quot;highlighter-rouge&quot;&gt;mirror&lt;/code&gt; with enabled option to continue download. In this case you will not need to re-transfer all files if connection gets interrupted.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp ftp.server.com:~&amp;gt; mirror &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;target
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;or&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp ftp.server.com:~&amp;gt; mirror &lt;span class=&quot;nt&quot;&gt;--continue&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you need to download only new files than use &lt;code class=&quot;highlighter-rouge&quot;&gt;--only-newer&lt;/code&gt; key:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp ftp.server.com:~&amp;gt; mirror &lt;span class=&quot;nt&quot;&gt;--only-newer&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;or&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp ftp.server.com:~&amp;gt; mirror &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can increase the mirroring speed by enabling parallel transfer:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp ftp.server.com:~&amp;gt; mirror &lt;span class=&quot;nt&quot;&gt;-P&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The following command will run mirroring in 10 parallel processes:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp ftp.server.com:~&amp;gt; mirror &lt;span class=&quot;nt&quot;&gt;--parallel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;10
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Mirror only new files from the remote server in 10 parallel threads:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mirror &lt;span class=&quot;nt&quot;&gt;--continue&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--only-newer&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--parallel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;5 &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;target
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;upload-local-files-to-the-remote-server-with-lftp&quot;&gt;Upload local files to the remote server with lftp&lt;/h3&gt;
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;-R&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;--reverse&lt;/code&gt; key should be used to upload files from the local storage to the remote server
+First login to the remote ftp server&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp &amp;lt;strong&amp;gt;ftp.server.com&amp;lt;/strong&amp;gt;
+lftp ftp.server.com:~&amp;gt; user username@ftp.server.com
+Password:
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Lead to the desired folder (in this example I’m using &lt;code class=&quot;highlighter-rouge&quot;&gt;/home/project/website/version5/&lt;/code&gt;):&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp ftp.server.com:~&amp;gt; lcd /home/project/website/version5/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The sample output:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lcd ok, &lt;span class=&quot;nb&quot;&gt;local &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;cwd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/home/project/website/version5
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The following can be used to upload files to the remote ftp server:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp ftp.server.com:~&amp;gt; mirror &lt;span class=&quot;nt&quot;&gt;-R&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can specify local and remote catalog (in this example &lt;code class=&quot;highlighter-rouge&quot;&gt;/home/user/projects/website&lt;/code&gt; =&amp;gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;/var/www/html&lt;/code&gt;)&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp ftp.server.com~&amp;gt; mirror &lt;span class=&quot;nt&quot;&gt;-R&lt;/span&gt; /home/user/projects/website /var/www/html
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Single command:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lftp &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'mirror --parallel=10 -R /home/user/projects/website /var/www/html'&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; login,password ftp.example.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The following problem:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 521 Data connection cannot be opened with this PROT setting.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Can be resolved by running the following set of commands:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;ftp:ssl-force &lt;span class=&quot;nb&quot;&gt;true
+set &lt;/span&gt;ftp:ssl-protect-data &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Yaroslav Yarmoshyk</name></author><category term="lftp" /><category term="ftp" /><category term="bash" /><summary type="html">Usefull tips about lftp usage</summary></entry><entry><title type="html">Configure NginX to distribute traffic between multiple servers</title><link href="http://0.0.0.0:4000/nginx/nginx-loadbalancing/" rel="alternate" type="text/html" title="Configure NginX to distribute traffic between multiple servers" /><published>2014-03-14T00:00:00+00:00</published><updated>2014-03-14T00:00:00+00:00</updated><id>http://0.0.0.0:4000/nginx/nginx-loadbalancing</id><content type="html" xml:base="http://0.0.0.0:4000/nginx/nginx-loadbalancing/">&lt;p&gt;In this article I’d like to give some guidelines how to configure NginX to be the loadbalancer for a multiple backend servers.
+I consider the following schema:&lt;/p&gt;
+&lt;center&gt;&lt;img src=&quot;/assets/images/nginx-load-balancer.jpg&quot; /&gt;&lt;/center&gt;
+
+&lt;p&gt;There are 2 NginX features that will do the trick for us:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;upstream&lt;/code&gt; is shipped with &lt;a href=&quot;http://wiki.nginx.org/HttpUpstreamModule&quot;&gt;HttpUpstream&lt;/a&gt; module and allows to loadbalance the traffict between multiple backend servers.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;proxypass&lt;/code&gt; is shipped with &lt;a href=&quot;http://wiki.nginx.org/HttpProxyModule&quot;&gt;HttpProxy&lt;/a&gt; module and allows to proxy requests to the servers behind the load balancer.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So let’s consider 3 webservers that run a single website and we need to distribute the incomming traffic between them:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Apapche#1:
+ip: 192.168.10.10
+
+Apapche#2
+ip: 192.168.10.20
+
+Apapche#3
+ip: 192.168.10.30
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We need to update the nginx configuration with the following:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;upstream http &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    server 192.168.10.10 &lt;span class=&quot;nv&quot;&gt;weight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2 &lt;span class=&quot;nv&quot;&gt;max_fails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2 &lt;span class=&quot;nv&quot;&gt;fail_timeout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2s&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    server 192.168.10.20 &lt;span class=&quot;nv&quot;&gt;weight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2 &lt;span class=&quot;nv&quot;&gt;max_fails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2 &lt;span class=&quot;nv&quot;&gt;fail_timeout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2s&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    server 192.168.10.30 &lt;span class=&quot;nv&quot;&gt;weight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2 &lt;span class=&quot;nv&quot;&gt;max_fails&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2 &lt;span class=&quot;nv&quot;&gt;fail_timeout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2s&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Here:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;weight&lt;/code&gt; is used to define the importance of the server in the cluster. In this particular case all servers are equal. If you need more traffic to be delivered to some server than you can increase it’s &lt;code class=&quot;highlighter-rouge&quot;&gt;weight&lt;/code&gt; with the higher value.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;max_fails&lt;/code&gt; defines the number of failed connections to the backend server before considering it as unhealthy.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;fail_timeout&lt;/code&gt; the amount of time between failed connections.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In this case the the server will be marked as unheathy after 2 failures during 4 seconds and NginX will stop delivering traffic to it.
+This ecxample describes the approach with &lt;code class=&quot;highlighter-rouge&quot;&gt;Passive health checks&lt;/code&gt;. More details about health checks can be read &lt;a href=&quot;https://docs.nginx.com/nginx/admin-guide/load-balancer/http-health-check/&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;There is one more thing that can be defined in the upstream section. It is the loadbalancing type. One of the following:
+Методы балансировки нагрузки (описываются в начале секции upstream):&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ip_hash&lt;/code&gt; will make nginx to deliver all incomming requests from one client to the same backend server according to the information about it’s ip address. &lt;em&gt;Not compatible with &lt;code class=&quot;highlighter-rouge&quot;&gt;weight&lt;/code&gt;&lt;/em&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;least_conn&lt;/code&gt; will make nginx to deliver requests to the backend server with that has the least active connections.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;round-robin&lt;/code&gt; is the default mode. Traffic will be delivered to all servers one by one.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now we need to tell NginX what to do with the http upstream. This can be done by specifying the default location:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;location / &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    proxy_read_timeout 1200&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    proxy_connect_timeout 1200&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    proxy_pass http://http/&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    proxy_set_header Host &lt;span class=&quot;nv&quot;&gt;$host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    proxy_set_header X-Real-IP &lt;span class=&quot;nv&quot;&gt;$remote_addr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    proxy_set_header X-Forwarded-For &lt;span class=&quot;nv&quot;&gt;$proxy_add_x_forwarded_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;It is really cool that NginX supports ssl termination. This means that there is no need to specify the separate upstream for https connections. We need to specify the ssl certificate to be used for https listener and that is it. Here is an example of https config:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;server &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  servername mywebsite.com www.mywebsite.com&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  listen 443&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+  ssl on&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  ssl_certificate /etc/nginx/SSL/hostname.pem&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  ssl_certificate_key /etc/nginx/SSL/server.key&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+  location / &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      proxy_read_timeout 1200&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      proxy_connect_timeout 1200&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      proxy_pass http://http/&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      proxy_set_header Host &lt;span class=&quot;nv&quot;&gt;$host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      proxy_set_header X-Real-IP &lt;span class=&quot;nv&quot;&gt;$remote_addr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      proxy_set_header X-Forwarded-For &lt;span class=&quot;nv&quot;&gt;$proxy_add_x_forwarded_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      proxy_set_header HTTPS on&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Small recommendation is to offload static content with NginX insteed of reading it from backend server:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;location ~&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ico|gif|jpeg|jpg|png|eot|ttf|swf|woff&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    root /var/www/html&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    expires 30d&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    access_log off&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+location ~&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;css|js&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    root /var/www/html&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    expires 1d&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    access_log off&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Yaroslav Yarmoshyk</name></author><category term="nginx" /><category term="loadbalancing" /><summary type="html">Use NginX as a load balancer</summary></entry></feed>

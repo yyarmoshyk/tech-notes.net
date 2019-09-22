@@ -1,0 +1,607 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.16.6 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Configure NginX to distribute traffic between multiple servers - Tech Notes</title>
+<meta name="description" content="Use NginX as a load balancer">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Tech Notes">
+<meta property="og:title" content="Configure NginX to distribute traffic between multiple servers">
+<meta property="og:url" content="http://0.0.0.0:4000/nginx/nginx-loadbalancing/">
+
+
+  <meta property="og:description" content="Use NginX as a load balancer">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2014-03-14T00:00:00+00:00">
+
+
+
+  <meta property="article:modified_time" content="2014-03-14T00:00:00+00:00">
+
+
+
+
+<link rel="canonical" href="http://0.0.0.0:4000/nginx/nginx-loadbalancing/">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Tech Notes Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE ]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Tech Notes
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/about/" >About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/tags/" >Tags</a>
+            </li><li class="masthead__menu-item">
+              <a href="/posts/" >Archive</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  
+  
+  <div class="sidebar sticky">
+  <span class="nav__sub-title">Categories</span>
+  
+    
+      
+    
+      
+    
+      
+    
+      
+        <li>
+          <a href="/categories/#bash">
+            <strong>Bash</strong> <span class="taxonomy__count">2</span>
+          </a>
+        </li>
+      
+    
+      
+    
+  
+    
+      
+        <li>
+          <a href="/categories/#nginx">
+            <strong>NginX</strong> <span class="taxonomy__count">1</span>
+          </a>
+        </li>
+      
+    
+      
+        <li>
+          <a href="/categories/#ftp">
+            <strong>FTP</strong> <span class="taxonomy__count">1</span>
+          </a>
+        </li>
+      
+    
+      
+        <li>
+          <a href="/categories/#centos">
+            <strong>CentOS</strong> <span class="taxonomy__count">1</span>
+          </a>
+        </li>
+      
+    
+      
+    
+      
+        <li>
+          <a href="/categories/#ubuntu-desktop">
+            <strong>Ubuntu desktop</strong> <span class="taxonomy__count">1</span>
+          </a>
+        </li>
+      
+    
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Configure NginX to distribute traffic between multiple servers">
+    <meta itemprop="description" content="Use NginX as a load balancer">
+    <meta itemprop="datePublished" content="March 14, 2014">
+    <meta itemprop="dateModified" content="March 14, 2014">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Configure NginX to distribute traffic between multiple servers
+</h1>
+          
+            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>In this article I’d like to give some guidelines how to configure NginX to be the loadbalancer for a multiple backend servers.
+I consider the following schema:</p>
+<center><img src="/assets/images/nginx-load-balancer.jpg" /></center>
+
+<p>There are 2 NginX features that will do the trick for us:</p>
+<ul>
+  <li><code class="highlighter-rouge">upstream</code> is shipped with <a href="http://wiki.nginx.org/HttpUpstreamModule">HttpUpstream</a> module and allows to loadbalance the traffict between multiple backend servers.</li>
+  <li><code class="highlighter-rouge">proxypass</code> is shipped with <a href="http://wiki.nginx.org/HttpProxyModule">HttpProxy</a> module and allows to proxy requests to the servers behind the load balancer.</li>
+</ul>
+
+<p>So let’s consider 3 webservers that run a single website and we need to distribute the incomming traffic between them:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Apapche#1:
+ip: 192.168.10.10
+
+Apapche#2
+ip: 192.168.10.20
+
+Apapche#3
+ip: 192.168.10.30
+</code></pre></div></div>
+
+<p>We need to update the nginx configuration with the following:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>upstream http <span class="o">{</span>
+    server 192.168.10.10 <span class="nv">weight</span><span class="o">=</span>2 <span class="nv">max_fails</span><span class="o">=</span>2 <span class="nv">fail_timeout</span><span class="o">=</span>2s<span class="p">;</span>
+    server 192.168.10.20 <span class="nv">weight</span><span class="o">=</span>2 <span class="nv">max_fails</span><span class="o">=</span>2 <span class="nv">fail_timeout</span><span class="o">=</span>2s<span class="p">;</span>
+    server 192.168.10.30 <span class="nv">weight</span><span class="o">=</span>2 <span class="nv">max_fails</span><span class="o">=</span>2 <span class="nv">fail_timeout</span><span class="o">=</span>2s<span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>Here:</p>
+<ul>
+  <li><code class="highlighter-rouge">weight</code> is used to define the importance of the server in the cluster. In this particular case all servers are equal. If you need more traffic to be delivered to some server than you can increase it’s <code class="highlighter-rouge">weight</code> with the higher value.</li>
+  <li><code class="highlighter-rouge">max_fails</code> defines the number of failed connections to the backend server before considering it as unhealthy.</li>
+  <li><code class="highlighter-rouge">fail_timeout</code> the amount of time between failed connections.</li>
+</ul>
+
+<p>In this case the the server will be marked as unheathy after 2 failures during 4 seconds and NginX will stop delivering traffic to it.
+This ecxample describes the approach with <code class="highlighter-rouge">Passive health checks</code>. More details about health checks can be read <a href="https://docs.nginx.com/nginx/admin-guide/load-balancer/http-health-check/">here</a></p>
+
+<p>There is one more thing that can be defined in the upstream section. It is the loadbalancing type. One of the following:
+Методы балансировки нагрузки (описываются в начале секции upstream):</p>
+
+<ul>
+  <li><code class="highlighter-rouge">ip_hash</code> will make nginx to deliver all incomming requests from one client to the same backend server according to the information about it’s ip address. <em>Not compatible with <code class="highlighter-rouge">weight</code></em>.</li>
+  <li><code class="highlighter-rouge">least_conn</code> will make nginx to deliver requests to the backend server with that has the least active connections.</li>
+  <li><code class="highlighter-rouge">round-robin</code> is the default mode. Traffic will be delivered to all servers one by one.</li>
+</ul>
+
+<p>Now we need to tell NginX what to do with the http upstream. This can be done by specifying the default location:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>location / <span class="o">{</span>
+    proxy_read_timeout 1200<span class="p">;</span>
+    proxy_connect_timeout 1200<span class="p">;</span>
+    proxy_pass http://http/<span class="p">;</span>
+    proxy_set_header Host <span class="nv">$host</span><span class="p">;</span>
+    proxy_set_header X-Real-IP <span class="nv">$remote_addr</span><span class="p">;</span>
+    proxy_set_header X-Forwarded-For <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>It is really cool that NginX supports ssl termination. This means that there is no need to specify the separate upstream for https connections. We need to specify the ssl certificate to be used for https listener and that is it. Here is an example of https config:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>server <span class="o">{</span>
+  servername mywebsite.com www.mywebsite.com<span class="p">;</span>
+  listen 443<span class="p">;</span>
+
+  ssl on<span class="p">;</span>
+  ssl_certificate /etc/nginx/SSL/hostname.pem<span class="p">;</span>
+  ssl_certificate_key /etc/nginx/SSL/server.key<span class="p">;</span>
+
+  location / <span class="o">{</span>
+      proxy_read_timeout 1200<span class="p">;</span>
+      proxy_connect_timeout 1200<span class="p">;</span>
+      proxy_pass http://http/<span class="p">;</span>
+      proxy_set_header Host <span class="nv">$host</span><span class="p">;</span>
+      proxy_set_header X-Real-IP <span class="nv">$remote_addr</span><span class="p">;</span>
+      proxy_set_header X-Forwarded-For <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+      proxy_set_header HTTPS on<span class="p">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Small recommendation is to offload static content with NginX insteed of reading it from backend server:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>location ~<span class="k">*</span> <span class="se">\.</span><span class="o">(</span>ico|gif|jpeg|jpg|png|eot|ttf|swf|woff<span class="o">)</span><span class="nv">$ </span><span class="o">{</span>
+    root /var/www/html<span class="p">;</span>
+    expires 30d<span class="p">;</span>
+    access_log off<span class="p">;</span>
+<span class="o">}</span>
+location ~<span class="k">*</span> <span class="se">\.</span><span class="o">(</span>css|js<span class="o">)</span><span class="nv">$ </span><span class="o">{</span>
+    root /var/www/html<span class="p">;</span>
+    expires 1d<span class="p">;</span>
+    access_log off<span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#loadbalancing" class="page__taxonomy-item" rel="tag">loadbalancing</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#nginx" class="page__taxonomy-item" rel="tag">nginx</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#nginx" class="page__taxonomy-item" rel="tag">NginX</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2014-03-14">March 14, 2014</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Configure+NginX+to+distribute+traffic+between+multiple+servers%20http%3A%2F%2F0.0.0.0%3A4000%2Fnginx%2Fnginx-loadbalancing%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F0.0.0.0%3A4000%2Fnginx%2Fnginx-loadbalancing%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2F0.0.0.0%3A4000%2Fnginx%2Fnginx-loadbalancing%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="#" class="pagination--pager disabled">Previous</a>
+    
+    
+      <a href="/ftp/use-lftp-to-work-with-ftp-server/" class="pagination--pager" title="Use lftp to work with files on ftp server in Linux
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/bash/unique-ips-from-apache-log/" rel="permalink">Reading unique records from file
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">How to quickly install and setup Minimal Mistakes for use with GitHub Pages.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/ubuntu%20desktop/install-wireshark-ubuntu-desktop/" rel="permalink">Install Wireshark to Ubuntu 16.04/14.04
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">How to quickly install and setup Minimal Mistakes for use with GitHub Pages.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/bash/sed-crib/" rel="permalink">Sed crib
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  3 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Many examples of using sed.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/centos/enable-additional-yum-repositories-in-centos/" rel="permalink">Enable Epel, Remi, Atrpms in RHEL/CentOS
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">How to enable additional repos in CentOS/RHEL.
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://twitter.com/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+        
+      
+        
+          <li><a href="https://github.com/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://instagram.com/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2019 Tech Notes. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>

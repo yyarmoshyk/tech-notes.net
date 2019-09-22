@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://0.0.0.0:4000/nginx/nginx-loadbalancing/</loc>
+<lastmod>2014-03-14T00:00:00+00:00</lastmod>
+</url>
+<url>
+<loc>http://0.0.0.0:4000/ftp/use-lftp-to-work-with-ftp-server/</loc>
+<lastmod>2014-07-29T00:00:00+00:00</lastmod>
+</url>
+<url>
+<loc>http://0.0.0.0:4000/centos/enable-additional-yum-repositories-in-centos/</loc>
+<lastmod>2014-10-14T00:00:00+00:00</lastmod>
+</url>
+<url>
 <loc>http://0.0.0.0:4000/bash/sed-crib/</loc>
 <lastmod>2018-04-16T00:00:00+00:00</lastmod>
 </url>
@@ -26,5 +38,8 @@
 </url>
 <url>
 <loc>http://0.0.0.0:4000/posts/</loc>
+</url>
+<url>
+<loc>http://0.0.0.0:4000/page2/</loc>
 </url>
 </urlset>

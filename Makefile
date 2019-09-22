@@ -10,3 +10,9 @@ build:
 
 run:
 	docker run --name jekyll-run --rm -v "${PWD}/src:/myblog" -v "${PWD}/public:/myblog/public" -d -p 4000:4000 yyarmoshyk/jekyll-minimal-mistakes:ruby-2.5
+
+restart:
+	docker restart jekyll-run
+
+stop:
+	docker stop jekyll-run

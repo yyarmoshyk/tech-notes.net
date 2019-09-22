@@ -9,36 +9,36 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Install Wireshark to Ubuntu 16.04/14.04 - Tech Notes</title>
-<meta name="description" content="How to quickly install and setup Minimal Mistakes for use with GitHub Pages.">
+<!-- begin _includes/seo.html --><title>Enable Epel, Remi, Atrpms in RHEL/CentOS - Tech Notes</title>
+<meta name="description" content="How to enable additional repos in CentOS/RHEL.">
 
 
 
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Tech Notes">
-<meta property="og:title" content="Install Wireshark to Ubuntu 16.04/14.04">
-<meta property="og:url" content="http://0.0.0.0:4000/ubuntu%20desktop/install-wireshark-ubuntu-desktop/">
+<meta property="og:title" content="Enable Epel, Remi, Atrpms in RHEL/CentOS">
+<meta property="og:url" content="http://0.0.0.0:4000/centos/enable-additional-yum-repositories-in-centos/">
 
 
-  <meta property="og:description" content="How to quickly install and setup Minimal Mistakes for use with GitHub Pages.">
-
-
-
+  <meta property="og:description" content="How to enable additional repos in CentOS/RHEL.">
 
 
 
 
-  <meta property="article:published_time" content="2018-03-17T00:00:00+00:00">
 
 
 
-  <meta property="article:modified_time" content="2018-03-17T00:00:00+00:00">
+  <meta property="article:published_time" content="2014-10-14T00:00:00+00:00">
+
+
+
+  <meta property="article:modified_time" content="2014-10-14T00:00:00+00:00">
 
 
 
 
-<link rel="canonical" href="http://0.0.0.0:4000/ubuntu%20desktop/install-wireshark-ubuntu-desktop/">
+<link rel="canonical" href="http://0.0.0.0:4000/centos/enable-additional-yum-repositories-in-centos/">
 
 
 
@@ -214,15 +214,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Install Wireshark to Ubuntu 16.04/14.04">
-    <meta itemprop="description" content="How to quickly install and setup Minimal Mistakes for use with GitHub Pages.">
-    <meta itemprop="datePublished" content="March 17, 2018">
-    <meta itemprop="dateModified" content="March 17, 2018">
+    <meta itemprop="headline" content="Enable Epel, Remi, Atrpms in RHEL/CentOS">
+    <meta itemprop="description" content="How to enable additional repos in CentOS/RHEL.">
+    <meta itemprop="datePublished" content="October 14, 2014">
+    <meta itemprop="dateModified" content="October 14, 2014">
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Install Wireshark to Ubuntu 16.04/14.04
+          <h1 id="page-title" class="page__title" itemprop="headline">Enable Epel, Remi, Atrpms in RHEL/CentOS
 </h1>
           
             <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
@@ -238,15 +238,69 @@
 
       <section class="page__content" itemprop="text">
         
-        <p><a href="https://www.wireshark.org/">WireShark</a> is a great tool to analyze the network traffic. One day I discovered that it is not a trivial task to gegt it installed on Ubuntu.
-There is a surce package available for linux:
-<a href="https://1.na.dl.wireshark.org/src/wireshark-3.1.0.tar.xz">https://1.na.dl.wireshark.org/src/wireshark-3.1.0.tar.xz</a></p>
+        <p>CentOS and other RHEL-based systems are being shipped with the default configuration for <code class="highlighter-rouge">yum</code> package manager. The default (official) repositories often don’t contain the required software or the latest versions of the perticular packages are not avaialble in these repositories.</p>
 
-<p>However it is way easier to get it installed using the default package manager:</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>add-apt-repository ppa:wireshark-dev/stable
-apt-get update
-apt-get install wireshark
+<p>In order to extend yum capabilities the additional repositories can be enabled. Next you can find the complete instructions ho to enable each of them with additional explanations about the purpose of each repository.</p>
+
+<h2 id="epel-extra-packages-for-enterprise-linux">Epel (Extra Packages for Enterprise Linux):</h2>
+<h3 id="rhelcentos-7-64-bit">RHEL/CentOS 7 64-Bit:</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm <span class="nt">-ivh</span> http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
 </code></pre></div></div>
+<h3 id="rhelcentos-6-3264-bit">RHEL/CentOS 6 32/64-Bit</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm <span class="nt">-ivh</span> http://dl.fedoraproject.org/pub/epel/6/x86_64/Packages/e/epel-release-6-8.noarch.rpm
+</code></pre></div></div>
+
+<h3 id="rhelcentos-5-3264-bit">RHEL/CentOS 5 32/64-Bit</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm <span class="nt">-ivh</span> https://archives.fedoraproject.org/pub/archive/epel/5/i386/epel-release-5-4.noarch.rpm
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">noarch</code> meens that the package is insensitive to the system architecture (<code class="highlighter-rouge">x86_64</code> or <code class="highlighter-rouge">i386</code>)</p>
+
+<h2 id="remi">REMI</h2>
+<p>Contains the latest <code class="highlighter-rouge">php</code> and <code class="highlighter-rouge">mysql</code> versions. Depends on <code class="highlighter-rouge">Epel</code></p>
+
+<h3 id="rhelcentos-7-3264-bit">RHEL/CentOS 7 32/64-Bit:</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm <span class="nt">-ivh</span> http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+</code></pre></div></div>
+
+<h3 id="rhelcentos-6-3264-bit-1">RHEL/CentOS 6 32/64-Bit</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm <span class="nt">-ivh</span> http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+</code></pre></div></div>
+<h3 id="rhelcentos-5-3264-bit-1">RHEL/CentOS 5 32/64-Bit</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm <span class="nt">-ivh</span> http://rpms.famillecollet.com/enterprise/remi-release-5.rpm
+</code></pre></div></div>
+
+<h2 id="rpmforge">RPMForge</h2>
+<h3 id="rhelcentos-6-64-bit">RHEL/CentOS 6 64-Bit:</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm <span class="nt">-ivh</span> http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
+</code></pre></div></div>
+<h3 id="rhelcentos-6-32-bit">RHEL/CentOS 6 32-Bit:</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm <span class="nt">-ivh</span> http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.i686.rpm
+</code></pre></div></div>
+<h3 id="rhelcentos-5-64-bit">RHEL/CentOS 5 64-Bit</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm <span class="nt">-ivh</span> http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.3-1.el5.rf.x86_64.rpm
+</code></pre></div></div>
+<h3 id="rhelcentos-5-32-bit">RHEL/CentOS 5 32-Bit</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm <span class="nt">-ivh</span> http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.3-1.el5.rf.i386.rpm
+</code></pre></div></div>
+
+<h2 id="elrepo">ELRepo</h2>
+<h3 id="rhelcentos-7-3264-bit-1">RHEL/CentOS 7 32/64-Bit:</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm <span class="nt">-Uvh</span> http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm
+</code></pre></div></div>
+<h3 id="rhelcentos-6-3264-bit-2">RHEL/CentOS 6 32/64-Bit:</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm <span class="nt">-Uvh</span> http://www.elrepo.org/elrepo-release-6-6.el6.elrepo.noarch.rpm
+</code></pre></div></div>
+<h3 id="rhelcentos-6-3264-bit-3">RHEL/CentOS 6 32/64-Bit:</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rpm <span class="nt">-Uvh</span> http://www.elrepo.org/elrepo-release-5-5.el5.elrepo.noarch.rpm
+</code></pre></div></div>
+
+<h2 id="sources">Sources</h2>
+<ul>
+  <li><a href="http://www.unixmen.com/install-remi-repository-rhel-centos-scientific-linux-76-x5-x-fedora-201918/">unixmen.com</a></li>
+  <li><a href="http://wiki.centos.org/AdditionalResources/Repositories">wiki.centos.org</a></li>
+  <li><a href="http://www.tecmint.com/how-to-enable-epel-repository-for-rhel-centos-6-5/">tecmint.com</a></li>
+</ul>
 
         
       </section>
@@ -267,11 +321,19 @@ apt-get install wireshark
     
       
       
-      <a href="/tags/#ubuntu" class="page__taxonomy-item" rel="tag">ubuntu</a><span class="sep">, </span>
+      <a href="/tags/#atrpms" class="page__taxonomy-item" rel="tag">atrpms</a><span class="sep">, </span>
     
       
       
-      <a href="/tags/#wireshark" class="page__taxonomy-item" rel="tag">wireshark</a>
+      <a href="/tags/#centos" class="page__taxonomy-item" rel="tag">centos</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#epel" class="page__taxonomy-item" rel="tag">epel</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#remi" class="page__taxonomy-item" rel="tag">remi</a>
     
     </span>
   </p>
@@ -292,36 +354,36 @@ apt-get install wireshark
     
       
       
-      <a href="/categories/#ubuntu-desktop" class="page__taxonomy-item" rel="tag">Ubuntu desktop</a>
+      <a href="/categories/#centos" class="page__taxonomy-item" rel="tag">CentOS</a>
     
     </span>
   </p>
 
 
         
-          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2018-03-17">March 17, 2018</time></p>
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2014-10-14">October 14, 2014</time></p>
         
       </footer>
 
       <section class="page__share">
   
 
-  <a href="https://twitter.com/intent/tweet?text=Install+Wireshark+to+Ubuntu+16.04%2F14.04%20http%3A%2F%2F0.0.0.0%3A4000%2Fubuntu%2520desktop%2Finstall-wireshark-ubuntu-desktop%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Enable+Epel%2C+Remi%2C+Atrpms+in+RHEL%2FCentOS%20http%3A%2F%2F0.0.0.0%3A4000%2Fcentos%2Fenable-additional-yum-repositories-in-centos%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F0.0.0.0%3A4000%2Fubuntu%2520desktop%2Finstall-wireshark-ubuntu-desktop%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F0.0.0.0%3A4000%2Fcentos%2Fenable-additional-yum-repositories-in-centos%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2F0.0.0.0%3A4000%2Fubuntu%2520desktop%2Finstall-wireshark-ubuntu-desktop%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2F0.0.0.0%3A4000%2Fcentos%2Fenable-additional-yum-repositories-in-centos%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="/bash/sed-crib/" class="pagination--pager" title="Sed crib
+      <a href="/ftp/use-lftp-to-work-with-ftp-server/" class="pagination--pager" title="Use lftp to work with files on ftp server in Linux
 ">Previous</a>
     
     
-      <a href="/bash/unique-ips-from-apache-log/" class="pagination--pager" title="Reading unique records from file
+      <a href="/bash/sed-crib/" class="pagination--pager" title="Sed crib
 ">Next</a>
     
   </nav>
@@ -374,7 +436,7 @@ apt-get install wireshark
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/bash/sed-crib/" rel="permalink">Sed crib
+        <a href="/ubuntu%20desktop/install-wireshark-ubuntu-desktop/" rel="permalink">Install Wireshark to Ubuntu 16.04/14.04
 </a>
       
     </h2>
@@ -384,10 +446,10 @@ apt-get install wireshark
 
 
 
-  3 minute read
+  less than 1 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">Many examples of using sed.
+    <p class="archive__item-excerpt" itemprop="description">How to quickly install and setup Minimal Mistakes for use with GitHub Pages.
 </p>
   </article>
 </div>
@@ -402,7 +464,7 @@ apt-get install wireshark
     
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="/centos/enable-additional-yum-repositories-in-centos/" rel="permalink">Enable Epel, Remi, Atrpms in RHEL/CentOS
+        <a href="/bash/sed-crib/" rel="permalink">Sed crib
 </a>
       
     </h2>
@@ -412,10 +474,10 @@ apt-get install wireshark
 
 
 
-  less than 1 minute read
+  3 minute read
 </p>
     
-    <p class="archive__item-excerpt" itemprop="description">How to enable additional repos in CentOS/RHEL.
+    <p class="archive__item-excerpt" itemprop="description">Many examples of using sed.
 </p>
   </article>
 </div>
