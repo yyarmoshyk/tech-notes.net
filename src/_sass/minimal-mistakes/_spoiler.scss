@@ -1,0 +1,44 @@
+/* Spoiler */
+.spoiler-wrap {
+        background:none repeat scroll 0 0 #CED8F6;
+        width:100%;
+        border-color:#16A1E7;
+        border-style:solid;
+        border-width:1px 1px 1px 2px;
+        margin:6px;
+}
+.spoiler-head {
+        // font-size:13px;
+        line-height:25px;
+        margin-left:6px;
+        cursor:pointer;
+        width:97%;
+        padding:1px 14px 3px;
+}
+.folded {
+        background:url(/wp-content/uploads/spoiler/icon_plus_1.gif) no-repeat scroll left center transparent;
+        display:block;
+        padding-left:14px;
+}
+.unfolded {
+        background:url(/wp-content/uploads/spoiler/icon_minus_1.gif) no-repeat scroll left center transparent;
+        display:block;
+        padding-left:14px;
+}
+.spoiler-body {
+        background:none repeat scroll 0 0 #F4FEF3;
+        border-top:1px solid #16A1E7;
+        line-height:20px;
+        padding:1px 6px 2px;
+        font-size:14px;
+}
+
+.spoiler-body pre {
+        background: #263238;
+        border-top:1px solid #16A1E7;
+        line-height:20px;
+        color: #eeffff;
+        font-family: Monaco, Consolas, "Lucida Console", monospace;
+        font-size:14px;
+}
+/* EOF */

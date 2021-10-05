@@ -1,0 +1,67 @@
+#!/bin/sh
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/sbin/nginx
+NAME=nginx
+DESC=nginx
+
+test -x $DAEMON || exit 0
+
+set -e
+
+test_nginx_config() {
+	if $DAEMON -t $DAEMON_OPTS >/dev/null 2>&1; then
+		return 0
+	else
+		$DAEMON -t $DAEMON_OPTS
+		return $?
+	fi
+}
+
+case "$1" in
+	start)
+		echo -n "Starting $DESC: "
+		test_nginx_config
+		# Check if the ULIMIT is set in /etc/default/nginx
+		if [ -n "$ULIMIT" ]; then
+			# Set the ulimits
+			ulimit $ULIMIT
+		fi
+		$DAEMON;
+		echo "$NAME."
+		;;
+
+	stop)
+		echo -n "Stopping $DESC: "
+		$DAEMON -s stop;
+		echo "$NAME."
+		;;
+
+	restart)
+		echo -n "Restarting $DESC: "
+		$DAEMON -s stop;
+		test_nginx_config
+		# Check if the ULIMIT is set in /etc/default/nginx
+		if [ -n "$ULIMIT" ]; then
+			# Set the ulimits
+			ulimit $ULIMIT
+		fi
+		$DAEMON;
+		echo "$NAME."
+		;;
+
+	configtest|testconfig)
+		echo -n "Testing $DESC configuration: "
+		if test_nginx_config; then
+			echo "$NAME."
+		else
+			exit $?
+		fi
+		;;
+	*)
+		echo "Usage: $NAME {start|stop|restart}" >&2
+		exit 1
+		;;
+esac
+
+exit 0

@@ -1,2 +1,6 @@
 test
 src/public
+public/
+_posts.bak/
+.DS_Store
+deploy_s3.sh

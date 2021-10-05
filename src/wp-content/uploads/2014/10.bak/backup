@@ -1,0 +1,34 @@
+#!/bin/bash
+mail='your@mail.com'
+logifile=/var/log/backup.log
+
+echo "[$(date)] Starting backup" >> $logifile
+echo "Compressing websites:" >> $logifile
+for f in /var/www/*;do tar czf /var/backups/server/files/$(echo $f |sed 's|/|_|g' |sed 's|^_||g').tgz $f > /dev/null; echo " - Done with $f" >> $logifile; done
+echo "" >> $logifile;
+
+echo "Dumping databases:" >> $logifile;
+for db in $(echo "show databases;" |mysql |grep -v "Database\|^mysql$\|information_schema\|performance_schema\|^test"); 
+do 
+   mysqldump $db |gzip > /var/backups/server/databases/"$db".sql.gz; 
+   echo " - Done with $db" >> $logifile;
+done
+
+tar czf /var/backups/server_backup_$(date +%Y-%m-%d).tgz /var/backups/server > /dev/null
+echo "" >> $logifile;
+
+echo "Uploading files to dropbox ($(du -hs /var/backups/server_backup_$(date +%Y-%m-%d).tgz))" >> $logifile;
+/root/dropbox_uploader upload /var/backups/server_backup_$(date +%Y-%m-%d).tgz AWS_backup/server_backup_$(date +%Y-%m-%d).tgz 2>&1 >> $logifile
+echo "" >> $logifile;
+
+echo "Cleaning up" >> $logifile;
+rm -rf /var/backups/server/files/*
+rm -rf /var/backups/server/databases/*
+rm -f /var/backups/server_backup_$(date +%Y-%m-%d).tgz
+echo "" >> $logifile;
+
+echo -e "Done! \n" >> $logifile;
+
+cat $logifile | mail -s "Backup is ready $(date)" $mail
+
+rm -f $logifile
