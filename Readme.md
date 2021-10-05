@@ -1,5 +1,6 @@
 This repository contains empty jekyll so far.
 
+
 Before doing any further steps, make sure to build the local image required to run other commands:
 ```bash
 make build-image
