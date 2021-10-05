@@ -1,0 +1,1 @@
+/var/www/vhosts/tech-notes.net/httpdocs/wp-content/uploads/wp-static-html-output-1557152950/

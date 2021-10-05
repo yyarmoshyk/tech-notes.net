@@ -1,0 +1,62 @@
+#!/bin/bash
+logifile=/var/log/backup.log
+
+if [ ! -d /var/backups/server/files ]
+then
+mkdir -p /var/backups/server/files
+fi
+
+if [ ! -d /var/backups/server/databases ]
+then 
+mkdir -p /var/backups/server/databases/
+fi
+
+echo "[$(date)] Starting backup" >> $logifile
+echo "Compressing websites:" >> $logifile
+for f in /var/www/*;do tar czf /var/backups/server/files/$(echo $f |sed 's|/|_|g' |sed 's|^_||g').tgz $f > /dev/null; echo " - Done with $f" >> $logifile; done
+echo "" >> $logifile;
+
+echo "Dumping databases:" >> $logifile;
+for db in $(echo "show databases;" |mysql |grep -v "Database\|^mysql$\|information_schema\|performance_schema\|^test"); 
+do 
+   mysqldump $db |gzip > /var/backups/server/databases/"$db".sql.gz; 
+   echo " - Done with $db" >> $logifile;
+done
+
+tar czf /var/backups/server_backup_$(date +%Y-%m-%d).tgz /var/backups/server > /dev/null
+echo "" >> $logifile;
+
+echo "Uploading files to dropbox ($(du -hs /var/backups/server_backup_$(date +%Y-%m-%d).tgz))" >> $logifile;
+/root/dropbox_uploader upload /var/backups/server_backup_$(date +%Y-%m-%d).tgz AWS_backup/server_backup_$(date +%Y-%m-%d).tgz 2>&1 >> $logifile
+echo "" >> $logifile;
+
+echo "Cleaning up" >> $logifile;
+rm -rf /var/backups/server/files/*
+rm -rf /var/backups/server/databases/*
+rm -f /var/backups/server_backup_$(date +%Y-%m-%d).tgz
+echo "" >> $logifile;
+
+echo "Removing old backups from DropBox" >> $logifile
+
+#Remove 7-days old backups from DropBox and leave 1 monthly backup
+today=$(date +%d)
+if (( $today < 8 ));
+then
+   let "last = 30 + $today - 7"
+   let "month = $(date +%m) - 1"
+else
+   let "last = $today - 7";
+   month=$(date +%m);
+fi
+
+if (( "$last" < "10" )); then filename="$(date +%Y)-$month-0$last.tgz"; else filename="$(date +%Y)-$month-$last.tgz"; fi
+
+echo "I shoulod remove $filename from dropbox" >> $logifile
+
+if (( $last != 30 )) || (( $last != 31 )); then /root/dropbox_uploader delete AWS_backup/server_backup_"$filename" 2>&1 >> $logifile; fi
+
+echo -e "Done! \n" >> $logifile;
+
+cat $logifile | mail -s "Tech-notes backup on $(date)" tryvia@mail.ru
+
+rm -f $logifile

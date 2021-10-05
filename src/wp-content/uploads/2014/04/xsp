@@ -1,0 +1,91 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          xsp
+# Required-Start:    $local_fs $remote_fs $network
+# Required-Stop:     $local_fs $remote_fs $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Asp.Net testing server startup script.
+# Description:       Asp.Net testing server startup script.
+### END INIT INFO
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC=xsp
+NAME=xsp
+DAEMON=/usr/bin/xsp4
+DEFAULT=/etc/default/$NAME
+DAEMON_ARGS="--nonstop --root /var/www/asptest"
+#DAEMON_ARGS="--nonstop --root /usr/lib/xsp/test"
+MONO_SHARED_DIR=/var/run/$NAME
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+
+[ -x "$DAEMON" ] || exit 0
+[ -f "$DEFAULT" ] && . $DEFAULT
+
+. /lib/lsb/init-functions
+
+if [ ! -e $MONO_SHARED_DIR ]; then
+        mkdir $MONO_SHARED_DIR
+        chown $user:$group $MONO_SHARED_DIR
+fi
+
+chk_start() {
+        if [ -f "$PIDFILE" ]; then
+                xpid=`head -1 "$PIDFILE"`
+                xps=`ps -p $xpid | wc -l`
+                if [ "$xps" != "1" ]; then
+                        log_action_msg "Xsp is running"
+                        return 1
+                fi
+        fi
+        return 0
+}
+
+do_start()
+{
+        export MONO_SHARED_DIR
+        start-stop-daemon --start --background --make-pidfile \
+                --quiet --pidfile /var/run/$NAME.pid \
+                --user $user --group $group --chuid $user \
+                --exec $DAEMON -- \
+                --port $port --address $address \
+                $DAEMON_ARGS
+}
+
+do_stop()
+{
+        if [ -e "$PIDFILE" ] ; then
+                kill -9 `head -1 "$PIDFILE"` 1>/dev/null 2>&1
+                rm -f "$PIDFILE"
+        fi
+}
+
+case "$1" in
+  start)
+        if chk_start ; then
+                log_daemon_msg "Starting $DESC" "$NAME"
+                do_start
+                log_end_msg $?
+        fi
+        ;;
+  stop)
+        log_daemon_msg "Stopping $DESC" "$NAME"
+        do_stop
+        log_end_msg $?
+        ;;
+  status)
+       ;;
+  restart|force-reload)
+        log_daemon_msg "Restarting $DESC" "$NAME"
+        do_stop
+        do_start
+        log_end_msg $?
+        ;;
+  *)
+        echo "Usage: $SCRIPTNAME {start|stop|status|restart|force-reload}" >&2
+        exit 3
+        ;;
+esac
+
+:

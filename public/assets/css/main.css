@@ -11,7 +11,9 @@
 /* system typefaces */
 /* sans serif typefaces */
 /* serif typefaces */
-/* type scale */
+/* type scale
+http://pxtoem.com/
+*/
 /* Colors ========================================================================== */
 /* YIQ color contrast */
 /* brands */
@@ -145,7 +147,7 @@ a:focus, button:focus { /* Default*/ outline: thin dotted #6f777d; /* Webkit*/ o
 * { box-sizing: border-box; }
 
 html { /* apply a natural box layout model to all elements */ box-sizing: border-box; background-color: #fff; font-size: 16px; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
-@media (min-width: 48em) { html { font-size: 14px; } }
+@media (min-width: 48em) { html { font-size: 13px; } }
 @media (min-width: 64em) { html { font-size: 16px; } }
 @media (min-width: 80em) { html { font-size: 18px; } }
 
@@ -528,8 +530,8 @@ tr, td, th { vertical-align: middle; }
 .notice--danger ul:last-child { margin-bottom: 0; /* override*/ }
 
 /* ========================================================================== MASTHEAD ========================================================================== */
-.masthead { position: relative; border-bottom: 1px solid #f2f3f3; -webkit-animation: intro 0.3s both; animation: intro 0.3s both; -webkit-animation-delay: 0.15s; animation-delay: 0.15s; z-index: 20; }
-.masthead__inner-wrap { clear: both; margin-left: auto; margin-right: auto; padding: 1em; max-width: 100%; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-pack: justify; -ms-flex-pack: justify; justify-content: space-between; font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif; }
+.masthead { position: relative; border-bottom: 1px solid #f2f3f3; -webkit-animation: intro 0.3s both; animation: intro 0.3s both; -webkit-animation-delay: 0.15s; animation-delay: 0.15s; z-index: 9999; background-color: #222; opacity: 0.9; }
+.masthead__inner-wrap { clear: both; margin-left: auto; margin-right: auto; padding: 1em; max-width: 100%; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-pack: justify; -ms-flex-pack: justify; justify-content: space-between; font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif; background-color: inherit; }
 .masthead__inner-wrap::after { clear: both; content: ""; display: table; }
 @media (min-width: 80em) { .masthead__inner-wrap { max-width: 1280px; } }
 .masthead__inner-wrap nav { z-index: 10; }
@@ -541,8 +543,8 @@ tr, td, th { vertical-align: middle; }
 
 .site-subtitle { display: block; font-size: 0.625em; }
 
-.masthead__menu { float: left; margin-left: 0; margin-right: 0; width: 100%; clear: both; }
-.masthead__menu .site-nav { margin-left: 0; }
+.masthead__menu { float: left; margin-left: 0; margin-right: 0; width: 100%; clear: both; background-color: inherit; }
+.masthead__menu .site-nav { margin-left: 0; background-color: inherit; }
 @media (min-width: 37.5em) { .masthead__menu .site-nav { float: right; } }
 .masthead__menu ul { margin: 0; padding: 0; clear: both; list-style-type: none; }
 
@@ -581,8 +583,8 @@ tr, td, th { vertical-align: middle; }
 .page__content + .pagination, .page__meta + .pagination, .comment__date + .pagination, .page__share + .pagination, .page__comments + .pagination { margin-top: 2em; padding-top: 2em; border-top: 1px solid #f2f3f3; }
 
 /* Priority plus navigation ========================================================================== */
-.greedy-nav { position: relative; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; min-height: 2em; background: #fff; }
-.greedy-nav a { display: block; margin: 0 1rem; color: #6f777d; text-decoration: none; }
+.greedy-nav { position: relative; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; min-height: 2em; background: inherit; }
+.greedy-nav a { display: block; margin: 0 1rem; color: #fff; text-decoration: none; }
 .greedy-nav a:hover { color: #53595e; }
 .greedy-nav a.site-logo { margin-left: 0; margin-right: 0.5rem; }
 .greedy-nav a.site-title { margin-left: 0; }
@@ -924,8 +926,8 @@ a.reversefootnote:hover { text-decoration: underline; }
 #main::after { clear: both; content: ""; display: table; }
 @media (min-width: 80em) { #main { max-width: 1280px; } }
 
-@media (min-width: 64em) { .page { float: right; width: calc(100% - 200px);} }
-@media (min-width: 80em) { .page { width: calc(100% - 300px);} }
+@media (min-width: 64em) { .page { float: right; width: calc(100% - 200px); } }
+@media (min-width: 80em) { .page { width: calc(100% - 300px); } }
 .page .page__inner-wrap { float: left; margin-top: 1em; margin-left: 0; margin-right: 0; width: 100%; clear: both; }
 .page .page__inner-wrap .page__content, .page .page__inner-wrap .page__meta, .page .page__inner-wrap .comment__date, .page .page__inner-wrap .page__share { position: relative; float: left; margin-left: 0; margin-right: 0; width: 100%; clear: both; }
 
@@ -1243,3 +1245,24 @@ a.reversefootnote:hover { text-decoration: underline; }
   .page__hero-caption a { color: #000 !important; }
   /* Hide the following elements on print ========================================================================== */
   .masthead, .toc, .page__share, .page__related, .pagination, .ads, .page__footer, .page__comments-form, .author__avatar, .author__content, .author__urls-wrapper, .nav__list, .sidebar, .adsbygoogle { display: none !important; height: 1px !important; } }
+/* Spoiler */
+.spoiler-wrap { background: none repeat scroll 0 0 #CED8F6; width: 100%; border-color: #16A1E7; border-style: solid; border-width: 1px 1px 1px 2px; margin: 6px; }
+
+.spoiler-head { line-height: 25px; margin-left: 6px; cursor: pointer; width: 97%; padding: 1px 14px 3px; }
+
+.folded { background: url(/wp-content/uploads/spoiler/icon_plus_1.gif) no-repeat scroll left center transparent; display: block; padding-left: 14px; }
+
+.unfolded { background: url(/wp-content/uploads/spoiler/icon_minus_1.gif) no-repeat scroll left center transparent; display: block; padding-left: 14px; }
+
+.spoiler-body { background: none repeat scroll 0 0 #F4FEF3; border-top: 1px solid #16A1E7; line-height: 20px; padding: 1px 6px 2px; font-size: 14px; }
+
+.spoiler-body pre { background: #263238; border-top: 1px solid #16A1E7; line-height: 20px; color: #eeffff; font-family: Monaco, Consolas, "Lucida Console", monospace; font-size: 14px; }
+
+/* EOF */
+#wpfront-scroll-top-container { display: none; position: fixed; cursor: pointer; z-index: 9999; }
+
+#wpfront-scroll-top-container div.text-holder { padding: 3px 10px; border-radius: 3px; -webkit-border-radius: 3px; -webkit-box-shadow: 4px 4px 5px 0px rgba(50, 50, 50, 0.5); -moz-box-shadow: 4px 4px 5px 0px rgba(50, 50, 50, 0.5); box-shadow: 4px 4px 5px 0px rgba(50, 50, 50, 0.5); }
+
+#wpfront-scroll-top-container a { outline-style: none; box-shadow: none; text-decoration: none; }
+
+/* MASTHEAD customized  */
