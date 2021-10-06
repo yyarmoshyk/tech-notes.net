@@ -18,5 +18,5 @@ jobs:
         docker run -t \
           -v ${{ github.workspace }}/public:/myblog/public \
           -v ${{ github.workspace }}/src:/myblog \
-          jekyll/builder:latest \
-          /bin/bash -c "chmod -R 777 /myblog && pwd && ls -la && cd /myblog && bundle && bundle exec jekyll build -d public"
+          yyarmoshyk/jekyll-minimal-mistakes:ruby-2.5 \
+          /bin/bash -c "cd /myblog && bundle && bundle exec jekyll build -d public"
