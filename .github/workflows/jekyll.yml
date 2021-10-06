@@ -11,16 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Build the site in the yyarmoshyk/jekyll-minimal-mistakes:ruby-2.5 container
+    - name: Build
       run: |
         docker run -t \
           -v ${{ github.workspace }}/public:/myblog/public \
           -v ${{ github.workspace }}/src:/myblog \
           yyarmoshyk/jekyll-minimal-mistakes:ruby-2.5 \
           /bin/bash -c "cd /myblog && bundle && bundle exec jekyll build -d public"
-  Deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Deploy site to S3
+    - name: Deploy to S3
       run: bash deploy_s3.sh
