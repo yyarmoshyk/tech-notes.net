@@ -1,0 +1,44 @@
+name: Jekyll site CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: |
+        docker run -t \
+          -v ${{ github.workspace }}/public:/myblog/public \
+          -v ${{ github.workspace }}/src:/myblog \
+          yyarmoshyk/jekyll-minimal-mistakes:ruby-2.5 \
+          /bin/bash -c "cd /myblog && bundle && bundle exec jekyll build -d public"
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: public
+        path: public
+        retention-days: 1
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: public
+    - name: Deploy to S3
+      run: bash deploy_s3.sh
+    env:
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      AWS_ROLE: ${{ secrets.AWS_ROLE }}
+      AWS_USER: ${{ secrets.AWS_USER }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
