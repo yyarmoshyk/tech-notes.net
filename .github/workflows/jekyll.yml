@@ -19,10 +19,11 @@ jobs:
           yyarmoshyk/jekyll-minimal-mistakes:ruby-2.5 \
           /bin/bash -c "cd /myblog && bundle && bundle exec jekyll build -d public"
     - name: Archive artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: public
-          path: public
+      uses: actions/upload-artifact@v2
+      with:
+        name: public
+        path: public
+        retention-days: 1
   deploy:
     needs: build
     runs-on: ubuntu-latest
