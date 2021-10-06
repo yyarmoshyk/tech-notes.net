@@ -15,8 +15,8 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build the site in the yyarmoshyk/jekyll-minimal-mistakes:ruby-2.5 container
       run: |
-        docker run --rm \
+        docker run \
           -v ${{ github.workspace }}/public:/myblog/public \
           -v ${{ github.workspace }}/src:/myblog \
           yyarmoshyk/jekyll-minimal-mistakes:ruby-2.5 \
-          /bin/bash -c "cd /myblog; bundle; bundle exec jekyll build -d public"
+          /bin/bash -c "chmod -R 777 /myblog && cd /myblog && bundle && bundle exec jekyll build -d public"
