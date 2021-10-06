@@ -9,9 +9,9 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: yyarmoshyk/jekyll-minimal-mistakes:ruby-2.5
 
     steps:
     - uses: actions/checkout@v2
     - name: Build the site in the yyarmoshyk/jekyll-minimal-mistakes:ruby-2.5 container
-      run: make build
+      run: cd /src; bundle; bundle exec jekyll build -d public
