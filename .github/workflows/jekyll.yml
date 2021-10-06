@@ -29,6 +29,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: public
     - name: Deploy to S3
       run: bash deploy_s3.sh
     env:
