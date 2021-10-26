@@ -28,5 +28,3 @@ Copy the desired build name from one server into other:
 java -jar /Downloads/jenkins-cli.jar -auth <username>:<password> -s https://<source_jenkins_server_address>/ get-job "Build name" |\
 java -jar /Downloads/jenkins-cli.jar -auth <username>:<password> -s https://<target_jenkins_server_address>/ create-job "Build name"
 ```
-
-This trick doesn't work for multibraunch pipelines
