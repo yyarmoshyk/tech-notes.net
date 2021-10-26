@@ -16,21 +16,17 @@ You'll need to have java installed. In modern world it makes more sence to run d
 docker run -v /Users/myuser/Downloads/:/Downloads -it openjdk:8u312-jre bash
 ```
 
-Install `xclip` and `xsel`
-```
-apt install xclip xsel
-echo "alias pbcopy='xclip -selection clipboard'" >> ~/.bashrc
-echo "alias pbpaste='xclip -selection clipboard -o'" >> ~/.bashrc
-source ~/.bashrc
-```
+I mount my `~/Downloads` folder into the container because this is where `jenkins-cli.jar` is saved. You might need to change the source for the volume to be mounted.
 
 List the jobs:
 ```bash
-java -jar ~/Downloads/jenkins-cli.jar -auth <username>:<password> -s https://<jenkins_server_address>/ list-jobs
+java -jar /Downloads/jenkins-cli.jar -auth <username>:<password> -s https://<jenkins_server_address>/ list-jobs
 ```
 
 Copy the desired build name from one server into other:
 ```bash
-java -jar ~/Downloads/jenkins-cli.jar -auth <username>:<password> -s https://<source_jenkins_server_address>/ get-job "Build name" |pbcopy
-pbpaste | java -jar ~/Downloads/jenkins-cli.jar -auth <username>:<password> -s https://<target_jenkins_server_address>/ create-job "Build name"
+java -jar /Downloads/jenkins-cli.jar -auth <username>:<password> -s https://<source_jenkins_server_address>/ get-job "Build name" |\
+java -jar /Downloads/jenkins-cli.jar -auth <username>:<password> -s https://<target_jenkins_server_address>/ create-job "Build name"
 ```
+
+This trick doesn't work for multibraunch pipelines
