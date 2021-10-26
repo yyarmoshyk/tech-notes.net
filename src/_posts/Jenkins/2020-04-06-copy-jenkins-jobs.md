@@ -10,7 +10,8 @@ tags:
   - Jenkins
 ---
 Для начала вам нужно будет скопировать jenkins-cli.jar к себе на компьютер.
-<img src="assets/images/JenkinsCLIMenu.png">
+<img src="/assets/images/JenkinsCLIMenu.png" width="1149" height="314" class="aligncenter size-full wp-image-3516">
+
 
 Получаем список плагинов:
 ```bash
