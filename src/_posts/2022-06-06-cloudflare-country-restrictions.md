@@ -2,8 +2,7 @@
 id: 458
 title: 'Cloudflare: restrict access to your website for a country'
 date: 2022-06-06T00:00:00+00:00
-author: admin
-
+author: "Yaroslav Yarmoshyk"
 guid: http://www.tech-notes.net/?p=458
 permalink: /cloudflare-country-restrictions/
 image: /wp-content/uploads/2022/web-application-firewall-icon-25web-application-firewall-icon-25.png
