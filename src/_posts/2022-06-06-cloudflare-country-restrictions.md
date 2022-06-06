@@ -23,3 +23,6 @@ I use [jekyll](https://jekyllrb.com/) to organize the website content and [AWS S
 Restricting access to your website with CloudFlare for a particular country is fairy simple. You need WAF section that is available even in the free tier account.
 You got to create new firewall rule as shown at the screenshot below
 ![cloudflare_country_block!](/wp-content/uploads/2022/cloudflare_country_block.png "cloudflare_country_block")
+
+An now you can hapily observe how they hit the wall or their expectations:
+<center><img src="/wp-content/uploads/2022/blocked-access-waf.png" alt="drawing" width="30%" height="30%"/></center>
