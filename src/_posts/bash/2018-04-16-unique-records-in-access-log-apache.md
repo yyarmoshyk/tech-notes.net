@@ -1,6 +1,6 @@
 ---
 id: 3674
-title: Уникальные IP адреса в access.log Apache
+title: Get Inique IP addresses from Apache access.log 
 date: 2018-04-16T06:33:14+00:00
 author: admin
 guid: http://www.tech-notes.net/?p=3674
@@ -15,11 +15,9 @@ tags:
   - Nginx
   - logfile
 ---
-Получить список уникальных IP адресов в лог файле вэбсервера `Apache` можно с помощью:  
 
+The following can be used to fetch the unique records from apache access.log. This example covers IP addresses of the clients but this example can be used to extract other data as well:
 ```bash
 cat access.log | awk '{print $1}' | sort -n | uniq -c | sort -nr | head -20
 ```
-
-
-Она же сработает и для логов вэбсервера `Nginx`, носколько в обоих фарматах IP адрес посетителя является первым полем каждой записи.
+It also will work for `nginx` access logs because visitor's IP address is also a first field for every row.
