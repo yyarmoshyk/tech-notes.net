@@ -25,4 +25,4 @@ You got to create new firewall rule as shown at the screenshot below
 ![cloudflare_country_block!](/wp-content/uploads/2022/cloudflare_country_block.png "cloudflare_country_block")
 
 An now you can hapily observe how they hit the wall or their expectations:
-<center><img src="/wp-content/uploads/2022/blocked-access-waf.png" alt="drawing" width="30%" height="30%"/></center>
+![blocked-access-waf!](/wp-content/uploads/2022/blocked-access-waf.png "blocked-access-waf")
