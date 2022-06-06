@@ -6,6 +6,7 @@ author: admin
 
 guid: http://www.tech-notes.net/?p=458
 permalink: /cloudflare-country-restrictions/
+image: /wp-content/uploads/2022/web-application-firewall-icon-25web-application-firewall-icon-25.png
 categories:
   - cloudflare
 tags:
