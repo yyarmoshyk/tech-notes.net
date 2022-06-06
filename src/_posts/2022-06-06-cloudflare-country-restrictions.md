@@ -13,7 +13,7 @@ tags:
 ---
 Today I woke up and suddenly realised that most of the articles in this blog were written in russian language and the major visitors come from russian-speeking countries.
 Almost 80% of traffic came to my website from russia. Here is the data for last Friday:
-![tech-notes-traffic-stats!](/wp-content/uploads/2022/tech-notes-traffic-stats.png "tech-notes-traffic-stats" =250x)
+<img src="/wp-content/uploads/2022/tech-notes-traffic-stats.png" alt="drawing" width="50%" height="50%"/>
 
 I need to prevent these guys from using my background in their work so no more traffic from russia (I wrote from small letter for purpose). I don't care about the numbers becuase this is non-profitable website.
 
