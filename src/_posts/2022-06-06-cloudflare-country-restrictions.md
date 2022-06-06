@@ -12,7 +12,10 @@ tags:
   - cloudflare
 ---
 Today I woke up and suddenly realised that most of the articles in this blog were written in russian language and the major visitors come from russian-speeking countries.
-I need to prevent these guys from using my background in their work so no more traffic from russia (I wrote from small letter for purpose).
+Almost 80% of traffic came to my website from russia. Here is the tada for last Friday:
+![tech-notes-traffic-stats!](/wp-content/uploads/2022/tech-notes-traffic-stats.png "tech-notes-traffic-stats")
+
+I need to prevent these guys from using my background in their work so no more traffic from russia (I wrote from small letter for purpose). I don't care about the numbers becuase this is non-profitable website.
 
 I use jekyll to organize the website content and AWS S3 to store the files so I don't much options how to restrict access to it. But I also use CloudFlare as a CDN for it and I found a cool thing in it that can help me to acheive what I need.
 
