@@ -1,24 +1,28 @@
 ---
 id: 3404
-title: Установка Unison на CentOS 7
+title: Setup Unison in CentOS 7
 date: 2016-08-31T11:06:55+00:00
-author: admin
+author: "Yaroslav Yarmoshyk"
 
 guid: http://www.tech-notes.net/?p=3404
 permalink: /setup-unison-centos-7/
 image: /wp-content/uploads/2016/08/unison.png
 categories:
   - Linux server
+tags:
+  - unison
+  - master-master file replication
 ---
-`Unison` - одна из утилит, которая используется для репликации файлов между серверами. Большим достоинством Unison является поддержка master-master репликации.
+`Unison` is one of the utilities that is used to replicate files between servers. A big advantage of Unison is its support for master-master replication.
 
-До недавнего времени Unison был доступен в репозитории `Epel`, но по незвестным причинам его там больше нету, поэтому предлагается его скомпилить из пакета с исходным кодом. Для этого нам понадобятся некие пакеты:
+Until recently, Unison was available in the `Epel` repository, but for unknown reasons it is no longer there, so it is suggested to compile it from the source.
 
+Prepare first:
 ```bash
 yum install ocaml ocaml-camlp4-devel ctags ctags-etags
 ```
 
-Скачиваем `Unison`:
+Download and make `Unison`:
 
 ```bash
 cd /usr/src  
@@ -33,29 +37,25 @@ sudo cp -v unison /usr/local/sbin/
 sudo cp -v unison /usr/bin
 ```
 
-Это не ошибка и не опечатка. Если бинарника не будет в папке /usr/bin - может выскочить следующая ошибка:
-
+You got to do the steps above to copy the binary into one of the `$PATH` folders to avoid the following error:
 ```bash
 Contacting server ...
 bash: unison: command not found  
 Fatal error: Lost connection with the server
 ```
 
-Создаем папку с конфигами:
-
+Create configuration folder:
 ```bash
 mkdir ~/.unison/  
 cd ~/.unison/
 ```
 
-Создаем в ней конфигурационный файл для синхнонизации с сервером web2:
-
+Create configuration file to sync with server `web2`:
 ```bash
 vim sync-web2.prf
 ```
 
-Содержимой файла следующее:
-
+File contents:
 ```bash
 # Reasonable defaults
 auto=true
@@ -87,10 +87,10 @@ backupdir=/var/www/unison-backups/
 maxbackups=2
 
 # Local root
-root=<strong>/var/www/vhosts/website_name</strong>/
+root=/var/www/vhosts/website_name/
 
 # Remote root (the double forward-slash between IP and remote path is correct)
-root=ssh://<strong>web2_ip_address/var/www/vhosts/website_name</strong>/
+root=ssh://web2_ip_address/var/www/vhosts/website_name/
 
 # Resolve conflicts in favor of local root
 prefer=newer
@@ -111,16 +111,16 @@ ignore=Path tmp/page_parse_time.log
 ignore=Path tmp/sessionsadmin
 ignore=Path rewrite.log
 ```
+You got to customize the following values:
+* Local root
+* Remote root
 
-
-Для синхронизации выполните следующее:
-
+Run the following to sync:
 ```bash
 unison sync-web2
 ```
 
-Рекомендуется запланировать выполнение с определенным интервалом с помощью cron задачи:
-
+Create cron task to run the sync periodically
 ```bash
 crontab -e  
 */10 * * * * unison sync-web2 2>&1 > /dev/null
