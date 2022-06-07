@@ -55,6 +55,12 @@ Create configuration file to sync with server `web2`:
 vim sync-web2.prf
 ```
 
+<center>
+  <div id="gads">
+  </div>
+</center>
+
+
 File contents:
 ```bash
 # Reasonable defaults
