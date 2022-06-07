@@ -1,8 +1,8 @@
 ---
 id: 2257
-title: Шпаргалка по sed
+title: SED Cheat Sheet
 date: 2014-12-03T20:30:26+00:00
-author: admin
+author: "Yaroslav Yarmoshyk"
 
 guid: http://www.tech-notes.net/?p=2257
 permalink: /sed-examples/
@@ -12,93 +12,84 @@ categories:
 tags:
   - sed
 ---
-Sed является потоковым редактором в UNIX-подобных операционных системах, которий используется для фильтрации и преобразования текста.
+`Sed` is a stream editor on UNIX-like operating systems that is used to filter and transform text.
 
-Sed можно использовать как для редактирования файлов, так и стандартного вывода програм/операций в stdout.
+`Sed` can be used for both editing files and standard output of programs/operations to stdout.
 
-Стандарнтный синтаксис:
+Standard syntax:
 ```bash
-sed [опции] команды [имя файла]
+sed [options] commands [filename]
 ```
 
-Ниже приведены примеры использования sed в различных ситуациях.
+The following are examples of using sed in various situations.
 
-**Замена слова** (root на Admin):
+**Word replacement** (root on Admin):
 ```bash
-sed 's/root/Admin/' имя_файла
+sed 's/root/Admin/' filename
 ```
 
-В результате содержимое файла будет выведено в stdout, а `root` будет заменено на `Admin`.  
-К сожалению замена будет произведена только для первого найденого root. Для того чтобы весь вывод был обработан - используйте `g` в выражении.
+As a result, the contents of the file will be printed to stdout and `root` will be replaced by `Admin`.
+Unfortunately, the replacement will be made only for the first occurance of `root`. To have all output processed, use `g` in the expression.
 ```bash
-sed 's/root/Admin/g' имя_файла
+sed 's/root/Admin/g' filename
 ```
 
-Как правило команда для sed состоит из двух частей, разделенных символом /.  
-В левой части указывается значение или выражение, которое нас интересует, в правой - новое значение для левой части.
+Typically, a sed command consists of two parts, separated by the `/` character.
+On the left side, the value or expression that interests us is indicated, on the right side, the new value for the left side.
 
 <center>
   <div id="gads">
   </div>
 </center>
 
-**Для выполнения нескольких операций** воспользуйтесь ключем `-e`:
-
+**To perform multiple operations** use the `-e` switch:
 ```bash
-sed -e 's/root/Admin/g' -e 's/bash/sh/g' имя_файла
+sed -e 's/root/Admin/g' -e 's/bash/sh/g' filename
 ```
 
-**Замена слова только в строках содержащих нужное** (заменить `root` на `Admin` в строках со словом `user`):
-
+**Replace the word only in lines containing the desired one** (replace `root` with `Admin` in lines with the word `user`):
 ```bash
-sed '/user/s/root/Admin/g' имя_файла
+sed '/user/s/root/Admin/g' filename
 ```
 
-**Для того что бы отредактировать файл** используйте ключь `-i`:
-
+**To edit a file** use the `-i` switch:
 ```bash
-sed -i '/user/s/root/Admin/g' имя_файла
+sed -i '/user/s/root/Admin/g' filename
 ```
 
-**Удаление 5-й строки**
-
+**Removing the 5th line**
 ```bash
-sed -i '5d' имя_файла
+sed -i '5d' filename
 ```
 
-**Чтобы сделать резервную копию оригиналльного файла** воспользуйтесь -i.bak
-
+**To backup the original file** use -i.bak
 ```bash
-sed -i.bak '5d' имя_файла
+sed -i.bak '5d' filename
 ```
 
-**Удаление строки, в которую входит слово `games`**:
-
+**Remove the line containing the word `games`**:
 ```bash
-sed '/games/d' имя_файла
+sed '/games/d' filename
 ```
 
-**Удаление всех пустых строк**:
-
+**Remove all blank lines**:
 ```bash
-sed '/^$/d' имя_файла
+sed '/^$/d' filename
 ```
 
-**Отображения диапазона строк** (строки, начиная с первой по пятую)
-
+**Row range display** (rows from one to five)
 ```bash
-sed -n '1,5p' имя_файла
+sed -n '1,5p' filename
 ```
 
-Имя файла использовать не обязательно. С помощью sed можно исменять стандартный вывод.  
-Сравните стандартный вывод:
+The file name is optional. With sed you can change the standard output.
 
+Compare standard output:
 ```bash
-fd -kh
+df -kh
 ```
 
-и его видоизмененный вариант:
-
+and its modified version:
 ```bash
 df -kh |sed 's/%/000000/g'
 ```
@@ -108,39 +99,34 @@ df -kh |sed 's/%/000000/g'
   </div>
 </center>
 
-### Использование специальных символов:
+### Using special characters:
+You can use special characters:
+* `^` - start of line
+* `$` - end of line
+* `.` - designation of one character
 
-Можно использовать спецсимволы:  
-^ - начало строки  
-$ - конец строки  
-. - обозначение одного символа
+The complete set is not limited to just these three. `Sed` understands [regular expressions](https://www.gnu.org/software/sed/manual/html_node/Regular-Expressions.html) very well.
 
-Полный набор не ограничен только этими тремя. Sed прекрасно понимает [регулярные выражения (regular expressions)](https://www.gnu.org/software/sed/manual/html_node/Regular-Expressions.html).
-
-Следующая команда заменит `root` на `Admin` в тех строках, которые начинаются с `user`:
-
+The following command will replace `root` with `Admin` on lines that start with `user`:
 ```bash
-sed '/^user/s/root/Admin/g' имя_файла
+sed '/^user/s/root/Admin/g' filename
 ```
 
-Следующая команда заменит `root` на `Admin` в тех строках, которые заканчиваются словом `data`:
-
+The following command will replace `root` with `Admin` on lines that end with `data`:
 ```bash
-sed '/data$/s/root/Admin/g' имя_файла
+sed '/data$/s/root/Admin/g' filename
 ```
 
-В том, случае если Вам нужно использовать какой-либо спецсимвол в sed ( `$`, `^`, `/`, пробел, точка, `'`, и т.д.) его нужно `экранировать` с помощью `\`.
+In case you need to use any special character in sed ( `$`, `^`, `/`, space, dot, `'`, etc.) it must be `escaped` with `\ `.
 
-С помощью следующей конструкции слово `root` с пробелом после него будет заменено на `Admin` с двоеточием:
-
+The following construct will replace the word `root` followed by a space with `Admin` followed by a colon:
 ```bash
-sed 's/root\ /Admin:/g' имя_файла
+sed 's/root\ /Admin:/g' filename
 ```
 
-В случае использования символа | (pipe) в качестве разделителя спецсимволы экранировать не нужно, но при этом регулярные выражения работать не будут
-
+In the case of using the symbol | (pipe) special characters do not need to be escaped as a separator, but regular expressions will not work in this case
 ```bash
-sed 's|root |Admin:|g' имя_файла
+sed 's|root |Admin:|g' filename
 ```
 
 <center>
@@ -148,68 +134,62 @@ sed 's|root |Admin:|g' имя_файла
   </div>
 </center>
 
-### Регулярные выражения
+### Regular Expressions
 
-**Убрать все цыфры из вывода**:
-
+**Remove all digits from output**:
 ```bash
 sed 's/\[0-9\]\[0-9\]//g'
 ```
 
-**Продублировать отсеченное значение**:
-
+**Duplicate Clipped Value**:
 ```bash
 sed 's/root/& &/g'
 ```
 
-Попробуйте выполнить:
-
+Try executing:
 ```bash
-echo `123 abc` | sed 's/\[0-9\]\[0-9\]*/&-&/'
+echo '123abc' | sed 's/\[0-9\]\[0-9\]*/&-&/'
 ```
 
-Регулярное выражение `[0-9]*` определят 0 или больше цыфр.  
-Регулярное выражение `\[0-9\]\[0-9\]*` определят 1 или больше цыфр.
+The regular expression `[0-9]*` matches 0 or more digits.
+The regular expression `\[0-9\]\[0-9\]*` matches 1 or more digits.
 
-Если Вам нужно использовать первое слово из строки текста - обзначьте его экранированой цыфрой:
-
+If you need to use the first word from a line of text, mark it with an escaped digit:
 ```bash
 sed 's/\([a-z]\*\).\*/\1/'
 ```
 
-Проверьте сами:
-
+Check this out:
 ```bash
 echo 'abcd qwer zxc 123'| sed 's/\([a-z]\*\).\*/\1/'
 ```
 
-Для того что бы поменять местами первое и второе слово - воспользуйтесь следующей конструкцией:
-
+In order to swap the first and second word - use the following construction:
 ```bash
 sed 's/\([a-z]\*\) \([a-z]\*\)/\2 \1/'
 ```
 
-Пробел в левой части выражения может быть заменен на любой другой разделитель.
+The space on the left side of the expression can be replaced by any other delimiter.
 
-Для теста:
+For test:
 
 ```bash
 echo 'abcd qwer zxc 123'| sed -r 's/([a-z]+) ([a-z]+)/\2 \1/'
 ```
 
-и
+and
 
 ```bash
-echo 'abcd_qwer_zxc_123'| sed -r 's/([a-z]+)_([a-z]+)/\2**_**\1/'  
+echo 'abcd_qwer_zxc_123'| sed -r 's/([a-z]+)_([a-z]+)/\2**_**\1/'
 ```
+
 ```bash
 echo 'abcd_qwer_zxc_123'| sed -r 's/([a-z]+)**_**([a-z]+)/\2 \1/'
 ```
 
-Замена текства между двумя словами:
-
+**Replacing text between two words**
 ```bash
-sed -ure 's/**word1**.+?**word2**/**word1**\ замена\ **word2**/g' -i файл
+sed -ure 's/**word1**.+?**word2**/**word1**\ replacement\ **word2**/g' -i file
 ```
 
 <center>
@@ -217,18 +197,16 @@ sed -ure 's/**word1**.+?**word2**/**word1**\ замена\ **word2**/g' -i фа�
   </div>
 </center>
 
-### Использование переменных в выражениях sed
+### Using variables in sed expressions
 
-При написании bash скриптов мы используем переменные. Иногда возникает необходимость использовать эти переменные в выражениях sed.
+When writing bash scripts, we use variables. Sometimes it becomes necessary to use these variables in sed expressions.
 
-Самый простой подход - использование двойных кавычек для обертки выражения:
-
+The easiest approach is to use double quotes for the wrapper:
 ```bash
 sed 's/$var1/$var2/g'
 ```
 
-Двойные кавычки не сработают, есть в `$var1` или `$var2` присутвствуют спецсимволы. Лучше всего - исключать переменные из обертки:
-
+Double quotes won't work, there are special characters in `$var1` or `$var2`. Your best bet is to exclude variables from the wrapper:
 ```bash
 sed 's/''$var1''/''$var2''/g'
 ```

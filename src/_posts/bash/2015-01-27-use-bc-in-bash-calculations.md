@@ -1,8 +1,8 @@
 ---
 id: 2321
-title: Математика в BASH с помощью bc
+title: Doing match calculations in BASH with bc
 date: 2015-01-27T16:05:40+00:00
-author: admin
+author: "Yaroslav Yarmoshyk"
 
 guid: http://www.tech-notes.net/?p=2321
 permalink: /use-bc-in-bash-calculations/
@@ -11,95 +11,77 @@ categories:
   - bash
 tags:
   - bash
-  - Алгебраические функции bc
-  - возведения в степень bc
-  - Использование bc
-  - Округление bc
-  - Тригонометри́ческие функции bc
+  - using bc
+  - bc match
 ---
-`bc` - это язык, который поддерживает числа произвольной точности с интерактивным исполнения отчетности.  
-Безусловно, bc - один из аутсайдеров, когда дело доходит до расчетов по командной строке.
+`bc` is a tool that allows to do inline calculations in bash cli.
+Eventually `bc` can't be used for complicated calculations.
 
-Главным достоинством bc является обработка чисел с запятой (float). В среде bash можно проводить обычные операции (сложение, вычитание, деление и умножение) с целыми числами, но без bc не обойтись, когда дело доходит до десятичных дробей.
+The primary advantage of `bc` is float support. In bash, you can do the usual operations (addition, subtraction, division, and multiplication) on integers but bc is indispensable when it comes to decimals.
 
-Дальше приводится несколько примеров использования bc:
+Next you can find a number of examples of `bc` usage:
 
-### Использование bc для базовых операций:
-
+### Basic operations with bc
 ```bash
 bc <<< 3-2  
 bc <<< 5*2  
 bc <<< 9/3
 ```
-
-как всегда, можно использовать `echo + |`:
-
+of cource you can use it with echo and pipe `echo ... |bc`:
 ```bash
-echo `3*2` |bc  
-echo `3-2` |bc  
-echo `3*2` |bc  
-echo `3/2` |bc
+echo '3*2' |bc  
+echo '3-2' |bc  
+echo '3*2' |bc  
+echo '3/2' |bc
+```
+`bc`  respects the precedence of mathematical operations. Check this out:
+```bash
+echo '2 + 2 * 2' |bc
 ```
 
-`bc`, как положено, соблюдает приоритетность математических операций. Проверьте:
-
+### Rounding result
+In the case of the division operation from the example `bc` will return 1. In order to show the numbers after the decimal point, you need to specify how many of them you need using `scale` (default = 0):
 ```bash
-echo `2 + 2 * 2` |bc
+echo 'scale=1;3/2' |bc
 ```
 
-### Округление результата
-
-В случае выполнения операции деления из примера bc вернет 1. Для того что бы показать цифры после запятой нужно указать сколько их нужно с помощью `scale` (по умолчанию = 0):
-
-```bash
-echo `scale=1;3/2` |bc
-```
-
-### Если же у Вас есть файл с набором математических операций
- воспользуйтесь слудющей конструкцией:
-
+### You can use the file with the set of match operations
 ```bash
 bc < FileName
 ```
 
-### Использование результата последней операции:
-
+### Using result of last operation
 ```bash
-echo `2 + 2;last * 2` |bc
+echo '2 + 2;last * 2' |bc
 ```
 
-Вместо last можно использовать точку:
+You can use dot (.) instead of `last`
 
 ```bash
-echo `2 + 2;. * 2` |bc
+echo '2 + 2;. * 2' |bc
 ```
 
-**Получение квадратного корня и возведение в степень**  
-`sqrt` вернет квадратный корень из числа. Если результат является десятичной дробью - используйте `scale` для отображения знаков после запятой.
-
+**Getting the square root and exponentiation**  
+`sqrt` returns square root. You can use scale for floats `scale`
 ```bash
-echo `sqrt(16)` | bc
+echo 'sqrt(16)' | bc
+```
+It is rather strange that a tool written in C does not have the use of `sqr`.
+
+**Exponentiation example**
+```bash
+echo '4^2' | bc
 ```
 
-Довольно странно, что у библиотеки, написанной на C не предусмотрено использование sqr, но все же его нету.
+### Trigonometric functions
+I doubt that someone will use the cosine value or the natural logarithm of a number in scripts, but still:
+   * **s (x)** Sine **x**. **x** is given in radians.
+   * **c (x)** Cosine **x**. **x** is given in radians.
+   * **l (x)** Natural logarithm of x
 
-**Пример возведения в степень:**
-
+### Cerate variables from bc outputs
 ```bash
-echo `4^2` | bc
-```
-
-### Тригонометрические функции:
-
-Сомневаюсь, что кто-то будет в скриптах использовать значение косинуса или натурального логарифма числа, но все же:
-  * **s (x)** Синус **x**. **x** задается в радианах.
-  * **c (x)** Косинус **x**. **x** задается в радианах.
-  * **l (x)** Натуральный логарифм x
-
-### Создание переменных на основе результатов вычислений:
-
-```bash
-var1=$(echo `sqrt(16)` | bc)
+var1=$(echo 'sqrt(16)' | bc)
 ```
 
 ```bash
@@ -110,8 +92,8 @@ var2=$(bc <<< "2 + 2 * 2")
 echo $var1 + $var2 |bc
 ```
 
-В <a href="http://www.tech-notes.net/mysql-database-size/" target="_blank">этой статье</a> bc используется для определения места, которое занимают базы даных mysql.
+In [this article]("/mysql-database-size/") `bc` is used to determine the size of the MySQL databases.
 
-Статьи на английском языке:  
-<a href="http://mylinuxbook.com/linux-command-line-calculator-bc-examples/" target="_blank">mylinuxbook.com</a>  
-<a href="http://www.basicallytech.com/blog/?/archives/23-command-line-calculations-using-bc.html" target="_blank">basicallytech.com</a>
+## External links:
+* [mylinuxbook.com]("http://mylinuxbook.com/linux-command-line-calculator-bc-examples/")
+* [basicallytech.com]("http://www.basicallytech.com/blog/?/archives/23-command-line-calculations-using-bc.html")
