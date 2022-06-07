@@ -56,6 +56,10 @@ resource "google_compute_firewall" "foo" {
   source_ranges = "0.0.0.0/0"
 }
 ```
+<center>
+  <div id="gads">
+  </div>
+</center>
 
 More complicated example. Here I loop over the map of string values and build dynamic block:
 ```terraform
@@ -95,6 +99,10 @@ resource "google_compute_firewall" "foo" {
   source_ranges = ["0.0.0.0/0"]
 }
 ```
+<center>
+  <div id="gads">
+  </div>
+</center>
 
 And even more complicated example. Here I loop over the map of strings and lists and build the dinamic block:
 ```terraform

@@ -14,20 +14,25 @@ lazy_seo_meta_key_geo:
   - geo1
 image: /wp-content/uploads/2013/10/dns_control.jpg
 categories:
-  - DNS
+  - DNS MX
 ---
-**Что такое MX запись и с чем ее кушают?**
+**What is an MX record and what does it stand for?**
 
-Простыми словами - это комбинация букв и цифр определяющий маршрут которым ходит почта для конкретного web домена.
+This is a combination of letters and numbers that determines the route that mail goes to for a particular web domain.
 
-Она состоит из IP адреса и приоритета для записи.
+It consists of the target (an IP address or the destination mail server dns) and a priority for the entry.
 
-Приоритет - это просто число, которое определяет какой сервер будет использован как назначение для доставки почты в случае, если используются несколько серверов/записей. Высший приоритет определятся низшим значением. То есть если есть два сервера, у первого - приоритет 10, у второго - 20, то сначала любой почтовик будет поставлять почту на тот сервер, у которого приоритет 10.
+Priority is a number that determines which server will be used as the mail delivery destination in case multiple servers/records are used. The highest priority is determined by the lowest value. If there are two server records where the first one has a priority of 10 and the second one has a priority of 20 then at first any mailer will deliver email to the server with a priority of 10.
 
-Если MX запись для домена отсутствует, тогда почта доставляется согласно A записи в DNS.
+If there is no MX record for the domain then mail is delivered according to the A record in DNS.
 
-**Для чего это нужно?**
+<center>
+  <div id="gads">
+  </div>
+</center>
 
-Допустим ваш сайт хостится где-то на shared hostingе у GoDaddy. В то же время у вас есть крутой почтовый аккаунт на каком-то из почтовых сервисов (допустим gmail). Само наличие почтового ящика с содержанием Вашего доменного имени не подразумевает доставку почты в него. Для того что бы это работало нужно добавить соответсвующие MX записи для почтового сервиса.
+**What is it for?**
 
-Второй пример. Имеется почта на сервере вместе с web сайтом. Планируется переезд на другой хостинг/тарифный план со сменой ip адреса. Почта очень важна. В DNS зоне описана MX запись для первого (исходного) сервера или почтового аккаунта с приоритетом 10. Во время переключение DNS на новый сервер может потеряться часть почты во время так называемого `DNS propagation`. За сутки до переезда можно добавить вторую MX запись в DNS зону с ip адресом нового сервера и приоритетом 20. В этом случае после переключения DNS на новый сервер все почтовики будут знать о втором почтовом сервере, и те до которых изменения DNS о первой записи еще не дошли будут доставлять почту на второй сервер. При этом почтовую службу на исходном сервере нужно остановить, либо отключить учетные записи почты в панели управления.
+Let's say your site is hosted somewhere on shared hosting by `GoDaddy`. At the same time, you have a cool mail account on some of the mail services (let's say gmail). The mere existence of a mailbox containing your domain name does not imply delivery of mail to it. In order for this to work you need to create the appropriate MX records for the mail service.
+
+Second example: there is mail on the server along with the web site. It is planned to move to another hosting or tariff plan and change the ip address. The mail is very important. The DNS zone describes an MX record for the first (source) server or mail account with a priority of 10. During the DNS switch to a new server, some mail may be lost during the so-called `DNS propagation`. A day before the move, you can add a second MX record to the DNS zone with the ip address of the new server and priority 20. In this case, after switching DNS to the new server all mailers will know about the second mail server and those before which DNS changes about the first record have not yet reached will deliver mail to the second server. In this case, the mail service on the source server must be stopped, or mail accounts must be disabled in the control panel.
