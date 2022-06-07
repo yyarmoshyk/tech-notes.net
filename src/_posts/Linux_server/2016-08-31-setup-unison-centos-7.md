@@ -126,10 +126,15 @@ Run the following to sync:
 unison sync-web2
 ```
 
-Create cron task to run the sync periodically
+Create cron task to run the sync periodically (every 10 minutes)
 ```bash
 crontab -e  
 */10 * * * * unison sync-web2 2>&1 > /dev/null
+```
+
+or even more often (every minute):
+```
+* * * * * unison sync-web2 2>&1 > /dev/null
 ```
 
 [https://www.digitalocean.com/community/questions/install-unison-in-centos-7](https://www.digitalocean.com/community/questions/install-unison-in-centos-7)
