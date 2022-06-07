@@ -1,6 +1,6 @@
 ---
 id: 49
-title: DNS MX запись
+title: DNS MX record
 date: 2013-12-13T20:05:36+00:00
 author: admin
 
@@ -8,10 +8,6 @@ guid: http://wp38.local/?p=49
 permalink: /dns-mx-record/
 attitude_sidebarlayout:
   - default
-lazy_seo_meta_key:
-  - почта
-lazy_seo_meta_key_geo:
-  - geo1
 image: /wp-content/uploads/2013/10/dns_control.jpg
 categories:
   - DNS MX
