@@ -22,8 +22,6 @@ The user will then be able to execute binary without entering a password as foll
 sudo /path/to/binary
 ```
 
-Небольшой хак для того, чтобы и sudo вводить не пришлось. очень хорошо подходит docker для примера. По умолчанию все docker команды выполняются с правами суперпользователя. Для того чтобы обычный пользователь в системе смог выполнять docker-команды без необходимости вводить sudo и пароль каждый раз нужно сначала отредактировать `/etc/sudoers` следующей строкой:
-
 A small hack so that you don't have to enter `sudo` either. `Docker` fits the example very well. By default, all docker commands are to be ran under `root`. 
 For a regular user on the system to be able to execute docker commands without having to enter `sudo` and password each time you must first edit `/etc/sudoers` with the following line:
 ```bash
