@@ -23,7 +23,7 @@ github_username: yyarmoshyk
 search: true
 host: 0.0.0.0
 repository: yyarmoshyk/tech-notes.net
-incremental: false
+incremental: true
 
 # Build settings
 markdown: kramdown
