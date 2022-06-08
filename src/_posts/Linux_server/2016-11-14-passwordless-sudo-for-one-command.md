@@ -1,6 +1,6 @@
 ---
 id: 3498
-title: Безпарольный sudo для выполнения одной команды
+title: Sudo without password in linux to run a single command
 date: 2016-11-14T09:55:18+00:00
 author: admin
 
@@ -9,27 +9,28 @@ permalink: /passwordless-sudo-for-one-command/
 image: /wp-content/uploads/2014/10/shellshocker.png
 categories:
   - Linux server
+  - sudo
 ---
-Допустим понадобилось нам разрешить одному пользователю в системе выполнить приложение, требующее sudo без ввода пароля. Для этого нужно отредактировать файл `/etc/sudoers` соответсвенно:
-
+Suppose we needed to allow one user on the system to execute an application that requires sudo without entering a password. 
+In order to do this you need to edit the `/etc/sudoers` file accordingly:
 ```bash
-имя_пользователя ALL = (ALL) NOPASSWD: /path/to/binary
+username ALL = (ALL) NOPASSWD: /path/to/binary
 ```
 
-После этого пользователь сможет выполнить binary без ввода пароля следующим образом:
-
+The user will then be able to execute binary without entering a password as follows:
 ```bash
 sudo /path/to/binary
 ```
 
 Небольшой хак для того, чтобы и sudo вводить не пришлось. очень хорошо подходит docker для примера. По умолчанию все docker команды выполняются с правами суперпользователя. Для того чтобы обычный пользователь в системе смог выполнять docker-команды без необходимости вводить sudo и пароль каждый раз нужно сначала отредактировать `/etc/sudoers` следующей строкой:
 
+A small hack so that you don't have to enter `sudo` either. `Docker` fits the example very well. By default, all docker commands are to be ran under `root`. 
+For a regular user on the system to be able to execute docker commands without having to enter `sudo` and password each time you must first edit `/etc/sudoers` with the following line:
 ```bash
-имя_пользователя ALL = (ALL) NOPASSWD: /usr/bin/docker
+username ALL = (ALL) NOPASSWD: /usr/bin/docker
 ```
 
-В файл .bashrc в домашнем каталоге пользователя, нужно добавить следующую функцию:
-
+Nex update the `.bashrc` file in the user home folder with the following:
 ```bash
 docker () {
 	sudo docker "$@"
@@ -37,10 +38,9 @@ docker () {
 ```
 
 
-Для применения изменений выполните следующее:
-
+In order to apply the cnages in the active shell run the following under the user:
 ```bash
-source /home/имя_пользователя/.bashrc
+source ~/.bashrc
 ```
 
-Можно объявить эту функцию глобально отредактировав файл `/etc/profile`
+Additionally you can specify this globally in `/etc/profile`
