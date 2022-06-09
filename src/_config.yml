@@ -103,6 +103,7 @@ defaults:
       type: posts
     values:
       layout: single
+      lang: "en"
       author_profile: true
       read_time: false
       comments: false
@@ -115,6 +116,7 @@ defaults:
     values:
       layout: single
       author_profile: true
+      lang: "en"
   # _pages
   - scope:
       path: ""
