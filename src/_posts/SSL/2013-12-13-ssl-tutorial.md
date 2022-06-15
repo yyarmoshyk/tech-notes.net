@@ -1,6 +1,6 @@
 ---
 id: 57
-title: Что такое SSL и с чем его кушать
+title: What is SSL and how it works
 date: 2013-12-13T20:08:03+00:00
 author: admin
 
@@ -13,70 +13,62 @@ lazy_seo_meta_key_geo:
 image: /wp-content/uploads/2014/01/download.jpg
 categories:
   - SSL
-  - Безопасность
+  - Security
 ---
 [<img class="size-full wp-image-57 aligncenter" alt="download" src="/wp-content/uploads/2013/11/download.jpg" width="276" height="183" />](/wp-content/uploads/2013/11/download.jpg)
 
-**SSL** (англ. Secure Sockets Layer — уровень защищённых сокетов) — криптографический протокол. Предназначен для шифрования данных при обмене информацией между сетевыми устройствами. SSL изначально разработан компанией Netscape Communications для добавления протокола HTTPS в свой веб-браузер Netscape Navigator. Впоследствии, на основании протокола SSL 3.0 был разработан и принят стандарт RFC, получивший имя TLS.
+**SSL** (`Secure Sockets Layer` - the level of secure sockets) is a cryptographic protocol. It was designed to encrypt data when exchanging information between network devices. SSL was originally developed by `Netscape Communications` to add HTTPS to its `Netscape Navigator` web browser. Subsequentl based on the SSL 3.0 protocol the RFC standard was developed and adopted which received the name `TLS`.
 
-Больше материалов доступно в [статье на википедии](http://ru.wikipedia.org/wiki/SSL). Не буду вдаваться во все подробности, но опишу как можно проще его применение по отношению к вэб-сайтам.
+More materials are available in [wikipedia article](http://ru.wikipedia.org/wiki/SSL). I will not go into all the details but I will describe its application to websites as simply as possible.
 
-Итак, частое использование протокола SSL привело к формированию протокола HTTPS (Hypertext Transfer Protocol Secure), поддерживающего шифрование. Данные, которые передаются по протоколу HTTPS, «упаковываются» в криптографический протокол SSL или TLS, тем самым обеспечивая защиту этих данных. Такой способ защиты широко используется в мире Веб для приложений, в которых важна безопасность соединения, например в платёжных системах. HTTPS по умолчанию использует TCP-порт 443.
+So the most frequent use of the SSL protocol led to the formation of the HTTPS (`Hypertext Transfer Protocol Secure`) protocol which supports encryption. Data that is transmitted over the HTTPS protocol is “packaged” in the SSL or TLS cryptographic protocol thereby ensuring the protection of this data. This method of protection is widely used in the Web world for applications where connection security is important such as payment systems. HTTPS uses TCP port 443 by default.
 
 <center>
   <div id="gads">
   </div>
 </center>
 
-Рассматривая ssl соединение нужно понимать что такое приватный или серверный ключ или server private key, запрос подписи сертификата или CSR (Certificate Signing request), публичный ключ (public key), сертификат безопасности или Security Certificate, шифр, cipher или алгоритм шифрования, центр сертификации или Certification Authority.
+When considering an ssl connection you need to understand what a `private` or `server key` or `server private key` is, a `certificate signing request` or , a `public key`, a `Security Certificate`, a `cipher` or encryption algorithm and a `certificate authority`.
 
-**Приватный или серверный ключ** - начало жизни любого сертфиката. Это текстовый файл который содержит в себе набор непонятных символов, напоминающих абракадабру. Эта абракадабра является ключем на основе которого происходит шифрование исходящих и дешифровка входящих данных на стороне сервера. На основе этого файла-ключа генерируется запрос подписи сертификата или CSR (Certificate Signing request).
+**Private or server key** - the beginning of the life of any certificate. This is a text file that contains a set of incomprehensible characters resembling abracadabra. This abracadabra is the key on the basis of which the outgoing data is encrypted and the incoming data is decrypted on the server side. Based on this key file a certificate signing request or CSR is generated.
 
-**Запрос подписи сертификата или CSR** - такая же закодированая абракадабра как и ключ. Эта абракадабра генерируется на основе серверного ключа и содержит информацию которая будет включена в сертификат. Это информация о вашей организации (organization name), имя вэб сайта, на котором будет установлен сертификат (common name), структурное подразделение организации (organizational unit), место нахождения или город (locality) и страна (country). Все эти вопросы задаются генератором на этапе создания запроса. Также он содержит публичный ключь (public key) который тоже будет включен в сертификат.
+**Certificate Signing Request or CSR** is the same encoded gibberish as the key. This abracadabra is generated based on the server key and contains information that will be included in the certificate. This is is the information about your organization (`organization name`), the name of the web site where the certificate will be installed (`common name`), organizational unit, location or city (`locality`) and country (`country`). All these questions are asked by the generator at the stage of creating a request. It also contains the public key, which will also be included in the certificate.
 
-**Центр сертификации или Certification Authority** - сторона (отдел, организация), чья честность неоспорима, а открытый ключ широко известен. Задача центра сертификации — подтверждать подлинность ключей шифрования с помощью сертификатов электронной подписи. Другими словами - это контора которой доверяют все производители браузеров. Именно туда направляется CSR для того что бы ваш сайт проверили на подлинность, принадлежность Вам и за определенные деньги на основе своего ключа и Вашего CSRа сделали Вам сертификат безопасности.
+**Certification Authority or Certification Authority** - a party (department, organization) whose honesty is undeniable and the public key is widely known. The task of the certification authority is to authenticate encryption keys using electronic signature certificates. In other words this is an organisation trusted by all browsers. It is a place whereyou send your CSR in order for your site to be checked for authenticity, ownership by you and for some money, based on your key and your CSR, they provide you a security certificate.
 
-**Сертификат безопасности** - опять же абракадабра потому что зашифрованный файл, который содержит информацию о Вашей организации, вэб-сайте и все то, что было указано на этапе генерации CSR. Также подлинный сертификат безопасности содержит подпись Центра сертификации о том, что его проверили и подтвердили, что вы - это вы, ваш вэб-сайт - тот за кого себя выдает и с ним можно дружить. Если такой сертификат прикручен к сайту, по при обращении к нему по протоколу https начало адресной строки превратится в приятную зеленку и браузер будет считать такое соединение безопасным и очень положительным во всех отношениях.
-
-
+**Security certificate** -  is an encrypted file that contains information about your organization, website and everything that was specified during the CSR generation stage. Also a genuine security certificate contains the signature of the `Certification Authority` that it was checked and confirmed that you are who you are, your website is what it declares to be and you can be friends with it. If such a certificate is attached to the site when accessing it over the `https` protocol the beginning of the address bar will turn into a pleasant green and the browser will consider such a connection safe and very positive in all respects.
 
 [<img class="size-full wp-image-55 aligncenter" alt="Screenshot from 2013-11-19 11:22:47" src="/wp-content/uploads/2013/11/Screenshot-from-2013-11-19-112247.png" width="520" height="33" />](/wp-content/uploads/2013/11/Screenshot-from-2013-11-19-112247.png)
 
 
+It is necessary to mention the **self-signed certificate** - this is the same security certificate as the previous one with one important disadvantage: it does not contain a digital signature of the `certification authority`. Usually, when accessing such sites the screen turns red and the browser strongly recommends that you refuse to establish a secure connection to the server.
 
+## What happens when we make a request to the server using https instead of http?
+The SSL client and server agree to establish communication using the SSL HandShake procedure. During the handshake the client and server agree on how they will ensure secure data transfer:
 
+1. The client sends the client's SSL version number, encrypted parameters to the server to communicate with the client using SSL.
+2. The server does the same. The server also sends its certificate, which requires client authentication. Once authenticated the server requests a client certificate.
+3. The client uses the information sent by the server to authenticate. If the server cannot be verified then the user is warned that there is a problem and that connection encryption and authentication cannot be established. If the server successfully passed the test then the client proceeds to the next step.
+4. Using all the data received so far from the handshake procedure the client (in cooperation with the server) creates a pre-secret of the session, depending on the cipher used from the server, encrypts it using the `server's public key` (obtained from the server's certificate sent to 2 -th step) and then sends it to the server.
+5. The server attempts to authenticate the client. If the client cannot authenticate, the session ends. If the client can be successfully authenticated then the server uses its `private key` to decrypt the `pre-secret` and then a `master secret` is generated on the server and on the client.
+6. Both the client and server use the secret to generate `session keys` which are symmetric keys used to encrypt and decrypt information exchanged during an SSL session.
+7. The client sends a message to the server informing it that future messages from the client will be encrypted with the session key. It then sends a separate encrypted message that the handshake part is over.
+8. Finally, the server sends a message to the client informing it that future messages from the server will be encrypted with the session key. It then sends a separate, encrypted message that the handshake part is over.
 
-Отдельно нужно упомянуть **самоподписанный сертификат** - это такой же сертификат безопасности, как и предыдущий с одним важным минусом: в нем не содержится цифровой подписи центра сертификации. Обычно при обращении к таким сайтам экран становится красным и браузер настойчиво рекомендует отказаться от установления защищенного соединения с сервером.
+This completes the handshake and begins a secure connection which is encrypted and decrypted using key data.
 
+The advantages of using secure ssl connections are the following:
+- Confidence that the data is transmitted in a secure manner. If the sent packet is intercepted the attacker will not be able to open/read/change it since it does not have an encryption key that is unique for each session.
+- a beautiful address bar in the browser.
+- proof to everyone how cool your website is.
 
-Что же происходит, когда мы делаем обращение к серверу использую https вместо http?  
-SSL клиент и сервер договариваются об установлении связи с помощью процедуры рукопожатия или HandShake. Во время рукопожатия клиент и сервер договариваются о том как они будут обеспечивать безопасную передачу данных:
+It is clear that the main advantage is the first point.
 
-1. Клиент посылает серверу номер версии SSL клиента, зашифрованные параметры чтобы общаться с клиентом, используя SSL.  
-2. Сервер делает то же самое. Сервер также посылает свой ​​сертификат, который требует проверки подлинности клиента. После идентификации сервер запрашивает сертификат клиента.  
-3. Клиент использует информацию, переданную сервером для проверки подлинности. Если сервер не может быть проверен, пользователь получает предупреждение о проблеме и о том, что шифрование и аутентификация соединения не может быть установлена. Если сервер успешно прошел проверку, то клиент переходит к следующему шагу.  
-4. Используя все данные, полученные до сих пор от процедуры рукопожатия, клиент (в сотрудничестве с сервером) создает предварительный секрет сессии, в зависимости от используемого шифра от сервера, шифрует его с помощью открытого ключа сервера (полученного из сертификата сервера , отправленного на 2-м шаге), а затем отправляет его на сервер.  
-5. Сервер пытается аутентифицировать клиента. Если клиент не может пройти проверку подлинности, сеанс заканчивается. Если клиент может быть успешно аутентифицирован, сервер использует свой ​​закрытый ключ для расшифровки предварительного секрета, а затем создается главный секрет на сервере и на клиенте.  
-6. И клиент, и сервер используют секрет для генерации ключей сеансов, которые являются симметричными ключами, использующимися для шифрования и расшифрования информации, которой обмениваются во время SSL сессии.  
-7. Клиент посылает сообщение серверу, информируя его, что будущие сообщения от клиента будут зашифрованы с помощью ключа сеанса. Затем он отправляет отдельное, зашифрованное сообщение о том, что часть рукопожатие закончена.  
-8. И в заключение, сервер посылает сообщение клиенту, информируя его, что будущие сообщения от сервера будут зашифрованы с помощью ключа сеанса. Затем он отправляет отдельное, зашифрованное сообщение о том, что часть рукопожатие закончена.
+The disadvantages of using ssl include:
+- money. Yes, you need to pay for certificates to offices that are called `certification authorities`. Very respected certificate authorities charge very good money for signing your certificate.
+- money again? Yes. Https connections are more gluttonous in terms of system resources. A more powerful server may be required. That is why it is not recommended to use https for the entire web site. I don't think this is a problem is 2022.
 
-На этом рукопожатие завершается, и начинается защищенное соединение, которое зашифровывается и расшифровывается с помощью ключевых данных.
+Links:
+1. [SSL wikipedia](http://ru.wikipedia.org/wiki/SSL)  
+2. [SslShopper FAQs](http://www.sslshopper.com/ssl-faq.html)  
 
-К плюсам использования защищенных ssl соединений можно отнести:  
-- уверенность в том что данные передаются в защищенном виде. В случае перехвата отправленного пакета злоумышленник не сможет его открыть/почитать/изменить, так как он не имеет ключа шифрования, который является уникальным для каждой сессии.  
-- красивая адресная строка в браузере.  
-- доказательство всем на сколько крутой твой вэб-сайт.
-
-Ясное дело, что главным преимуществом является первый пункт.
-
-Есть и вторая сторона медали. К недостаткам использования ssl можно отнести:  
-- деньги. Да за сертификаты нужно платить конторам, которые называются центрами сертификации. Очень уважаемые центры сертификации берут очень неплохие деньги за то, что подписывают Ваш сертификат.  
-- опять деньги? Да. Https соединения более прожорливы в плане ресурсов системы. Может потребоваться более мощный сервер. Именно поэтому не рекомендуется использовать https для всего вэб сайта.
-
-Если интересно, можно почитать про:
-
-[Первые несколько миллисекунд HTTPS соединения](http://habrahabr.ru/post/191954/)  
-[SSL wikipedia](http://ru.wikipedia.org/wiki/SSL)  
-[SslShopper FAQs](http://www.sslshopper.com/ssl-faq.html)  
-[Центр сертификации wikipedia](http://ru.wikipedia.org/wiki/%D0%A6%D0%B5%D0%BD%D1%82%D1%80_%D1%81%D0%B5%D1%80%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D0%B8)
