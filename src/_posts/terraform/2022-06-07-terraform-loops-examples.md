@@ -136,5 +136,5 @@ resource "google_compute_firewall" "foo" {
 ```
 
 External links:
-* ["HashiCorp Terraform 0.12 Preview: For and For-Each"](https://www.hashicorp.com/blog/hashicorp-terraform-0-12-preview-for-and-for-each)
-* ["Terraform For Each Examples – How to use for_each | Devops Junction"](https://www.middlewareinventory.com/blog/terraform-for-each-examples/)
+* [HashiCorp Terraform 0.12 Preview: For and For-Each](https://www.hashicorp.com/blog/hashicorp-terraform-0-12-preview-for-and-for-each)
+* [Terraform For Each Examples – How to use for_each](https://www.middlewareinventory.com/blog/terraform-for-each-examples/)
