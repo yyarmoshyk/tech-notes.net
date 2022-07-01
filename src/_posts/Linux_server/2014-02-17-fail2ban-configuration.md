@@ -1,6 +1,6 @@
 ---
 id: 503
-title: Настройка Fail2Ban
+title: Fail2Ban configuration
 date: 2014-02-17T21:24:35+00:00
 author: admin
 
@@ -11,34 +11,32 @@ categories:
   - Linux server
 tags:
   - linux
-  - настройка fail2ban
+  - fail2ban
 ---
-Fail2Ban - это тузовина, написана на Python, которая предназначена для предотвращения атак на сервер. Она читает лог файлы ssh,ftp, apache и, в зависимости от настроек, блокирует ip адреса путем добавления DROP правил в iptables.
+Fail2Ban is a software written in Python which is designed to prevent attacks on the server. It reads ssh, ftp, apache log files and blocks ip addresses by adding DROP rules into iptables depending on the settings.
 
-Бывает очень полезно блокировать к чертовой бабушке ip адреса потенциальных ботов, брутфорсеров и прочих негодяев, которые пытаются незаконно, вопреки Вашему желанию, заполучить контроль над Вашим детищем.
+It can be very useful to block the hell out of ip addresses of potential bots, brute forcers and other villains who are trying to gain control over your server illegally and against your will.
 
-Итак, все дальнейшие шаги проделывались на Linux CentOS v.5.8.  
-Устанавливаем:
+So, all further steps were done on Linux CentOS v.5.8.
 
+Install:
 ```bash
 yum install fail2ban
 ```
 
-Все файлы конфигурации находятся в папке /etc/fail2ban. Файл, который будем ковырять - /etc/fail2ban/jail.conf.  
-Исключения:
-
+All configuration files are located in the `/etc/fail2ban` folder. The file that we will pick is `/etc/fail2ban/jail.conf`.
+Exceptions:
 ```bash
-ignoreip = 127.0.0.1 10.0.0.0/8 **%ваш_ip_адрес%**
+ignoreip = 127.0.0.1 10.0.0.0/8 %your_ip_address%
 ```
 
-Время бана (1 час)
+Ban time = 1 hour
 
 ```bash
 bantime = 3600
 ```
 
-По умолчанию сразу после установки включена работа с ssh демоном. Секция выглядит вот так:
-
+The ssh daemon protection is enabled by default from the box. The secton looks like the following:
 ```bash
 [ssh-iptables]  
 enabled = true  
@@ -48,29 +46,26 @@ sendmail-whois[name=SSH, dest=root, sender=fail2ban@example.com, sendername=Fail
 logpath = /var/log/secure  
 maxretry = 5
 ```
-
-**enabled** - принимает true или false. Соответственно включена `тюрьма` (не нравится мне перевод) или нет.  
-**filter** - фильтр, применяемый для лог файла. Фильтры находятся в папке /etc/fail2ban/filter.d  
-**action** - что делать в с нарушителем покоя системы. Все действия находятся в папке /etc/fail2ban/action.d.  
-Конкретно в этом случае включено два действия:
-  * `iptables` (`/etc/fail2ban/action.d/iptables.conf`) создаст в фаерволе цепочку с названием fail2ban-ssh и будет в нее вкидывать ipишники нарушителей.
-  * `sendmail-whois` (`/etc/fail2ban/action.d/sendmail-whois.conf`)- отправит Вам на почту информацию о заблокированном ip адресе.
-
-Рекомендую sendmail-whois поменять на sendmail.
-
-**logpath** - лог файл, с которым нужно работать. В зависимости от конфигурации системы может отличаться. Впишите сюда путь к файлу, в который ssh записывает неудачные логины. Это может быть:
+Details: 
+* **enabled** - accepts true or false. Accordingly, `prison` is enabled or not.
+* **filter** - filter applied to the log file. Filters are located in `/etc/fail2ban/filter.d`
+* **action** - what to do with the system disturber. All actions are located in the `/etc/fail2ban/action.d` folder.
+In this particular case, two actions are included:
+  * `iptables` (`/etc/fail2ban/action.d/iptables.conf`) will create a chain in the firewall called `fail2ban-ssh` and will throw the ip addresses of violators into it.
+  * `sendmail-whois` (`/etc/fail2ban/action.d/sendmail-whois.conf`) - will send you information about the blocked ip address by mail.
+I recommend changing `sendmail-whois` to `sendmail`.
+* **logpath** - log file to work with. May vary depending on system configuration. Enter here the path to the file where ssh writes failed logins. Possible options are the following:
   * /var/log/secure
   * /var/log/messages
   * /var/log/auth.log
   * что-то другое
+* **maxretry** - number of failed login attempts. I recommend setting it to 3.
 
-**maxretry** - количество неудачных попыток авторизации. Рекомендую поставить на 3.
+There are also blank descriptions for `vsftpd`, `pro-ftpd`. In fact they differ only in the value of filter. You can look at any example and create your own filter for a custom application.
 
-Так же есть заготовки-описания для vsftpd, pro-ftpd. По сути отличаются они только значением filter. Можно посмотреть для примера любой и на основе его создать свой фильтр для кастомного приложения.
+Personally I don't like being notified when fail2ban is restarted. In order to disable them comment out everything related to `actionstart` and `actionstop` in the file `/etc/fail2ban/action.d/sendmail-whois.conf` or `/etc/fail2ban/action.d/sendmail.conf` if you changed action value on `sendmail`. You can customize the notice to your liking.
 
-Лично мне не нравится получать уведомления при перезапуске fail2ban. Для того что бы их отключить - закомментируйте все, что связано с actionstart и actionstop в файле /etc/fail2ban/action.d/sendmail-whois.conf, или /etc/fail2ban/action.d/sendmail.conf, если Вы сменили значение action на sendmail. По вкусу можно подкорректировать уведомление.
-
-Хочу немного остановиться на фильтрах. Как я уже говорил, находятся они в папке /etc/fail2ban/filter.d. Основное в них - значение failregex. Это описание маски неудавшегося логина в систему. При чем описано их несколько, что бы уж наверняка. Пример для SSH:
+I want to stop a little on filters. As I said they are located in the `/etc/fail2ban/filter.d` folder. The main thing in them is the value of failregex. This is a description of the failed login mask. At what it is described them a little that for certain. Example for SSH:
 
 ```bash
 ^%(__prefix_line)s(?:error: PAM: )?[aA]uthentication (?:failure|error) for .* from <HOST>( via \S+)?\s*$  
@@ -86,7 +81,7 @@ maxretry = 5
 ^%(__prefix_line)sUser .+ from <HOST> not allowed because none of user's groups are listed in AllowGroups\s*$
 ```
 
-Кто хоть раз читал логи, тот сразу увидит как можно их кастомизировать и создавать свои.
+Anyone who has ever read the logs will immediately see how you can customize them and create your own.
 
-Полезные ссылки по теме:  
+Useful related links:
 * <a href="http://www.fail2ban.org/wiki/index.php/HOWTO_fail2ban_with_ModSecurity2.5" target="_blank">Fail2Ban + mod_security</a>
