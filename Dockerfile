@@ -12,8 +12,8 @@ RUN apt-get clean && apt-get update;\
     apt-get install -y apt-utils locales ca-certificates;\
     echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen ;\
     locale-gen ;\
-    apt-get clean;\
-    gem update --system 3.2.3;\
+    apt-get clean
+RUN gem update --system 3.2.3;\
     gem install jekyll bundler;\
     bundle install
 
