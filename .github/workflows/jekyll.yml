@@ -3,6 +3,8 @@ name: Jekyll site CI
 on:
   push:
     branches: [ master ]
+    paths:
+      - 'src/**'    
   pull_request:
     branches: [ master ]
 
