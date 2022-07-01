@@ -1,6 +1,6 @@
 ---
 id: 2470
-title: 'Использование expect  в bash скриптах'
+title: 'Using expect in bash scripts'
 date: 2015-03-13T20:00:45+00:00
 author: admin
 
@@ -12,46 +12,40 @@ categories:
 tags:
   - expect
 ---
-`Expect` - это оболочка предоставляющая возможность програмировать диалог с интерактивными програмами. Под интерактивными програмами подразумеваются приложения, которые требуют ввода дополнительной информации в ходе работы.
+`Expect` is a wrapper that provides the ability to program the input for interactive programs. Interactive programs are applications that require the input of additional information in the course of execution.
 
-Тяжело объяснить без примера. О примерах использвания expect дальше и пойдет речь. Планируется сборная статья, которая будет пополнятся разнообразными примерами использования expect.
-
-Есть два варианта, по аналогии с `perl/python`:
-1. Создать скрипт-файл и запустить его следующим образом:  
+It's hard to explain without an example. Examples of using expect will be discussed further. 
+There are two options similar to `perl/python`:
+1. Create a script file and run it like this:  
 ```bash
 expect -f script.exp
 ```
-1. Выполнить expect с командами в виде параметров:  
+1. Execute `expect` with commands as parameters:  
 ```bash
-expect -c 'что-то сделать\r'
+expect -c '...do something...\r'
 ```
 
-`"\r"` в конце строки означает отправку команды (нажатие клавиши Enter).
+`"\r"` at the end of the line means to send the command (pressing the Enter key).
 
-Основная структура скрипта:
-
+The main scrip structure:
 ```bash
 #!/usr/bin/expect
-spawn #выполняемое приложение или команда
-expect #определяет в ответ на какой вопрос нужно отправить следующие ланные
-send #что отправить в ответ на предыдущий вопрос
+spawn #executable application or command
+expect #determines in response to which question the following data should be sent
+send #what to send in response to the previous question
 ```
 
-
-Если Вы хотите передать в скрипт какие-то параметры и использовать их в работе воспользуйтесь директивой `set`:
-
+If you want to pass some parameters to the script and use them in your work, use the `set` directive:
 ```bash
-set var1 [lindex $argv 0] #первый параметр передаваемый скрипту
-set var2 [lindex $argv 1] #второй параметр передаваемый скрипту
+set var1 [lindex $argv 0] #the first parameter passed to the script
+set var2 [lindex $argv 1] #the second parameter passed to the script
 ```
 
+Use `interact` at the end if the session should remain active after all sends have completed. Convenient for automation when working with ssh.
 
-Используйте `interact` в конце, если по завершению выполнения всех send'ов сесия должна оставаться активной. Удобно для автоматизации при работе с ssh.
+### Example 1: SSH
 
-### Пример 1: SSH
-
-Стандартному линуксовому ссш клиенту можно стравить имя пользователя и ipадрес сервера как аргуметы, но пароль ему нельзя передать. Следующие скрипт принимает в качестве аргументов имя пользователя и пароль, дальше подключается с ними к серверу `192.168.1.10` и выполняет там `cat /etc/issue`
-
+A standard Linux `ssh client` can take the username and server ip address as arguments but the password cannot be passed to it. The following script takes a username and password as arguments, then connects with them to the server `192.168.1.10` and executes `cat /etc/issue` there
 ```bash
 #!/usr/bin/expect
 log_file expect_log
@@ -66,28 +60,25 @@ send "cat /etc/issue\r"
 ```
 
 
-Выполнить его можно так:
+Can be executed as the following:
 ```bash
 expect -f script.exp user password
 ```
 
-Второй вариант - запустить все прямо в bash:
-
+The second option is to run everything directly in bash:
 ```bash
-expect -c 'spawn ssh user@192.168.1.10; expect `Password:` {send - `password\r`}; expect `user@` {send `cat /etc/issue\r`};'
+expect -c 'spawn ssh user@192.168.1.10; expect `Password:` {send - `%%password%%\r`}; expect `user@` {send `cat /etc/issue\r`};'
 ```
 
-Согласитесь, если у Вас есть список серверов, с паролями и логинами, то можно сгенерировать батч и автоматизировать выполнение определенной команды на всех серверах.
+This is super usefull if you have a list of servers with passwords and logins. You can generate a batch and automate the execution of a certain command on all servers.
 
-Весь вывод можно записать в лог использовав следующую конструкцию в начале файла:
-
+All output can be written to the log using the following construct at the beginning of the file:
 ```bash
 log_file expect_log
 ```
 
 
-Немаловажным является время выполнения. Я не помню значение по умолчанию, но хорошей практивой является установка таймаута на выполнение:
-
+The execution time is important. I don't remember the default, but it's a good practice to set a timeout on execution:
 ```bash
 set timeout 86000
 ```
@@ -98,21 +89,18 @@ set timeout 86000
   </div>
 </center>
 
-### Пример 2: FTP
+### Example 2: FTP
 
-Допустим нужно загрузить содержимое 10-ти ftp серверов в один каталог на сервере. Представьте использование 10-ти комбинаций логинов, паролей и адрдресов в [lftp](/use-lftp-for-file-exchange/). Представили? Страшно?
+Let's say you need to upload the contents of 10 ftp servers to one directory on the server. Imagine using 10 combinations of logins, passwords and addresses in [lftp](/use-lftp-for-file-exchange/). Represented? Scary?
 
-Я вышел из ситуации следующим образом:
+I got out of the situation like this:
 
-1. Создал файл со следующим содержанием:
-
+1. Created a file with the following content:
 ```bash
 #!/bin/bash
 expect -c 'set timeout 86000; spawn lftp '"$1"'; expect "Password:" {send -- "'"$2"'\r"}; expect ">" {send "mirror -c --parallel=10\r"}; expect "/>" {send "exit\r"};'
 ```
-
-2. Дальше катнул, эхнул, седнул и авкушнул оригинальный файл и получил новый файл в котором первая колонка - пользователь@ip_сервера, вторая - пароль.
-
+1. Next you got to do some magic to build the inventory file in which the first column is the user@ip_server, the second is the password like the following
 ```bash
 user1@server1 password1  
 user1@server2 password2  
@@ -120,50 +108,53 @@ user1@server3 password3
 ...  
 user1@serverN passwordN
 ```
-
-3. В bash запустил следующу команду:
-
+1. The following bash script can be used to process all servers in the file (you can paste it directly into the shell - no need to save into the .sh file):
 ```bash
-i=1 && end=$(cat file.txt |wc -l) && while [ $i -le $end ];do cmd=$(sed -n `$i`p file.txt |awk '{print $1}'); pwd=$(sed -n `$i`p file.txt |awk '{print $2}'); bash get_src $cmd $pwd; let `i = $i + 1`;done
+i=1;
+end=$(cat file.txt |wc -l);
+while [ $i -le $end ];do 
+  cmd=$(sed -n `$i`p file.txt |awk '{print $1}'); 
+  pwd=$(sed -n `$i`p file.txt |awk '{print $2}'); 
+  bash get_src $cmd $pwd; 
+  let `i = $i + 1`;
+done
 ```
 
-### С помощью rsync загружаем выбраные папки с сервера
+### Download selected folders form the server using rsync
 
-На сервере с `Plesk` файлы сайтов лежат в папках `/var/www/vhosts/имя_сайта/httpdocs`.
-У нас есть список сайтов:
-  * web-сайт1.com
-  * web-сайт2.com
-  * web-сайт3.com
-  * web-сайт4.com
-  * web-сайт5.com
-  * web-сайт6.com
-  * web-сайт7.com
-  * web-сайт8.com
-  * web-сайт9.com
+On the server with `Plesk`, the site files are located in the `/var/www/vhosts/site_name/httpdocs` folders.
+We have a list of sites:
+   * website1.com
+   * website2.com
+   * website3.com
+   * website4.com
+   * website5.com
+   * website6.com
+   * website7.com
+   * website8.com
+   * website9.com
 
-Нужно стянуть папки этих сайтов на новый сервер.
+We need to pull the folders of these sites to a new server.
 
-В подобных случаях я инициализирую в bash список с названием list:
-
+In cases like this, I initialize a list in bash called list:
 ```bash
-list="web-сайт1.com  
-web-сайт2.com  
-web-сайт3.com  
-web-сайт4.com  
-web-сайт5.com  
-web-сайт6.com  
-web-сайт7.com  
-web-сайт8.com  
-web-сайт9.com"
+list="website1.com
+website2.com
+website3.com
+website4.com
+website5.com
+website6.com
+website7.com
+website8.com
+website9.com"
 ```
 
-**Подсказка**: Набираете сначала `list="`, потом делаете вставку из буфера обмена, потом закрываете список двойными кавычками `"`
+**Hint**: Type `list="` first, then paste from clipboard, then close the list with double quotes `"`
 
-Дальше цыклом for перебираю эллементы списка:
-
+Next loop over the list elements. Don't forget to replace `%%password%%` with your value:
 ```bash
 for f in $list;do  
 mkdir -p /var/www/vhosts/$f;  
-expect -c 'spawn rsync -Hogva root@ip_адрес:/var/www/vhosts/$f/httpdocs /var/www/vhosts/$f/; expect `password:` {send - `пароль\r`};interact';  
+expect -c 'spawn rsync -Hvga root@ip_address:/var/www/vhosts/$f/httpdocs /var/www/vhosts/$f/; expect `password:` {send - `%%password%%\r`};interact';  
 done
 ```
