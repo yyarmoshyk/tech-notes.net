@@ -1,6 +1,6 @@
 build-image:
-	docker build -t yyarmoshyk/jekyll-minimal-mistakes:ruby-2.5 .
-	docker push yyarmoshyk/jekyll-minimal-mistakes:ruby-2.5
+	docker build -t yyarmoshyk/jekyll-minimal-mistakes:ruby-2.5-1 .
+	docker push yyarmoshyk/jekyll-minimal-mistakes:ruby-2.5-1
 
 verify:
 	docker run --name jekyll-verify --rm -v "${PWD}/test:/myblog/test" -v "${PWD}/src:/myblog" yyarmoshyk/jekyll-minimal-mistakes:ruby-2.5 /bin/bash -c "cd /myblog; bundle install; bundle exec jekyll build -d test"
