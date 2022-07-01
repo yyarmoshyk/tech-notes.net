@@ -1,6 +1,6 @@
 ---
 id: 2651
-title: Настройка SFTP и Chroot на Ubuntu 14.04
+title: Configure SFTP Chroot at Ubuntu 14.04
 date: 2015-06-02T12:41:56+00:00
 author: admin
 
@@ -13,37 +13,32 @@ tags:
   - chroot
   - sftp
 ---
-В этой статье рассматривается настройка sftp сервера и изоляция пользователей в их домашних каталогах (chroot) на базе Linux Ubuntu 14.04.  
+This article covers setting up an `sftp` server and isolating users in their home directories (`chroot`) based on Linux Ubuntu 14.04.
 
-Sftp - протокол обмена файлами через безопасное сетевое соединение.  
-Chroot - изолированая среда.
+`Sftp` is a protocol for exchanging files over a secure network connection.
+`Chroot` is an isolated environment.
 
-Для начала создадим группу с пользователями:
-
+First, let's create a group with users:
 ```bash
 groupadd sftpusers
 ```
 
-Поскольку sftp - подсистема ssh, то и настройки е находятся в файле sshd_config. Его и нужно подредактировать:
-
+Since `sftp` is a subsystem of ssh so it's settings are located in the `sshd_config` file. It needs to be edited:
 ```bash
-nano /etc/ssh/sshd_config
+vim /etc/ssh/sshd_config
 ```
 
-Находим и коментируем строку:
-
+Find and comment-out the line:
 ```bash
 #Subsystem sftp /usr/lib/openssh/sftp-server
 ```
 
-Добавляем прямо под ней строку:
-
+Add a line right below it:
 ```bash
 Subsystem sftp internal-sftp
 ```
 
-Добавляем следующее в конец документа:
-
+Add the following to the end of the document:
 ```bash
 Match Group sftpusers
         X11Forwarding no
@@ -51,37 +46,30 @@ Match Group sftpusers
         ChrootDirectory %h
         ForceCommand internal-sftp
         PasswordAuthentication yes
-
 ```
 
-
-Перезапускаем демон ssh что бы изменения вступили в силу:
-
+Restart the ssh daemon for the changes to take effect:
 ```bash
 initctl restart ssh
 ```
 
-Теперь можно и пользователя создать:
-
+Now you can create a user:
 ```bash
 useradd -g sftpusers -d /home/**username** -m -s /bin/false **username**
 ```
 
-На самом деле оболочка `/bin/false` отсутствует в файле `/etc/shells`, но это не вызывает проблем с логином через sftp. На всякий случай ее лучше добавить:
-
+Actually, the `/bin/false` shell is missing from `/etc/shells` but that doesn't cause problems with sftp login. You can addd it if you want but it will not change much:
 ```bash
 echo `/bin/false` >> /etc/shells
 ```
 
-Важным шагом является изменение собственника папки пользователя. Пользователям нельзя писать в свои домашние каталоги:
-
+An important step is to change the owner of the user's folder. Users cannot write to their home directories:
 ```bash
 chown root:root /home/**username**
 ```
 
-Если Вам нужно создать папку с правом на запись:
-
+If you need to create a folder with write access:
 ```bash
-mkdir /home/**username**/upload  
+mkdir /home/**username**/upload
 chown **username**:sftpusers /home/**username**/upload
 ```
