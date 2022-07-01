@@ -8,4 +8,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: make build-image
+      run: |
+        docker login -u ${docker_login} -p ${docker_password};\
+        make build-image;\
+        rm -rf ~/.docker || true
