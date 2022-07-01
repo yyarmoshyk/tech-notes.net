@@ -13,6 +13,7 @@ RUN apt-get clean && apt-get update;\
     echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen ;\
     locale-gen ;\
     apt-get clean;\
+    gem update --system 3.2.3;\
     gem install jekyll bundler;\
     bundle install
 
