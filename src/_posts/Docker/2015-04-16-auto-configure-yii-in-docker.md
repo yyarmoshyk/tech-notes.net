@@ -1,6 +1,6 @@
 ---
 id: 2513
-title: Автоматическое развертывание Yii в Docker контейнере
+title: Run Yii in Docker container locally
 date: 2015-04-16T20:34:12+00:00
 author: admin
 
@@ -12,49 +12,44 @@ categories:
 tags:
   - Yii
 ---
-Вот и у меня дошли руки до этой софтварины. Разработчики нормально так развернули идею контейнеров, которые уже 100 лет работают в виде `OpenVZ` и/или `Parallels Virtuozzo`.  
-Но не могу не согласиться - отправить `doсker` контейнер с дэмо-сайтом клиенту на много легче, чем контейнер `OpenVZ/Virtuozzo`.
+In this article I want to tell you what I did to automatically deploy `NginX`, `php-fcgi` and install `Yii` using `docker`. It can be usefull for local development. Eventually it was written many years ago so some steps might be outdated.
 
-Дальше буду рассказывать что я делал для автомитического развертывания `NginX`, `php-fcgi` и установки `Yii` с помощью `docker`.
+For this container I used [Yii 2 Starter Kit](https://github.com/trntv/yii2-starter-kit)
 
-Для даного контейнера я использовал [Yii 2 Starter Kit](https://github.com/trntv/yii2-starter-kit)
-
-Итак имеем сервер или ПК с установленым docker. Контенеры у себя я складывал в папку `/opt/docker`, соответственнно первым делом создаем папку:
+So we have a server or PC with `docker` installed. I located all files in `/opt/docker` folder so first lets create it:
 
 ```bash
 mkdir /opt/docker/yii
 ```
 
-Я буду использовать два отдельных контейнера:
-  * yiiweb (nginx+php+yii)
-  * yiidb (mysql)
+I will be using two separate containers:
+   * yiiweb (nginx+php+yii)
+   * yiidb (mysql)
 
-Создаю им папки:
-
+Lets create folders for them:
 ```bash
 mkdir /opt/docker/yii/web  
 mkdir /opt/docker/yii/db
 ```
 
-Дальше буду работать в папке контейнера:
-
+Switch to the container folder:
 ```bash
 cd /opt/docker/yii
 ```
 
-Для начала нам понадобятся следующие файлы:
-  * `backend.conf` и `frontend.conf` - конфиги сайтов для nginx
-  * `env` - файл, который пойдет в папку сайта. В нем описаны настройки фрэймворка.
-  * `php-fastcgi-init` - стартер скрипт для php
-  * `php-fastcgi-bin` - еще одна пепяка для работы php
-  * `autoconf.sh` - этот скрипт нужно выполнить в контейнере после запуска.
+To get started we need the following files:
+   * `backend.conf` and `frontend.conf` - site configs for nginx
+   * `env` - the file that will go to the site folder. It describes the framework settings.
+   * `php-fastcgi-init` - starter script for php
+   * `php-fastcgi-bin` is another script for php to work
+   * `autoconf.sh` - this script needs to be executed in the container after startup.
 
 <center>
   <div id="gads">
   </div>
 </center>
 
-Следующие два файла не представляют из себя ничего особого - конфиги nginx для двух сайтов. Эирным шрифтом выделены доменные имена сайтов. Смените на нужные Вам.  
+The next two files are nothing special - nginx configs for two sites. You'll need to customize them accordingly.
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="/assets/js/spoiler.js" type="text/javascript"></script>
@@ -167,8 +162,7 @@ include fastcgi_params;
 
 </div> </div>
 
-
-В следующем спойлере обратите внимание на выделенные жирным шрифтом базу, имя пользователя и пароль. Они будут содаваться при построении инстанса базы данных. Инстанс `yiiweb` будет использовать имя хоста `yiidb` для свзяи с инстансом `mysql`:
+In the following spoiler please pay attention to the database, username and password in bold. They will be generated when the database instance is built. The `yiiweb` instance will use the hostname `yiidb` to communicate with the `mysql` instance:
 
 <div class="spoiler-wrap">
 <div class="spoiler-head folded">
@@ -208,8 +202,7 @@ GITHUB_CLIENT_SECRET = your-client-secret
 </pre>
 </div> </div>
 
-Опираясь на [статью о настройке nginx+php-fcgi](/nginx-php-fcgi/) создаем следующие файлы. Во время создания контейнера они лягут в нужные места:
-
+Based on [an article about configuring nginx+php-fcgi](/nginx-php-fcgi/) we create the following files. During the container build they will be located in the correct paths:
 <div class="spoiler-wrap">
   <div class="spoiler-head folded">
     php-fastcgi-init
@@ -327,10 +320,9 @@ PHP5=/usr/bin/php-cgi
 </div> </div>
 
 
-Вся красота автоматической настройки заключается в следующем скрипте. Для его работы нужна учетная запись на [github.com](http://www.github.com). Если у Вас таковой нету - зарегистрируйтесь и подредактируйте скрипт (`\r` должно оставаться в конце).
+The whole beauty of automatic configuration lies in the following script. You need an account on [github.com](http://www.github.com) to use it. If you don't have one than go ahead and register. Next edit the script (`\r` should remain at the end).
 
-Этот скрипт нельзя выполнить на этапе инициализации контейнера (так называемого `билда`), так как на этом этапе docker не линкует контейнеры и не монтирует разделы.
-
+This script cannot be executed at the stage of container initialization (the so-called `build`) since at this stage docker does not link containers and does not mount partitions.
 
 <div class="spoiler-wrap">
   <div class="spoiler-head folded">
@@ -364,19 +356,9 @@ chown -R nginx:nginx /var/www/html
   <div id="gads">
   </div>
 </center>
+The preparation is finished. Let's move on
 
-
-Ох навалил я тексто-кода. Спасибо спойлерам. Читать его практически не нужно. Копи-паст решает все.
-
-
-
-Подготовка закончена, возвращаемся к самому докеру.
-
-
-
-Создаем `Dockerfile` со следующим содержанием:
-
-
+Create `Dockerfile`:
 <div class="spoiler-wrap">
   <div class="spoiler-head folded">
     Dockerfile
@@ -422,11 +404,8 @@ CMD /etc/rc.d/init.d/php-fastcgi start && service nginx start && /bin/sh -c "whi
 </pre>
 </div></div>
 
-Сам файл предоставляет набор команд, которые будут выполнены в ходе создания контейнера. Второй (db) инстанс будет создан из образа.
 
-Создаем файл `docker-compose.yml` со следующим содержанием:
-
-
+Create `docker-compose.yml` with the following contexts:
 <div class="spoiler-wrap">
   <div class="spoiler-head folded">
     docker-compose.yml
@@ -465,44 +444,36 @@ yiidb:
 </center>
 
 
-Подготовка закончена. Создаем контейнер:
+Let's build the container:
 ```bash
 docker-compose build
 ```
 
-Побежали бегунки, поскакали цифры. Во время выполнения вы будете видеть все, что происходит в контейнере. Об успешном окончании сборки вы бедет уведомлены.
-
-Можно запускать:
+Run the following to launch the container:
 ```bash
 docker-compose up -d
 ```
 
-Осталось выполнить `autoconf.sh`.
+Now we need to run the `autoconf.sh`.
 
-Для начала получим список контейнеров:
+Get the list of contianers running:
 
 ```bash
 docker ps
 ```
 
-Вы увидите таблицу из двух строк, первая колонка - id контейнера.
-
-Выполняем скрипт:
+You'll get the table that consists on multiple columns and a 2 rows. The first collumn contains the id of the container. The last one contains the name of the container. You can use either `container_id` or `container_name` in the following command:
 
 ```bash
-docker exec %id_контейнера% bash /root/autoconf.sh
+docker exec %container_id% bash /root/autoconf.sh
 ```
 
-Если же вы хотите поработать в консоли самого контейнера - выполните следующую команду:
-
+You can attach to the container console by running the following:
 ```bash
-docker exec -ti %id_контейнера% bash
+docker exec -ti %container_id% bash
 ```
 
-
-Находясь в консоли контейнера можно запустить:
+Run the following in the container console:
 ```bash
 bash /root/autoconf.sh
 ```
-
-Осталось дождаться окончания работы скрипта.
