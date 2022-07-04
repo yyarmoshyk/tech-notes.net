@@ -1,6 +1,6 @@
 ---
 id: 458
-title: 'Magento: как убрать последний слэш из URL сайта'
+title: 'Magento: remove trailing slash from the website URL'
 date: 2014-02-12T13:40:01+00:00
 author: admin
 
@@ -15,14 +15,14 @@ tags:
   - magento
   - url trailing slash
 ---
-Заметка о том, как как убрать слэш в конце URL, не навредив работе магазина.
+A note on how to remove the slash at the end of the URL without damaging the store.
 
-Для чего это нужно: Для сервера `mydomain.com/category` и `mydomain.com/category/` это одно и то же. Но для поисковых систем это две разные страницы с одинаковым контентом. И это не есть хорошо. Те сайты, которые уличены в такой, казалось бы мелочи, начинают падать в самый низ поисковых рейтингов.
+What it's for: For a server, `mydomain.com/category` and `mydomain.com/category/` are the same. But for search engines these are two different pages with the same content. And this is important for SEO. 
 
-### Что нужно делать:
-Для начала нам нужно немного исправить функцию `getUrl()`, чтобы в генерируемых URL не было замыкающего слэша. Для того, чтобы не вносить изменения в само ядро (что черевато потерей всего custom функционала при обновлении Magento) копируем файл `app/code/core/Mage/Core/Block/Abstract.php` в `app/code/local/Mage/Core/Block/Abstract.php`.
+### What do we have to do:
+First we need to slightly fix the `getUrl()` function so that the generated URLs do not have a trailing slash. In order not to make changes to the core itself (which is fraught with the loss of all custom functionality when updating Magento), copy the file `app/code/core/Mage/Core/Block/Abstract.php` to `app/code/local/Mage/Core/Block/Abstract.php`.
 
-Находим функцию `getUrl()` в файле `app/code/local/Mage/Core/Block/Abstract.php` (941 строка):
+Find the `getUrl()` function in the `app/code/local/Mage/Core/Block/Abstract.php` file (line 941):
 
 ```php
 public function getUrl($route = '', $params = array())
@@ -32,7 +32,7 @@ public function getUrl($route = '', $params = array())
 ```
 
 
-Меняем код этой функции на вот этот:
+Change the code of this function to this one:
 
 ```php
 public function getUrl($route = '', $params = array())
@@ -46,20 +46,19 @@ public function getUrl($route = '', $params = array())
 }
 ```
 
-Дальше нам нужно будет отредактировать .htaccess в корне сайта следующими строками:
-
+Next, we will need to edit `.htaccess` in the root of the site with the following lines:
 ```bash
-RewriteCond %{request_method} ^GET$  
-RewriteCond %{REQUEST_URI} ^(.+)/$  
+RewriteCond %{request_method} ^GET$
+RewriteCond %{REQUEST_URI} ^(.+)/$
 RewriteRule ^(.+)$ %1 [L,R=301]
 ```
 
-В стандартный `.htaccess` это нужно добавить после строки:
+In the standard `.htaccess` this should be added after the line:
 
 ```bash
-RewriteRule .* – [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 ```
 
-Если у Вас multi-store, то правила в `.htaccess` нужно добавлять для каждого магазина.
+If you have a multi-store, then the rules in `.htaccess` must be added for each store.
 
-<a href="http://habrahabr.ru/sandbox/78747/" target="_blank">и(C)точник</a>
+<a href="http://habrahabr.ru/sandbox/78747/" target="_blank">origin</a>
