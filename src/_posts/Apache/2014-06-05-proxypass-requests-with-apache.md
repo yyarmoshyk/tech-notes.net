@@ -1,6 +1,6 @@
 ---
 id: 1004
-title: Проксирование запросов в Apache c ProxyPass
+title: Proxy requests over Apache with ProxyPass
 date: 2014-06-05T13:30:45+00:00
 author: admin
 
@@ -10,42 +10,39 @@ image: /wp-content/uploads/2014/06/giuseppe-urso-redirect-http-to-https-slider-2
 categories:
   - Apache
 tags:
-  - Балансировка нагрузки
+  - load balancing
   - ProxyPass
 ---
-По разным причинам может понадобиться отображать информацию с одного сервера на другом. В причины вдаваться не буду.
+For various reasons you may want to display information from one server to another. I won't go into the reasons.
 
-Приведу пример как это можно реализовать средствами `mod_rewrite` и `mod_proxy` web-сервера `Apache2`. В этом примере я буду проксировать запросы на админку WordPress с одного сервера на второй.
+I will give an example of how this can be implemented using the `mod_rewrite` and `mod_proxy` tools of the `Apache2` web server. In this example, I will be proxying WordPress admin requests from one server to another.
 
-Используя mod_proxy:
+Using mod_proxy:
 
 ```bash
-ProxyRequests On
+Proxy Requests On
 ProxyPass /wp-admin http://second.server.com/wp-admin
 ProxyPass /wp-login.php http://second.server.com/wp-login.php
 ProxyPassReverse /wp-admin http://second.server.com/wp-admin
 ```
 
 
-В случае если Вы хотите проксировать SSL/https трафик тогда добавте еще:
+If you want to proxy SSL/https traffic then add:
 
 ```bash
 SSLProxyEngine on
 ```
 
-
-Используя mod_rewrite:
-
+Using mod_rewrite:
 ```bash
-RewriteEngine on
+Rewrite Engine on
 RewriteCond %{REQUEST_URI} ^/wp-admin [NC]
 RewriteCond %{REQUEST_URI} ^/wp-login.php [NC]
 RewriteRule ^(.*)$ http://second.server.com/%{REQUEST_URI} [P]
 ```
 
 
-В любом из случаев нужно что бы были включены `mod_rewrite`, `mod_proxy` и `mod_proxy_http`.
-
+In either case, `mod_rewrite`, `mod_proxy` and `mod_proxy_http` must be enabled.
 ```bash
 a2enmod mod_rewrite mod_proxy mod_proxy_http
 ```
