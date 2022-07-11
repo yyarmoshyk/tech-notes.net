@@ -1,6 +1,6 @@
 ---
 id: 647
-title: Краткое описание директив Apache mod_rewrite
+title: Brief description of Apache mod_rewrite directives
 date: 2014-03-13T09:47:43+00:00
 author: admin
 
@@ -10,138 +10,138 @@ image: /wp-content/uploads/2014/03/rewrite-small.png
 categories:
   - Apache
 ---
-Краткий ликбез о директивах, которые предоставляет `mod_rewrite`
+A brief educational program about the directives that `mod_rewrite` provides
 
-**Синтаксис регулярных выражений**
-^ Начало строки  
-$ Конец строки  
-. Любой одиночный символ  
-(a|b) «a» или «b»  
-(...) Группа  
-[abc] «a» или «b» или «c»  
-[^abc] Не «a», не «b» и не «c»  
-\s Пробел  
-a? 0 или 1 символ «a»  
-a* 0 или больше «a»  
-a*? 0 или больше «a», не жадный  
-a+ 1 или больше «a»  
-a+? 1 или больше «a», не жадный  
-a{3} Ровно 3 символа «a»  
-a{3,} 3 или больше «a»  
-a{3,6} от 3 до 6 «a»  
-a{3,6}? от 3 до 6 «a», не жадный  
-!(...) Префикс «не». Правило действу
+**Regular Expression Syntax**
+^ Start of line
+$ end of line
+. Any single character
+(a|b) "a" or "b"
+(...) Group
+[abc] "a" or "b" or "c"
+[^abc] Not "a", not "b" and not "c"
+\s Space
+a? 0 or 1 character "a"
+a* 0 or more "a"
+a*? 0 or more "a", not greedy
+a+ 1 or more "a"
+a+? 1 or more "a", not greedy
+a{3} Exactly 3 "a" characters
+a{3,} 3 or more "a"
+a{3,6} from 3 to 6 "a"
+a{3,6}? 3 to 6 "a", not greedy
+!(...) Prefix "not". Rule of action
 
 ---
-**Флаги RewriteRule**  
-R[=code] Перенаправить на новый URL,  
-опционально с кодом (см. ниже)  
-F Доступ запрещен  
-(посылает 403 заголовок)  
-G «Мертвая» страница (удалена)  
-P Прокси  
-L Последнее правило  
-N Следующий круг (перезапуск правил)  
-C Цепочка  
-T=mime-type Установить MIME-тип  
-NS Пропустить внутренний подзапрос  
-NC Не учитывать регистр  
-QSA Добавить строку запроса  
-NE Не экранировать при выводе  
-PT Пропустить через следующий  
-S=x Пропустить следующие x правил  
-E=var:value Установить переменную окружения
+**RewriteRule Flags**
+R[=code] Redirect to a new URL,
+optional with code (see below)
+F Access denied
+(sends 403 header)
+G "Dead" page (deleted)
+P Proxy
+L The last rule
+N Next round (rules restart)
+C Chain
+T=mime-type Set MIME type
+NS Skip inner subquery
+NC Not case sensitive
+QSA Add query string
+NE Do not escape on output
+PT Skip through next
+S=x Skip next x rules
+E=var:value Set environment variable
 ---
-**Флаги RewriteCond**  
-NC Не учитывать регистр  
-OR Комбинировать по принципу «или»
+**RewriteCond flags**
+NC Not case sensitive
+OR Combine according to the "or" principle
 ---
-**Коды заголовков перенаправления**  
-301 Перенесен постоянно  
-302 Перенесен временно  
-403 Доступ запрещен  
-404 Страница не найдена  
-410 «Мертвая» страница
+**Redirect header codes**
+301 Transferred permanently
+302 Rescheduled temporarily
+403 Access denied
+404 Page not found
+410 "Dead" page
 ---
-**Переменные: HTTP заголовки**  
-%{HTTP_USER_AGENT}  
-%{HTTP_REFERER}  
-%{HTTP_COOKIE}  
-%{HTTP_FORWARDED}  
-%{HTTP_HOST}  
-%{HTTP_PROXY_CONNECTION}  
+**Variables: HTTP headers**
+%{HTTP_USER_AGENT}
+%{HTTP_REFERER}
+%{HTTP_COOKIE}
+%{HTTP_FORWARDED}
+%{HTTP_HOST}
+%{HTTP_PROXY_CONNECTION}
 %{HTTP_ACCEPT}
 ---
-**Переменные: запрос**  
-%{REMOTE_ADDR}  
-%{REMOTE_HOST}  
-%{REMOTE_USER}  
-%{REMOTE_IDENT}  
-%{REQUEST_METHOD}  
-%{SCRIPT_FILENAME}  
-%{PATH_INFO}  
-%{QUERY_STRING}  
+**Variables: query**
+%{REMOTE_ADDR}
+%{REMOTE_HOST}
+%{REMOTE_USER}
+%{REMOTE_IDENT}
+%{REQUEST_METHOD}
+%{SCRIPT_FILENAME}
+%{PATH_INFO}
+%{QUERY_STRING}
 %{AUTH_TYPE}
 ---
-**Переменные: сервер**  
-%{DOCUMENT_ROOT}  
-%{SERVER_ADMIN}  
-%{SERVER_NAME}  
-%{SERVER_ADDR}  
-%{SERVER_PORT}  
-%{SERVER_PROTOCOL}  
+**Variables: server**
+%{DOCUMENT_ROOT}
+%{SERVER_ADMIN}
+%{SERVER_NAME}
+%{SERVER_ADDR}
+%{SERVER_PORT}
+%{SERVER_PROTOCOL}
 %{SERVER_SOFTWARE}
 ---
-**Переменные: время**  
-%{TIME_YEAR}  
-%{TIME_MON}  
-%{TIME_DAY}  
-%{TIME_HOUR}  
-%{TIME_MIN}  
-%{TIME_SEC}  
-%{TIME_WDAY}  
+**Variables: time**
+%{TIME_YEAR}
+%{TIME_MON}
+%{TIME_DAY}
+%{TIME_HOUR}
+%{TIME_MIN}
+%{TIME_SEC}
+%{TIME_WDAY}
 %{TIME}
 ---
-**Переменные: специальные**  
-%{API_VERSION}  
-%{THE_REQUEST}  
-%{REQUEST_URI}  
-%{REQUEST_FILENAME}  
+**Variables: special**
+%{API_VERSION}
+%{THE_REQUEST}
+%{REQUEST_URI}
+%{REQUEST_FILENAME}
 %{IS_SUBREQ}
 ---
-**Директивы**  
-RewriteEngine  
-RewriteOptions  
-RewriteLog  
-RewriteLogLevel  
-RewriteLock  
-RewriteMap  
-RewriteBase  
-RewriteCond  
+**Directives**
+RewriteEngine
+RewriteOptions
+RewriteLog
+RewriteLogLevel
+RewriteLock
+RewriteMap
+RewriteBase
+RewriteCond
 RewriteRule
 ---
-**Пример: новый домен**  
+**Example: new domain**
 ```bash
-# domain.com to domain2.com  
-RewriteCond  %{HTTP_HOST}  ^www\.domain\.com$  [NC]  
-RewriteRule  ^(.*)$  http://www.domain2.com/$1  [R=301,L]
+# domain.com to domain2.com
+RewriteCond %{HTTP_HOST} ^www\.domain\.com$  [NC]
+RewriteRule ^(.*)$ http://www.domain2.com/$1 [R=301,L]
 ```
 
-**Пример: страница временно перенесена**  
+**Example: page temporarily moved**
 ```bash
-# domain.com/page.htm to domain.com/new_page.htm  
-RewriteRule  ^page.htm$  new_page.htm  [R,NC,L]
+# domain.com/page.htm to domain.com/new_page.htm
+RewriteRule ^page.htm$ new_page.htm [R,NC,L]
 ```
-**Пример: человеко-понятные URL** (без строки запроса)  
+**Example: human-readable URLs** (no query string)
 ```bash
-# domain.com/category-name/ to domain.com/categories.php?name=category-name  
-RewriteRule  ^([A-Za-z0-9-]+)/?$  categories.php?name=$1  [L]
+# domain.com/category-name/ to domain.com/categories.php?name=category-name
+RewriteRule ^([A-Za-z0-9-]+)/?$ categories.php?name=$1 [L]
 ```
-**Пример: блокировать ссылочный спам**  
-(если URL содержит «viagra» или «xxx»)  
+**Example: block link spam**
+(if the URL contains "viagra" or "xxx")
 ```bash
-RewriteCond  %{HTTP_REFERER}  (viagra)  [NC,OR]  
-RewriteCond  %{HTTP_REFERER}  (xxx)  [NC]  
-RewriteRule  .*  -  [F]
+RewriteCond %{HTTP_REFERER} (viagra) [NC,OR]
+RewriteCond %{HTTP_REFERER} (xxx) [NC]
+RewriteRule .* - [F]
 ```
-<a href="http://www.tech-notes.net/htaccess-notes/" title="Шпаргалка по .htaccess" target="_blank">Больше примеров</a>
+<a href="http://www.tech-notes.net/htaccess-notes/" title=".htaccess cheat sheet" target="_blank">More examples</a>
