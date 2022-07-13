@@ -1,6 +1,6 @@
 ---
 id: 558
-title: Установка modsecurity для Apache
+title: Install modsecurity for Apache
 date: 2016-01-04T08:28:46+00:00
 author: admin
 
@@ -9,151 +9,129 @@ permalink: /install-modsecurity-for-apache/
 image: /wp-content/uploads/2015/02/mod-security.png
 categories:
   - Apache
-  - Безопасность
+  - Security
 ---
-ModSecurity - своеобразный фаервол для Apache, Nginx и IIS. Это модуль, предоставляющий набор правил для фильтрации трафика. Это модуль из разряда must have для любого сервера.
+`ModSecurity` is a kind of firewall for Apache, Nginx and IIS. This is a module that provides a set of rules for filtering traffic. This is a 'must have' module for any server.
 
-12 Февраля 2015 года была выпущена версия 2.9.0. Она является наиболее актуальной на момент написания этой заметки.
+On February 12, 2015 version 2.9.0 was released. It is the most current at the time of this writing.
 
-Даже четвертого января 2016 года эта версия является самой актуальной.
+Even on January 4, 2016, this version is the most current.
 
-Собирать будем из исходников и настраивать для вэб сервера Apache.
+We will compile it from source and configure for the Apache web server.
 
-Для нормальной компиляции этой версии необходим `libxml2` версии `2.6.29`. Первым шагом нужно удостовериться, что он доступен для ОС Вашего сервера:
-
+This version requires `libxml2` version `2.6.29` to compile properly. The first step is to make sure it is available for your server OS:
 ```bash
 yum info libxml2
 ```
 
-Или:
-
+Or:
 ```bash
 apt-cache showpkg libxml2
 ```
 
-Если необходимый пакет доступен для установки - можете продолжать.
+If the required package is available for installation than you can continue.
 
-Удостоверьтесь, что у Вас установлены следующие пакеты:  
+Make sure you have the following packages installed:
 **RedHat/Centos:**
-
 ```bash
-apt-get install gcc automake libxml2 libxml2-dev apache2-threaded-dev libcurl4-openssl-dev libpcre3-dev
+yum install gcc automake libxml2 libxml2-devel httpd-threaded-devel libcurl4-openssl-devel libpcre3-devel
 ```
 
 **Ubuntu/Debian:**
-
 ```bash
 apt-get install gcc automake libxml2 libxml2-dev apache2-threaded-dev libcurl-dev pcre-dev
 ```
 
-Я буду работать в папке /usr/local/src.
-
+I will work in the /usr/local/src folder.
 ```bash
 cd /usr/local/src
 ```
 
-Скачиваем нужный архив:
-
+Download the required archive:
 ```bash
 wget -no-check-certificate https://www.modsecurity.org/tarball/2.9.0/modsecurity-2.9.0.tar.gz
 ```
 
-Распаковываем и переходим в каталог:
-
+Unpack and go to the directory:
 ```bash
 tar xf modsecurity-2.9.0.tar.gz && cd modsecurity*
-```
-
-Стандартная установка:
-
-```bash
-./configure  
+./configure
 make && make install
 ```
 
-Модуль будет установлен в папку `/usr/local/modsecurity/lib`. Бинарники будут лежать в папке /usr/local/modsecurity/bin.
+The module will be installed in the `/usr/local/modsecurity/lib` folder. The binaries will be in the `/usr/local/modsecurity/bin` folder.
 
-Дальше нужно добавить вот такте строчки в файл конфигурации Apache (/etc/httpd/conf/httpd.conf)
-
+Next, you need to add the following lines to the Apache configuration file (/etc/httpd/conf/httpd.conf)
 ```bash
 LoadModule security2_module /usr/local/modsecurity/lib/mod_security2.so
 ```
 
-И раскомментировать:
-
+And uncomment:
 ```bash
 LoadModule unique_id_module modules/mod_unique_id.so
 ```
 
-Дальше берем рекомендуемую конфигурацию модуля и копируем в папку conf.d Apache:
-
+Next, we take the recommended module configuration and copy it to the Apache conf.d folder:
 ```bash
 cp modsecurity.conf-recommended /etc/httpd/conf.d/modsecurity.conf
 ```
 
-Можно открыть этот фал и подредактировать путь к логу аудита - SecAuditLog.
+You can open this file and edit the path to the audit log - SecAuditLog.
 
-При проверке конфигурации может выдать вот такую ошибку:
+When checking the configuration, it may give the following error:
 
 ```bash
-Syntax error on line 212 of /etc/httpd/conf.d/modsecurity.conf:  
+Syntax error on line 212 of /etc/httpd/conf.d/modsecurity.conf:
 Could not open unicode map file `/etc/httpd/conf.d/unicode.mapping`: No such file or directory
 ```
 
-Для фикса копируем нужный файл:
-
+To fix, copy the desired file:
 ```bash
 cp unicode.mapping /etc/httpd/conf.d/
 ```
 
-На этом все. Установка закончена. Даже с базовым набором параметров, сервер стал дышать свободнее.
+That's all. Installation completed. Even with the basic set of parameters, the server began to breathe more freely.
 
-Для скрытия версии апача, отключения Trace метода можно внести следующие строки в `/etc/httpd/conf.d/modsecurity.conf`:
-
+To hide the Apache version, disable the Trace method, you can add the following lines to `/etc/httpd/conf.d/modsecurity.conf`:
 ```bash
-ServerSignature Off  
-ServerTokens Prod  
-TraceEnable Off
+ServerSignature Off
+ServerTokensProd
+Trace Enable Off
 ```
 
-Более подробную информацию о всех параметрах настройки можно почитать [здесь](https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#wiki-Configuration_Directives)
+More information about all configuration options can be found [here](https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#wiki-Configuration_Directives)
 
-Поскольку mod_security -это фаервол, то для него существуют наборы правил, которые нужно включить для того, что бы mod_security начал приносить пользу.
+Because mod_security is a firewall, there are rulesets for it that need to be enabled in order for mod_security to be useful.
 
-Список беcплатных правил доступен на [GitHub](https://github.com/SpiderLabs/owasp-modsecurity-crs):
+The list of free rules is available on [GitHub](https://github.com/SpiderLabs/owasp-modsecurity-crs):
 
-Его и скачиваем и распаковываем:
-
+We download and unpack it:
 ```bash
-wget https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/master.zip  
+wget https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/master.zip
 unzip master.zip
 ```
 
-Создаем папку в которую мы сложим конфиги для правил, которые нам нужно включить и копируем нужные нам наборы правил:
-
+We create a folder in which we will add the configs for the rules that we need to enable and copy the sets of rules we need:
 ```bash
-mkdir /etc/modsecurity/activated_rules  
+mkdir /etc/modsecurity/activated_rules
 cp owasp-modsecurity-crs-master/base_rules/* /etc/modsecurity/activated_rules/
 ```
 
-Следующие наборы правил приносили больше зла, чем пользы, поэтому их лучше выключить:
-
+The following rule sets have done more harm than good, so it's best to turn them off:
 ```bash
-rm /etc/modsecurity/activated_rules/modsecurity_crs_35_bad_robots.conf  
-rm /etc/modsecurity/activated_rules/modsecurity_crs_41_sql_injection_attacks.conf  
+rm /etc/modsecurity/activated_rules/modsecurity_crs_35_bad_robots.conf
+rm /etc/modsecurity/activated_rules/modsecurity_crs_41_sql_injection_attacks.conf
 rm /etc/modsecurity/activated_rules/modsecurity_crs_21_protocol_anomalies.conf
 ```
 
-Дополниттельного внимания заслыживает следующая папка, так как в ней находятся рекомендованые правила для популярных CMS систем:
-
+The following folder deserves additional attention, as it contains recommended rules for popular CMS systems:
 ```bash
 owasp-modsecurity-crs-master/slr_rules
 ```
 
-Скопируйте нужные Вам файлы с расширениями `.conf` и `.data` в папку `/etc/modsecurity/activated_rules/`
+Copy the files you need with the extensions `.conf` and `.data` to the folder `/etc/modsecurity/activated_rules/`
 
-Отредактируйте файл `/etc/httpd/conf.d/modsecurity.conf` следующей строкой что бы все заработало:
-
+Edit the `/etc/httpd/conf.d/modsecurity.conf` file with the following line to make it work:
 ```bash
 Include /etc/modsecurity/activated_rules/*.conf
 ```
