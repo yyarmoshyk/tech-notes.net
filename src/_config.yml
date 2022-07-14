@@ -18,6 +18,8 @@ email:
 description: >- # this means to ignore newlines until "baseurl:"
   Useful notes about DevOps and system engineering
 
+url: https://www.tech-notes.net
+
 twitter_username: YYarmoshyk
 github_username: yyarmoshyk
 search: true
