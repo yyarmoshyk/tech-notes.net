@@ -33,13 +33,13 @@ The following example contains the `Apache2` server configuration file for the `
 
 
 Explanations:
-**ServerName** - site domain name.
-**ServerAlias** - site alias. You can specify multiple
-**DocumentRoot** - root folder where site files are located
-**LogLevel** - determines the number of messages that will be written to the log file Available values: `debug, info, notice, warn, error, crit, alert, emerg.`
+* **ServerName** - site domain name.
+* **ServerAlias** - site alias. You can specify multiple
+* **DocumentRoot** - root folder where site files are located
+* **LogLevel** - determines the number of messages that will be written to the log file Available values: `debug, info, notice, warn, error, crit, alert, emerg.`
 In the case of using debug log the file will contain the largest number of entries with information about requests, emerg - the smallest number of entries/information.
-**ErrorLog** - path to error log. If not specified, all errors will be logged to a standard file (`/var/log/httpd/error_log` or `/var/log/apache2/error.log`).
-**CustomLog** - log on demand. It takes two arguments - the path to the file and the log type (in the example, combined - can be used for visit statistics)
+* **ErrorLog** - path to error log. If not specified, all errors will be logged to a standard file (`/var/log/httpd/error_log` or `/var/log/apache2/error.log`).
+* **CustomLog** - log on demand. It takes two arguments - the path to the file and the log type (in the example, combined - can be used for visit statistics)
 
 From the start, the following log file formats are declared in the Apache config:
 
