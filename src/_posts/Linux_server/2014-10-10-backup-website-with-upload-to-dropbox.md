@@ -21,8 +21,8 @@ For my needs 2Gb is more than enough. There are several plugins for CMS WordPres
 
 I decided to implement backup by myself. Moreover I had to archive several sites.
 
-**Step 1**: Register on [Dropbox](https://db.tt/6rZRpi2U)
-**Step 2**: Download the file upload script from [github.com](https://github.com/andreafabrizi/Dropbox-Uploader)
+## Step 1: Register on [Dropbox](https://db.tt/6rZRpi2U)
+## Step 2: Download the file upload script from [github.com](https://github.com/andreafabrizi/Dropbox-Uploader)
 
 ```bash
 curl `https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh` -o dropbox_uploader
@@ -40,7 +40,7 @@ Run and follow the instructions (everything is quite simple):
 
 It remains a mystery to me why DropDox was unable to deliver the account verification email to the Gmail inbox.
 
-**Step 3:** We set up a script that will do a direct backup and pull `dropbox_uploader` to upload data.
+## Step 3: We set up a script that will do a direct backup and pull `dropbox_uploader` to upload data.
 
 The script will make a [backup of all mysql databases](/backup-restore-all-mysql-databases/), compress all site folders with `tar`, fill it all in `DropBox`, send an email notification and delete old backups from DropBox.
 
