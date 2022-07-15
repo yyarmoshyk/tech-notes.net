@@ -1,6 +1,6 @@
 ---
 id: 1905
-title: 'Backup to Dropbox: Backup сайта с заливкой в DropBox'
+title: 'Backup webiste to Dropbox'
 date: 2014-10-10T13:55:37+00:00
 author: admin
 
@@ -13,95 +13,84 @@ tags:
   - backup
   - Backup to Dropbox
 ---
-Задался на днях мыслью о корректном backup'е нескольких WordPress сайтов с последующей заливкой их на какой-то бесплатное хранилище. Как всегда хотелось что бы это выполнялось без дополнительных плагинов.
+The other day I was wondering about the correct backup of several WordPress sites and then uploading them to some free storage. I would like it to be done without additional plugins.
 
-Выбор хранилища пал на [Dropbox](https://db.tt/6rZRpi2U). По умолчанию Вам предоставляется 2Gb места в рамках бесплатной учетной записи. Если нужно больше места - его можно купить за относительно небольшие деньги. Как правило дисковое пространство стоит довольно дешево у хостинг провайдеров.
+The [Dropbox](https://db.tt/6rZRpi2U) was selected as a storage. By default you are provided with 2Gb of space as part of a free account. If you need more space than you can buy it for relatively little money. As a rule the disk space is quite cheap from hosting providers.
 
-Для моих нужд 2Gb хватит с головой. Для CMS WordPress есть несколько плагинов, которые умеют сами все делать, но ни один из них мне не понравился из-за того, что хранил архивы в папке сайта, при этом каждый следующий бэкап увеличивался на размер предыдущего и размер сайта довольно быстро превысил допустимую квоту.
+For my needs 2Gb is more than enough. There are several plugins for CMS WordPress that can do everything themselves but I didn’t like any of them because I kept archives in the site folder while each next backup increased by the size of the previous one and the site size quickly exceeded the allowable quota.
 
-Решил сделать все руками. Тем более, нужно архивировать несколько сайтов.
+I decided to implement backup by myself. Moreover I had to archive several sites.
 
-**Шаг 1**: Регистрация на [Dropbox](https://db.tt/6rZRpi2U)
-**Шаг 2**: Скачиваем скрипт загрузки файлов с [github.com](https://github.com/andreafabrizi/Dropbox-Uploader)
+**Step 1**: Register on [Dropbox](https://db.tt/6rZRpi2U)
+**Step 2**: Download the file upload script from [github.com](https://github.com/andreafabrizi/Dropbox-Uploader)
 
 ```bash
 curl `https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh` -o dropbox_uploader
 ```
 
-Делаем файл исполняемым:
-
+Make the file executable:
 ```bash
 chmod +x dropbox_uploader
 ```
 
-Запускаем и следуем инструкциям (все довольно просто):
-
+Run and follow the instructions (everything is quite simple):
 ```bash
 ./dropbox_uploader
 ```
 
-Для меня осталось загадкой, почему DropDox не смог доставить письмо верификации учетной записи на почтовый ящик Gmail.
+It remains a mystery to me why DropDox was unable to deliver the account verification email to the Gmail inbox.
 
-**Шаг 3:** Настраиваем скрипт, который будет делать непосредственный backup и дергать `dropbox_uploader` для отгрузки данных.
+**Step 3:** We set up a script that will do a direct backup and pull `dropbox_uploader` to upload data.
 
-Скрипт сделает [бэкап всех баз данных mysql](/backup-restore-all-mysql-databases/), сожмет все папки сайтов с помощью `tar`, зальет все это в `DropBox`, пришлет уведомление на email и удалит старые бэкапы из DropBox'а.
+The script will make a [backup of all mysql databases](/backup-restore-all-mysql-databases/), compress all site folders with `tar`, fill it all in `DropBox`, send an email notification and delete old backups from DropBox.
 
-Моя стратегия такая:
+My strategy was the following:
+* Backup starts at midnight on Monday, Wednesday and Friday
+* backups are kept for 7 days, then deleted (replaced by new ones)
+* backup created on the 30th of the month is stored forever
 
-  * резервное копирование запускается в полночь в понедельник, среду и пятницу
-  * резервные копии хранятся 7 дней, потом удаляются (замещаются новыми)
-  * бэкап, созданный 30-го числа месяца, хранится вечно
+Script:
+* calculates that folders with sites are stored in /var/www;
+* uses the mail utility to send a report to the mail;
+* Temporary files located in /var/backup/server;
+* Application in DropBox is called _backup_;
 
-Скрипт:
+If something is different in your case - edit the script accordingly.
 
-  * рассчитывает, что папки с сайтами хранятся в /var/www;
-  * использует утилиту mail для отправки отчета на почту;
-  * Временные файлы располагает в /var/backup/server;
-  * Application в DropBox'у у меня называется _backup_;
-
-Если в Вашем случае что-то отличается - отредактируйте скрипт соответствующим образом.
-
-Для начала убедитесь что у Вас установлены mailutils:
-
+First, make sure you have mailutils installed:
 ```bash
 apt-get install mailutils
 ```
 
-Потом создайте папки:
-
+Then create folders:
 ```bash
-mkdir -p /var/backups/server/files/  
+mkdir -p /var/backups/server/files/
 mkdir -p /var/backups/server/databases/
 ```
 
-Скачиваем скрипт:
-
+Downloading the script:
 ```bash
 wget http://www.tech-notes.net/wp-content/uploads/2014/10/backup
 ```
 
-Делаем файл исполняемым:
-
+Making the file executable:
 ```bash
 chmod +x backup
 ```
 
-Можно открыть файл и вписать Вам email во вторую строку, что бы получать уведомления об успешном завершенни операции.
-
+You can open the file and enter your email in the second line to receive notifications about the successful completion of the operation.
 ```bash
 mail='your@mail.com'
 ```
 
-Осталось запланировать периодическое выполнение скрипта с помощь crontab:
-
+It remains to schedule the periodic execution of the script using crontab:
 ```bash
 crontab -e
 ```
 
-Я делаю бэкапы по Понедельникам, Средам и Пятницам, поэтому в моем случае это:
-
+I backup on Mondays, Wednesdays and Fridays, so in my case it's:
 ```bash
 0 0 \* \* 1,3,5 /root/backup
 ```
 
-На этом все.
+That's all.
