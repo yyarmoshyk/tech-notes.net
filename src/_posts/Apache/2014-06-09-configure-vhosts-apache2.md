@@ -1,6 +1,6 @@
 ---
 id: 1022
-title: Настройка сайтов в Apache2
+title: Configure website in Apache2
 date: 2014-06-09T13:04:24+00:00
 author: admin
 
@@ -10,12 +10,12 @@ image: /wp-content/uploads/2014/05/apache_logo.jpg
 categories:
   - Apache
 ---
-Данный пример содержит конфигурационный файл сервера `Apache2` для сайта `tech-notes.net`:  
+The following example contains the `Apache2` server configuration file for the `tech-notes.net` site:
 
 ```bash
 <VirtualHost *:80>
   ServerName tech-notes.net
-  ServerAlias www.tech-notes.net
+  ServerAlias ​​www.tech-notes.net
   DocumentRoot /var/www/tech-notes
 
   LogLevel warn
@@ -25,23 +25,23 @@ categories:
   <Directory /var/www/tech-notes>
     Options +ExecCGI Indexes FollowSymLinks MultiViews
     AllowOverride All
-    Order allow,deny
+    order allow,deny
     allow from all
   </Directory>
 </VirtualHost>
 ```
 
 
-Пояснения:  
-**ServerName** - имя сайта.  
-**ServerAlias** - дополнительное имя сайта. Можно указывать несколько  
-**DocumentRoot** - папка в которой лежат файлы сайта  
-**LogLevel** - определяет количество сообщений, которые будут записываться в лог файлю Доступные значения: `debug, info, notice, warn, error, crit, alert, emerg.`  
-В случае использования debug log файл будет содержать наибольшее количество записей с информацией о запросах, emerg - наименьшее количество записей/информации.  
-**ErrorLog** - путь к логу с ошибками. Если не указан - все ошибки будут записаны в стандартный файл (`/var/log/httpd/error_log` или `/var/log/apache2/error.log`).  
-**CustomLog** - лог по требованию. Принимает два аргумента - путь к файлу и тип лога (в примере combined - можно использовать для статистики посещения)
+Explanations:
+**ServerName** - site domain name.
+**ServerAlias** - site alias. You can specify multiple
+**DocumentRoot** - root folder where site files are located
+**LogLevel** - determines the number of messages that will be written to the log file Available values: `debug, info, notice, warn, error, crit, alert, emerg.`
+In the case of using debug log the file will contain the largest number of entries with information about requests, emerg - the smallest number of entries/information.
+**ErrorLog** - path to error log. If not specified, all errors will be logged to a standard file (`/var/log/httpd/error_log` or `/var/log/apache2/error.log`).
+**CustomLog** - log on demand. It takes two arguments - the path to the file and the log type (in the example, combined - can be used for visit statistics)
 
-Со старта в конфиге апача объявлены следующие форматы лог файлов:
+From the start, the following log file formats are declared in the Apache config:
 
 ```bash
 LogFormat "%v:%p %h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" vhost_combined
@@ -52,34 +52,32 @@ LogFormat "%{User-agent}i" agent
 ```
 
 
-Можно создавать свои.
+You can create your own.
 
-Между тэгами **<Directory>** и **</Directory>** можно указать параметры, специфические для конкретного каталога (в примере - /var/www/tech-notes)  
-* **Options** - опции. Знак `+` - включает принудительно, `-` отключает:  
-* **ExecCGI** - Разрешает выполнение `cgi` скриптов. Должно быть включено, если php выполняется в режиме cgi.  
-* **Indexes** - дает дополнительные возможности для индексирования каталога (не путуть с индексированием поисковыми машинами).  
-* **FollowSymLinks** - включает поддержку `symbolic links` в каталоге.  
-* **MultiViews** - опциональный параметр. Его примочка в том что, если приходит запрос к каталогу `/some/dir/foo`, а `MultiViews` включено для `/some/dir`, и каталог `/some/dir/foo` не существует, тогда сервер будет искать файлы с именем `foo.*` в каталоге `/some/dir/`.
+Between the **<Directory>** and **</Directory>** tags, you can specify parameters specific to a particular directory (in the example - /var/www/tech-notes)
+* **Options** - options. The `+` sign - turns on forcibly, `-` turns off:
+* **ExecCGI** - Allows execution of `cgi` scripts. Must be enabled if php is running in cgi mode.
+* **Indexes** - gives additional options for catalog indexing (not to be confused with indexing by search engines).
+* **FollowSymLinks** - Enables support for `symbolic links` in the directory.
+* **MultiViews** is an optional parameter. Its quirk is that if a request comes in for the `/some/dir/foo` directory, and `MultiViews` is enabled for `/some/dir`, and the directory `/some/dir/foo` does not exist, then the server will look for files named `foo.*` in the directory `/some/dir/`.
 
-Используя директиву `Alias` можно к сайту подключить каталог, который не находится в домашнем каталоге сайта. К примеру `phpmyadmin`:
-
+Using the `Alias` directive, you can connect a directory to the site that is not in the site's home directory. For example `phpmyadmin`:
 ```bash
-Alias /phpmyadmin /usr/share/phpmyadmin
+Alias ​​/phpmyadmin /usr/share/phpmyadmin
 ```
 
-Если в конфиге хоста присутствует эта строчка то при открытии http://www.tech-notes.net/phpmyadmin бы попали бы в интерфейс управления базами данных.
+If this line is present in the host config, then when you open http://www.tech-notes.net/phpmyadmin, you would get into the database management interface.
 
-Это пример настроек `https/ssl` хоста на сервере с `CentOS`:
-
+This is an example of `https/ssl` host settings on a `CentOS` server:
 ```bash
 <VirtualHost *:443>
 	ServerName tech-notes.net
-	ServerAlias www.tech-notes.net
+	ServerAlias ​​www.tech-notes.net
 	DocumentRoot /var/www/tech-notes
 
-	SSLEngine on
+	SSL Engine on
 	SSLCertificateKeyFile /etc/ssl/private/tech-notes.key
-	SSLCertificateFile    /etc/ssl/certs/tech-notes.crt
+	SSLCertificateFile /etc/ssl/certs/tech-notes.crt
 	SSLCACertificateFile /etc/ssl/private/ca-bundle.crt
 
 	LogLevel warn
@@ -89,16 +87,16 @@ Alias /phpmyadmin /usr/share/phpmyadmin
 	<Directory /var/www/tech-notes>
 		Options +ExecCGI Indexes FollowSymLinks MultiViews
 		AllowOverride All
-		Order allow,deny
+		order allow,deny
 		allow from all
 	</Directory>
 </VirtualHost>
 ```
 
 
-В случае с Debian/Ubuntu настройки ssl хоста рекомендует размещать между тэгами `<IfModule mod_ssl.c>` и `</IfModule>`
+In case of Debian/Ubuntu the host's ssl settings are recommended to be placed between the tags `<IfModule mod_ssl.c>` and `</IfModule>`
 
-Если у Вас на одном ip адресе вертится несколько сайтов - нужно добавить следующее в `ports.conf` или `httpd.conf` (`apache2.conf`):
+If you have several sites spinning on the same ip address, you need to add the following to `ports.conf` or `httpd.conf` (`apache2.conf`):
 
 ```bash
 NameVirtualHost *:80
