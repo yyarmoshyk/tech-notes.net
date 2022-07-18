@@ -234,7 +234,33 @@ weekDays.each { day ->
 }
 ```
 ### If statements
+If statements are less flexible than case. Groovy doesn't support elseif/elif. So they are applicable only in `if ... else` way:
+```groovy
+int a = 2
 
+//Check for the boolean condition 
+if (a<100) { 
+    //If the condition is true print the following statement 
+    println("The value is less than 100"); 
+} else { 
+    //If the condition is false print the following statement 
+    println("The value is greater than 100"); 
+} 
+```
+
+Do something with list if it is not empty:
+```groovy
+if(myList) { 
+    ... do something ...
+}
+```
+
+Do something if varible has some value
+```groovy
+if( foo == "bar" ) { 
+    ... do something ...
+}
+```
 ## Variables with shell execution
 ```groovy
 def myVar = "Im with Groovy"
@@ -388,7 +414,7 @@ jsonObject.each { key, value ->
 ```
 
 ## Templating
-Groovy’s template engine is very similar to bas `envsubst`. 
+Groovy’s template engine is very similar to bash `envsubst`. 
 ### SimpleTemplateEngine()
 Let's assume we have the following `Student.template` file:
 ```xml
@@ -457,6 +483,6 @@ println template.toString()
 
 ### Exteral links:
 * [Switch cheat-sheet](https://www.tutorialspoint.com/groovy/groovy_switch_statement.htm)
-* [https://www.tothenew.com/blog/groovy-tokenize-vs-split/](https://www.tothenew.com/blog/groovy-tokenize-vs-split/)
+* [Groovy : tokenize() vs split()](https://www.tothenew.com/blog/groovy-tokenize-vs-split/)
 * [Working with collections in Groovy](http://docs.groovy-lang.org/next/html/documentation/working-with-collections.html)
 * [Groovy - XML](https://www.tutorialspoint.com/groovy/groovy_xml.htm)
