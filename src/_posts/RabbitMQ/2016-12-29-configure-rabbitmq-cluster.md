@@ -9,7 +9,6 @@ permalink: /configure-rabbitmq-cluster/
 image: /wp-content/uploads/2016/12/rabbitmq-logo.png
 categories:
   - Linux server
-  - Failover
 tags:
   - RabbitMQ
 ---
