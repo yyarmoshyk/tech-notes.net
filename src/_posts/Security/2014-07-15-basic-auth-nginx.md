@@ -9,7 +9,7 @@ permalink: /basic-auth-nginx/
 image: /wp-content/uploads/2014/02/nginx1-660x378.gif
 categories:
   - nginx
-  - Safety
+  - Security
 ---
 I will consider an example of setting up basic authorization in Nginx for a WordPress site. I need the authorization window to pop up for the following pages:
 * http://www.tech-notes.net/wp-admin
