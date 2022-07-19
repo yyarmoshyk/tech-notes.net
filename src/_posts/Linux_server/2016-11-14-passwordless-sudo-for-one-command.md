@@ -9,7 +9,6 @@ permalink: /passwordless-sudo-for-one-command/
 image: /wp-content/uploads/2014/10/shellshocker.png
 categories:
   - Linux server
-  - sudo
 ---
 Suppose we needed to allow one user on the system to execute an application that requires sudo without entering a password. 
 In order to do this you need to edit the `/etc/sudoers` file accordingly:
