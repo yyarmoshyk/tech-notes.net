@@ -1,6 +1,6 @@
 ---
 id: 920
-title: Симуляция https (ssl) сессии средствами rewrite модуля
+title: Simulate https (ssl) session using the rewrite module
 date: 2014-05-05T18:49:17+00:00
 author: admin
 
@@ -13,34 +13,34 @@ tags:
   - rewrite https
   - SSL
 ---
-Многие сталкивались с балансировкой нагрузки. В этой статье хочу затронуть тему балансировки нагрузки https соединений. Затрону только поверхностно, поскольку делаю маленькую заметку.
+In this article I want to touch on the topic of load balancing https connections.
 
-Большинство балансировщиков нагрузки поддерживают так называемое `ssl termination`. В этом случае клиент устанавливает защищенную сессию с балансировщиком нагрузки, на самом же балансировщике происходит ssl handshake и с него же отправляется ssl сертификат клиенту. Дальше балансровщик устанавливает сессию с самим сервером и получает с него контент. Из полученных данных формируется новый пакет и отправляется клиенту.
+Most load balancers support the so-called `ssl termination`. In this case, the client establishes a secure session with the load balancer and an ssl handshake occurs on the load balancer itself. The ssl certificate is sent from load balancer to the client. Next the balancer establishes a session with the server itself and receives content from it. A new packet is formed from the received data and sent to the client.
 
-Кто-то знает, кто-то нет, что ssl или https соединения грузят сам сервер на много больше, чем обычные http. Казалось бы, для того, что бы снять ненужную нагрузку с сервера, можно можно бэк-эндом для ssl сессии указывать http адрес сервера в настройках балансировщика и все будет в шоколаде.
+SSL or https connections to create bigger load on the server itself comparing to http. It would seem that in order to remove unnecessary load from the server you can specify the http address of the server in the balancer settings as a back-end for the ssl session and everything will be great.
 
-Да вот незадача: большинство cms систем, да и просто сайтов имеют проверку безопасных соединений. В случае обнаружения незащищенной сессии сайт перенаправит запрос/соединение на https. Балансировщик снова доставит его в http порт и браузер отобразит клиенту сообщение о том, что страница не может быть обработана из-за бесконечного редиректа.
+Yes that's bad luck: most of the cms systems (wordpress, joomla, magento, etc.) have a checks for secure connections. If an insecure session is detected the site will redirect the visitor to https. The load balancer will again deliver it to the http port and the browser will display a message to the client that the page cannot be processed because of an endless redirect.
 
-Как правило php приложения проверяют наличие переменной HTTPS со значением `on` в окружении SERVER. Так же может проверяться значение SERVER_PORT. Для того что бы обмануть приложение, можно руками создать эту переменную.
+PHP applications check for the presence of an HTTPS variable with a value of `on` in the `SERVER` environment. The value of `SERVER_PORT` can also be checked. In order to deceive the application you can manually create this variable.
 
-Для этого открываем конфиг виртуального https хоста. Рекомендую описывать его отдельно.  
-Меняем значение `SSLEngine` c ``on`` на ``off``.
+To do this, open the config of the virtual https host. I recommend describing it separately.
+Change the value of `SSLEngine` from ``on`` to ``off``.
 
-Теперь вставляем следующие строки в конфигурационный файл:
+Now paste the following lines into the configuration file:
 
 ```bash
-RewriteEngine on  
+Rewrite Engine on
 RewriteRule .* - [E=HTTPS:on]
 ```
 
-Если не поможет, добавьте еще вот такую строку:
-
+If that doesn't help, add the following line:
 ```bash
 RewriteRule .* - [E=SERVER_PORT:443]
 ```
 
-Либо:
-
+Or:
 ```bash
 SetEnvIf X-Forwarded-Proto https HTTPS=on
 ```
+
+This will make the CMS system think that all requests comming to it are secure hsttps) and will skip redirect.

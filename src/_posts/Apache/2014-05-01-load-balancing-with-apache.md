@@ -1,6 +1,6 @@
 ---
 id: 801
-title: Балансировка нагрузки с помощью Apache
+title: Load Balancing with Apache
 date: 2014-05-01T17:12:58+00:00
 author: admin
 
@@ -11,42 +11,45 @@ categories:
   - Apache
 tags:
   - Apache
-  - балансировка нагрузки
+  - load balancing
 ---
-Приветствую тебя, дорогой читатель. В этой статье я хочу описать настройку Apache для балансировки нагрузки на несколько back-end серверов.  
-Для корректной работы понадобятся два модуля:
-  * `mod_proxy`
-  * `mod_proxy_balancer`
+Greetings dear reader. In this article I want to describe how to configure Apache to load balance multiple back-end servers.
+You'll need the following two modules:
+* `mod_proxy`
+* `mod_proxy_balancer`
 
-Пример конфигурации хоста:
-
+Host configuration example:
 ```bash
 <VirtualHost *:80>
 	ServerName mywebsite.com
-	ProxyRequests On
+	Proxy Requests On
 	ProxyVia On
+	
 	<Proxy balancer://mycluster>
 		BalancerMember http://192.168.1.50:80
 		BalancerMember http://192.168.1.51:80
-		BalancerMember http://192.168.1.51:80
+		BalancerMember http://192.168.1.52:80
 	</Proxy>
+
 	ProxyPass / balancer://mycluster
 </VirtualHost>
 ```
 
-Для того что бы включить `липкие сессии` или source балансировку, нужно привести конфиг к следующему виду:  
+In order to enable `sticky sessions` you need to bring the config to the following form:
 ```bash
 <VirtualHost *:80>
 	ServerName mywebsite.com
-	ProxyRequests On
+	Proxy Requests On
 	ProxyVia On
 	Header add Set-Cookie "ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
+
 	<Proxy balancer://mycluster>
 		BalancerMember http://192.168.1.50:80 route=1
 		BalancerMember http://192.168.1.51:80 route=2
 		BalancerMember http://192.168.1.51:80 route=3
 		ProxySet stickysession=ROUTEID
 	</Proxy>
+
 	ProxyPass / balancer://mycluster
 </VirtualHost>
 ```

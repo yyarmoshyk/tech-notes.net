@@ -1,6 +1,6 @@
 ---
 id: 2245
-title: Статистика по дням в AwStats
+title: Daily statistics in AwStats
 date: 2014-12-02T16:51:32+00:00
 author: admin
 
@@ -12,26 +12,23 @@ categories:
 tags:
   - awstats
 ---
-AwStats - парсер лог файлов, написанный на perl, с помощью которого можно вести статистику посещений сайта на основе информации из лог файлов.
+AwStats is a log file parser written in perl, with which you can keep statistics of site visits based on information from log files.
 
-Как правило awstats отображает общую информаци за неделю, месяц. Но что же делать, если нужно отображать информацию о посещении сайта за конкретный день.
+As a rule, awstats displays general information for the week, month. But what to do if you need to display information about visiting the site for a specific day.
 
-О подобном трюке дальше и пойдет речи на примере сервера на базе Linux Ubuntu c Apache2.
+A similar trick will be discussed further on the example of a server based on Linux Ubuntu with Apache2.
 
-Для начала установим AwStats:
-
+First, install AwStats:
 ```bash
 apt-get install awstats libapache2-mod-perl2
 ```
 
-Создаем конфиг для сайта:
-
+Create website config:
 ```bash
 cp /etc/awstats/awstats.conf /etc/awstats/awstats.**website.com**.conf
 ```
 
-Открываем новый файл. В нем нужно найти и отредактировать следующие области:
-
+Edit the file accordingly:
 ```bash
 LogFile="/var/log/apache2/access.log" #path to logfile;
 LogFormat=1 #for full statistics;
@@ -42,22 +39,18 @@ DNSLookup=0
 ```
 
 
-На этом все.  
-Включаем конфигурацию AwStats в Apache:
-
+That is it. Next enable AwStats in Apache:
 ```bash
 cp /usr/share/doc/awstats/examples/apache.conf /etc/apache2/conf.d/awstats.conf  
 /etc/init.d/apache2 reload
 ```
 
-Открываем редактор запранированых заданий:
-
+Edit cron tab:
 ```bash
 crontab -e
 ```
 
-Создаем расписание (cronjob):
-
+Create the following cron jobs:
 ```bash
 0 2 * * * /usr/lib/cgi-bin/awstats.pl --config=/etc/awstats/awstats.website.com.conf -DatabaseBreak=day > /dev/null
 0 2 * * * /usr/lib/cgi-bin/awstats.pl --config=/etc/awstats/awstats.website.com.conf -DatabaseBreak=month > /dev/null
@@ -65,10 +58,10 @@ crontab -e
 ```
 
 
-Осталось создать `index.cgi`, который и предоставит возможность выбирать диапазон для отображения статистики.  
-Создайте файл `index.cgi` в папке `/usr/lib/cgi-bin/`
+It remains to create `index.cgi` that will provide the ability to select a range for displaying statistics.
+Create an `index.cgi` file in `/usr/lib/cgi-bin/`
 
-Содержимое файла - в спойлере.  
+The contents of the file are in the spoiler.
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="/assets/js/spoiler.js" type="text/javascript"></script>
 
@@ -189,15 +182,15 @@ print "&lt;/table&gt;\n";
 </pre>
 </div> </div>
 
-Выставте параметры доступа на файлы:
+Make it executable and change the owner:
 ```bash
 chmod 755 /usr/lib/cgi-bin/index.cgi
 chown www-data:www-data /usr/lib/cgi-bin/index.cgi
 ```
 
-Для упрощения доступа отредактируйте файл `/etc/apache2/conf.d/awstats.conf`:
+Edit `/etc/apache2/conf.d/awstats.conf` with the following:
 ```bash
 DirectoryIndex index.cgi
 ```
 
-По аналогии можно настроить <a href="http://www.tech-notes.net/awstats-for-nginx/" title="Настройка Awstats для Nginx" target="_blank">AwStats для NginX</a>
+I got the same note for <a href="http://www.tech-notes.net/awstats-for-nginx/" title="Configure Awstats for Nginx" target="_blank">NginX</a>

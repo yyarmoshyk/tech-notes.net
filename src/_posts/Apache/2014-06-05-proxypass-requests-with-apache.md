@@ -1,6 +1,6 @@
 ---
 id: 1004
-title: Proxy requests over Apache with ProxyPass
+title: Forward requests over Apache with ProxyPass
 date: 2014-06-05T13:30:45+00:00
 author: admin
 
@@ -11,7 +11,7 @@ categories:
   - Apache
 tags:
   - load balancing
-  - ProxyPass
+  - Proxy Pass
 ---
 For various reasons you may want to display information from one server to another. I won't go into the reasons.
 

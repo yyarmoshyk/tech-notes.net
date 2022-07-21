@@ -1,6 +1,6 @@
 ---
 id: 2586
-title: Использование mod_substitute в Apache
+title: Use mod_substitute in Apache
 date: 2015-05-15T14:48:43+00:00
 author: admin
 
@@ -10,49 +10,43 @@ image: /wp-content/uploads/2015/05/SearchReplaceSheet.png
 categories:
   - Apache
 tags:
-  - mod_substitute
+  -mod_substitute
 ---
-Для это штуки решил сделать отдельную заметку.
+The essence [mod_substitute](http://httpd.apache.org/docs/2.4/mod/mod_substitute.html) is to replace the text in the body of the response from the web server. With it you can change for example links to one domain with links to another domain without interfering with the site code.
 
-Суть работы этого [mod_substitute](http://httpd.apache.org/docs/2.4/mod/mod_substitute.html) заключается в замене текста в теле ответа от вэб сервера. Тоесть можно сменить, на принмер, ссылки на один домен ссылками на другой домен без вмешательства в код сайта.
-
-Проверить загружен ли модуль можно так:
-
+You can check if the module is loaded like this:
 ```bash
 /usr/sbin/apachectl -t -D DUMP_MODULES 2>&1|grep subst
 ```
 
-Либо удостовериться что следующая строка присутствует и не закомнтирована в файле httpd.conf:
-
+Or make sure the following line is present and not commented out in the httpd.conf file:
 ```bash
 LoadModule substitute_module modules/mod_substitute.so
 ```
 
-Допустим у вас есть сайт с доменным именем mysite.com. Вам нужно из него сделать сайт dev.mysite.com, но в базе, да и в файлах, существует целая туча ссылок на mysite.com. Соответственно dev домен будет на половину работать с живым сайтом и половна ссылок будут вести на живой сайт. Мжно ковырять базу, обновлять ссылки в файлах, но можно пойти путем наименьшего сопротивления, а именно, добавить следущую конструкцию в [.htaccess](http://www.tech-notes.net/htaccess-notes/" title="Шпаргалка по .htaccess):
+Let's say you have a website with the domain name `mysite.com`. You need to make the site `dev.mysite.com` out of it, but there are links to the `mysite.com` hardcoded in the database and website files.
+
+There is an option to update the database and files but you can go the path of least resistance and add the following construction to [.htaccess](http://www.tech-notes.net/htaccess-notes/" title="Cheat sheet for .htaccess):
 
 ```bash
 AddOutputFilterByType SUBSTITUTE text/html
 Substitute "s|mysite.com|dev.mysite.com|in"
 Substitute "s|www.mysite.com|dev.mysite.com|in"
 ```
+The first line indicates the type of files that will be replaced. 
 
-
-Первая строка означает тип файлов, в которых будет производится замена. Если у Вас есть еще и кастомизированые скрипты - заставте сервер отрабатывать их в том числле:
-
+If you also have customized scripts, make the server process them including:
 ```bash
 AddOutputFilterByType SUBSTITUTE text/javascript
 ```
 
 
-В случае возникновения проблем, проверьте [настройки сайта в Apache](/configure-vhosts-apache2/). Обратите внимание на:
-
+In case of problems, check [Apache site settings](/configure-vhosts-apache2/). Pay attention to:
 ```bash
 AllowOverride All
 ```
 
-
-`Substitute` бывает чувствительным к заголовку Accept-Ranges. В случае проблем попробуйте добавить следущее в конструкцию `Substitute` в `.htaccess` файле:
-
+`Substitute` is sensitive to the `Accept-Ranges` header. In case of problems try adding the following to the `Substitute` construct in your `.htaccess` file:
 ```bash
 Header set Accept-Ranges "none"
 ```
