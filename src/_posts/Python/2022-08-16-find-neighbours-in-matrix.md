@@ -46,7 +46,7 @@ def get_neighbors(matrix, x, y):
     
     for i in range( (0 if x-1 < 0 else x-1), (num_rows if x+2 > num_rows else x+2), 1  ):
         for j in range( (0 if y-1 < 0 else y-1), (num_cols if y+2 > num_cols else y+2), 1 ):
-            if matrix[r][c] != matrix[x][y]:
+            if matrix[x][y] != matrix[i][j]:
                 print(" • matrix["+str(i)+"]["+str(j)+"] = "+str(matrix[i][j]))
 ```
 
@@ -58,7 +58,7 @@ def get_neighbors(matrix, x, y):
     
     for i in range( (0 if x-1 < 0 else x-1), (num_rows if x+2 > num_rows else x+2), 1  ):
         for j in range( (0 if y-1 < 0 else y-1), (num_cols if y+2 > num_cols else y+2), 1 ):
-            if matrix[r][c] != matrix[x][y]:
+            if matrix[x][y] != matrix[i][j]:
                 result.append(matrix[i][j])
     return result
 ```
@@ -71,7 +71,7 @@ def get_neighbors(matrix, x, y):
     
     for i in range( (0 if x-1 < 0 else x-1), (num_rows if x+2 > num_rows else x+2), 1  ):
         for j in range( (0 if y-1 < 0 else y-1), (num_cols if y+2 > num_cols else y+2), 1 ):
-            if matrix[r][c] != matrix[x][y]:
+            if matrix[x][y] != matrix[i][j]:
                 result[matrix[i][j]] = [i,j]
 
     return result
