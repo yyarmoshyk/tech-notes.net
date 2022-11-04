@@ -23,13 +23,13 @@ I use the [bmwitcher.medium.com](https://bmwitcher.medium.com/using-lambda-cloud
 import boto3
 region = 'us-east-1'
 ec2 = boto3.client('ec2', region_name=region)
-
 def lambda_handler(event, context):
     if event["action"] == "stop":
         ec2.stop_instances(InstanceIds=[event["instance_id"]])
     if event["action"] == "start":
         ec2.start_instances(InstanceIds=[event["instance_id"]])
 ```
+
 2. Create the following IAM policy
 ```json
 {
@@ -59,11 +59,12 @@ def lambda_handler(event, context):
     ]
 }
 ```
-3. Attach this policy to the lambda execution IAM role. The role name can be found on the lambda configuration tab
-![lambda execution role]("/wp-content/uploads/2022/lambda_execution_role.png" "lambda execution role")
-4. Create 2 separarte CloudWatch rules to stop and start instances at the spcified schedule
-![CloudWatch create event rule]("/wp-content/uploads/2022/cw_create_rule.png" "CloudWatch create event rule")
 
+3. Attach this policy to the lambda execution IAM role. The role name can be found on the lambda configuration tab
+![lambda execution role](/wp-content/uploads/2022/lambda_execution_role.png "lambda execution role")
+
+4. Create 2 separarte CloudWatch rules to stop and start instances at the spcified schedule
+![CloudWatch create event rule](/wp-content/uploads/2022/cw_create_rule.png "CloudWatch create event rule")
 
 ## Links
 * [bmwitcher.medium.com](https://bmwitcher.medium.com/using-lambda-cloudwatch-events-to-start-and-stop-ec2-instances-48e31ff0daf2)
