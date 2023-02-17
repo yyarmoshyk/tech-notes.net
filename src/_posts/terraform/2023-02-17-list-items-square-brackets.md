@@ -21,3 +21,10 @@ Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0
 I decided to make this not becuase the explanation at [github.com/terraform-linters](https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.2.2/docs/rules/terraform_deprecated_index.md) is not very clear.
 <br>
 The fix is the to replace all occurances of `aws_instance.ec2.*.id[count.index]` with `aws_instance.ec2.[count.index].id`
+
+Another optio is to switch to for loop. Here is an example in optputs:
+```tcl
+output "ec2_private_ips" {
+  value = [for instances in aws_instance.ec2 : instances.private_ip]
+}
+```
