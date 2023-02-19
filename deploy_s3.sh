@@ -17,6 +17,7 @@ then
   aws s3 sync --acl public-read public/ s3://www.tech-notes.net/ --delete
 else
   echo "Current user can't assume role"
+  exit 1
 fi
 
 if [ "$current_user" == "arn:aws:iam::${AWS_ACCOUNT_ID}:role/${AWS_ROLE}" ]; then
