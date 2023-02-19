@@ -20,46 +20,86 @@ The key trick in RabbitMQ is in fact that there is no such thing as global clust
 
 Nex't I'll provide step by step instructions how to configure failover cluster for rabbitMQ that consists of 3 servers.
 
+The most officient way to do this is to run it in Docker containers. 
+
 ## Run on all servers
-Enable EPEL
+So you got to have docker and docker-compose installed on all 3 servers
+1. Docker install [instructions for Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+1. Docker install [instructions for Centos](https://docs.docker.com/engine/install/centos/)
+1. docker-compose install [instructions for Linux](https://docs.docker.com/compose/install/other/#on-linux) on all the servers.
+
+RabbitMQ cluster is using the erlang cookie to authorize nodes in the cluster. You can generate any random string for this.
+
+Run the following on all servers:
 ```bash
-rpm -ivh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm
-```
-Install needed libraries:
-```bash
-yum install -y vim net-tools wget git zip unip openssh-server openssh logrotate socat
+mkdir -p /opt/rabbitmq/{data,logs}
+echo ${ERLANG_COOKIE} > /opt/rabbitmq/data/.erlang.cookie
+
+chmod 600 /opt/rabbitmq/data/.erlang.cookie
+chmod 777 /opt/rabbitmq/log/
 ```
 
-### Install `Erlang`. 
-There are 3 options
-  * Install `Eplang` as is from Epel - I was getting errrors when one of the servers was falling out of cluster.сервера из кластера
-  * Download and install the latest Erlang from developers - RabbitMQ could not get installed with this one.
-  * Compile `Erlang`, that is optimized for Rabbit and includes only required components is a log way but it is the most reliable
-
-You'll need docker to build the `Erlang` rpm package. It is more efficient to build it locally and than copy to all the servers.
+Servers inside the cluster need to be able to resolve each other with the short DNS names. For this you'll need to update the `/etc/hosts` file on all servers:
 ```bash
-git clone https://github.com/rabbitmq/erlang-rpm.git  
-сd erlang-rpm/docker/  
-sed -i 's/-i\ -t/-tty/g' build-rpm-in-docker.sh  
-bash build-image-and-rpm.sh latest
+echo """
+1.1.1.1 server-1
+2.2.2.2 server-2
+3.3.3.3 server-3
+""" >> /etc/hosts
+```
+Create `docker-compose.yaml`
+```bash
+cat <<EOF > /opt/rabbitmq/docker-compose.yaml
+version: '2'
+services:
+  rabbitmq:        
+    image: rabbitmq:3.10-management
+    container_name: '$(uname -n)'
+    environment:
+        - RABBITMQ_NODENAME=rabbit@$(uname -n)
+    ports:
+        - 4369:4369
+        - 5672:5672
+        - 15672:15672
+        - 25672:25672
+    volumes:
+        - /opt/rabbitmq/data/:/var/lib/rabbitmq/
+        - /opt/rabbitmq/log/:/var/log/rabbitmq
+EOF
 ```
 
-Upon completion the rpm files will be located in the following folder:
+Start containers:
 ```bash
-build-dir-latest/RPMS/x86_64/
+docker-compose -f /opt/rabbitmq/docker-compose.yaml up -d 
+```
+<center>
+  <div id="gads">
+  </div>
+</center>
+
+## Connect all servers into a cluster
+The following commands should be executed on the slave nodes. You can use server-1 as master and run the following on `server-2` and `server-3`:
+```bash
+docker exec --tty $(uname -n) rabbitmqctl stop_app
+docker exec --tty $(uname -n) rabbitmqctl reset
+docker exec --tty $(uname -n) rabbitmqctl join_cluster rabbit@server-1
+docker exec --tty $(uname -n) rabbitmqctl start_app
 ```
 
-Install `Erlang`
+The following can be used to get the data from the cli:
 ```bash
-yum install -y build-dir-latest/RPMS/x86_64/erlang-19.2.0-1.el7.centos.x86_64.rpm  
-yum install -y build-dir-latest/RPMS/x86_64/erlang-debuginfo-19.2.0-1.el7.centos.x86_64.rpm
+rabbitmqctl cluster_status
 ```
-### Install `RabbitMQ`
-The latest version of `RabbitMQ` as of today is v3.6.6.
+
+Sample output:
 ```bash
-wget -O /tmp/rabbitmq-server-3.6.6-1.el7.noarch.rpm https://www.rabbitmq.com/releases/rabbitmq-server/v3.6.6/rabbitmq-server-3.6.6-1.el7.noarch.rpm -no-check-certificate  
-rpm -import http://www.rabbitmq.com/rabbitmq-release-signing-key.asc  
-yum install -y /tmp/rabbitmq-server-3.6.6-1.el7.noarch.rpm
+docker exec --tty $(uname -n) rabbitmqctl cluster_status
+Cluster status of node rabbit@cd27271cd9ff ...
+[{nodes,[{disc,[rabbit@cd27271cd9ff]}]},
+ {running_nodes,[rabbit@cd27271cd9ff]},
+ {cluster_name,<<"rabbit@cd27271cd9ff">>},
+ {partitions,[]},
+ {alarms,[{rabbit@cd27271cd9ff,[]}]}]
 ```
 
 <center>
@@ -67,6 +107,7 @@ yum install -y /tmp/rabbitmq-server-3.6.6-1.el7.noarch.rpm
   </div>
 </center>
 
+## UI
 RabbitMQ has a nice web UI that can be very helpfull in every day usage. It is disabled by default. Run the following in order to enabpe it:
 ```bash
 rabbitmq-plugins enable rabbitmq_management
@@ -80,39 +121,6 @@ Standard user:
 
 On the first page you'll see the state of the cluster (there is only one server in it so far)
 
-The following can be used to get the data from the cli:
-```bash
-rabbitmqctl cluster_status
-```
-
-Sample output:
-```bash
-[root@cd27271cd9ff /]# rabbitmqctl cluster_status
-Cluster status of node rabbit@cd27271cd9ff ...
-[{nodes,[{disc,[rabbit@cd27271cd9ff]}]},
- {running_nodes,[rabbit@cd27271cd9ff]},
- {cluster_name,<<"rabbit@cd27271cd9ff">>},
- {partitions,[]},
- {alarms,[{rabbit@cd27271cd9ff,[]}]}]
-```
-
-## Connect all servers into a cluster
-First make sure that the value of the `Erlang cookie` is identical on all servers (you can copy it from the active server to all others)
-The value can be read at `/var/lib/rabbitmq/.erlang.cookie`
-
-This file has to be owned by `rabbitmq` user and have 600 permissions on all servers
-
-RabbitMQ daemon needs to be restarted after the changes
-
-Next select any server to be the first one in cluster. You can use the current one. In my example it is `rabbit@cd27271cd9ff`.
-Run the following on all servers in the cluster:
-```bash
-rabbitmqctl stop_app  
-rabbitmqctl reset  
-rabbitmqctl join_cluster rabbit@cd27271cd9ff
-rabbitmqctl start_app
-```
-After this the output of the `cluster_status` and web UI on all servers will desplay tthe list of all servers in your cluster
 You can use [HA-Proxy](/use-ha-proxy-rabbitmq/) to distribute the load between the servers i the cluster
 
 The server-sde of the configuration is finished at this step
@@ -126,6 +134,14 @@ password=password
 vhost=name_of_the_vhost
 queue_name=name_of_the_queue
 exchange=the_name_of_exchange
+```
+The following commands can be executed on any node in the cluster inside the docker container:
+```bash
+docker exec --tty $(uname -n) 
+```
+Or attach to the container console by running the following:
+```bash
+docker exec -it $(uname -n) bash
 ```
 
 Create vhost:
