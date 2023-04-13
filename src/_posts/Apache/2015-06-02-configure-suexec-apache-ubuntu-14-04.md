@@ -1,6 +1,6 @@
 ---
 id: 2655
-title: Настройка suexec в Apache2 на Ubuntu 14.04
+title: Configure suexec for Apache2 on Ubuntu 14.04
 date: 2015-06-02T13:43:04+00:00
 author: admin
 
@@ -16,50 +16,42 @@ tags:
   - php-cgi
   - suexec
 ---
-Механизм suexec позволяет выполнять `CGI` скрипты от имени разных пользователей системы. В этой статье я рассмотрю пример настройки suexec на базе Linux Ubuntu 14.04.  
+The `suexec` mechanism allows you to execute `CGI` scripts on behalf of different system users. In this article, I'll walk through an example of setting up suexec based on Linux Ubuntu 14.04.
 <!--more-->
 
-Использовать suexec очень удобно если у вас есть несколько сайтов на сервере, доступ к которым организован [через sftp](/configure-sftp-chroot-on-ubuntu-14-04/). В таком случае вы **не столкнетесь** с проблемой разных владельцев файлов.
+It is very convenient to use `suexec` if you have multiple websites on the single server and you use [sftp isolation]((/configure-sftp-chroot-on-ubuntu-14-04/)) to access the files. 
+With `suexec` you'll never see the problems with the file owner/permissions mismatch
 
-Для начала установим нужные пакеты:
-
+Install the required software:
 ```bash
 apt-get install php5-cgi libapache2-mod-fcgid apache2-suexec apache2-suexec-custom -y
 ```
 
-Включим модули
-
+Enable `apache2` modules
 ```bash
 a2enmod fcgid  
 a2enmod suexec
 ```
 
-Теперь нужно указать, что все `php` файлы - это `cgi` скрипты и должны обрабатываться модулем `fcgid`
+Now we need to identify `php` files as `cgi` scripts to be executed by the `fcgid` module
+There are multiple options to enable this
+1. Updarte global `fcgid.conf`
+1. Update configuration files of every website
 
-Есть два варианта
-
-  1. отредактировать глобальный `fcgid.conf`
-  2. отредактировать отдельной конфиг каждого сайта.
-
-Я выбираю второй:
-
+The second option:
 ```bash
 nano /etc/apache2/sites-enabled/**sitename.conf**
 ```
 
-Следующая конструкция объявляет `php` файлы `cgi` скриптами:
-
+Update the website configuration with the following:
 ```bash
 <IfModule mod_mime.c>
   AddHandler     fcgid-script .php
   FCGIWrapper /usr/bin/php5-cgi .php
 </IfModule>
-
 ```
 
-
-В том же самом файле указываем от имени какого именно системного пользователя apache будет получать доступ к папкам и файлам сайта. В даном примере я указываю отдельный `php.ini` для каждого сайта:
-
+Next we need to specify the name of the user and group that should be used by suexec to work with the website files (additionally I use separate php.ini for every website on this server):
 ```bash
 <IfModule mod_suexec.c>
   FcgidInitialEnv PP_CUSTOM_PHP_INI /etc/php_conf.d/websitename_php.ini
@@ -67,23 +59,19 @@ nano /etc/apache2/sites-enabled/**sitename.conf**
 </IfModule>
 ```
 
-В остальном конфигурационный файл остается стандартным. Полный пример можно посмотреть по адресу:  
-[Настройка сайтов в Apache2](/configure-vhosts-apache2/)
+The remaining configuration is unchanged.
 
-Перезапускаем демон apache:
-
+Restart `apache` daemon to apply the changes
 ```bash
 service apache2 restart
 ```
 
-Разрешаем листинг каталога сайта:
-
+Allow listing for the website folder:
 ```bash
 chmod +x /var/www/**sitename.conf**
 ```
 
-Делаем все php файлы исполняемыми:
-
+Add executable permission to all php files in the website folder:
 ```bash
 find /var/www/**sitename.conf** -type f -name `*.php` -exec chmod +x {} \;
 ```
