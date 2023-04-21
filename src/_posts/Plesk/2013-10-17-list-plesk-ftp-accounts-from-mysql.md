@@ -1,6 +1,6 @@
 ---
 id: 44
-title: Просмотр всех FTP акаунтов созданых в Plesk на Linux сервере через mysql
+title: View all FTP accounts created in Plesk on a Linux server via mysql
 date: 2013-10-17T19:37:14+00:00
 author: admin
 
@@ -16,26 +16,23 @@ categories:
   - Plesk
 tags:
   - ftp plesk mysql
-  - ftp пользователи plesk
+  - ftp users plesk
 ---
-Случается так, что вэбморда Plesk становится недоступной по той или иной причине. Либо у нас есть набор файлов со старого сервера и нужно восстановить всех ftp пользователей на новом основываясь на информации из mysql базы Plesk.
+It happens that the Plesk WebUI becomes unavailable for any reason. Or we have a set of files from the old server and we need to restore all ftp users on the new one based on information from the Plesk `mysql` database.
 
-По умолчанию Plesk работает с базой `psa`. В ней он хранит все данные об аккаунтах, которые были созданы на сервере. От туда и будем выковыривать информацию.
+By default Plesk works with the `psa` database. Plesk stores all the data about the accounts that were created on the server in it. We will get the information from this database.
 
-Подключаемся к базе данных:
-
+Connecting to the database:
 ```bash
 mysql -uadmin -p$(cat /etc/psa/.psa.shadow)
 ```
 
-Именно в этом файле хранится пароль пользователя базы у Plesk.  
-Подключаемся к базе Plesk:
+Switch to Plesk database:
 ```bash
 use psa;
 ```
 
-Следующий запрос вернет нам список всех пользователей и паролей:
-
+Here is the mysql query that will return the list of the FTP users in Plesk:
 ```sql
 SELECT REPLACE(sys_users.home,'/home/httpd/vhosts/','') AS domain, sys_users.login,accounts.password
 FROM sys_users LEFT JOIN accounts on sys_users.account_id=accounts.id
