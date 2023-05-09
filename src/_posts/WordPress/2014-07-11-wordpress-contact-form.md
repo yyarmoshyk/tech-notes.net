@@ -1,6 +1,6 @@
 ---
 id: 638
-title: Форма обратной связи для WordPress без плагинов
+title: Contact form for WordPress website without additional plugins
 date: 2014-07-11T07:14:33+00:00
 author: admin
 
@@ -11,12 +11,11 @@ categories:
   - WordPress
 tags:
   - wordpress
-  - без плагина
-  - обратная связь
+  - contact form
 ---
-Есть разные плагины для организации обратной связи для WordPress. Почему-то ни один из них корректно не сработал в моем блоге.  
-Зная некоторые базовые основы WordPress и php, я подумал, что можно обойтись и без плагина. Предлагаю Вашему вниманию шаблон страницы для отправки почты:
 
+There are different plugins that enable contact form for WordPress websites. For some reason none of them worked correctly on my blog.
+Knowing some basic WordPress and php basics I thought that I could do without a plugin. I bring to your attention a page template for sending mail:
 ```php
 <?php
 /**
@@ -37,7 +36,7 @@ get_header();
   	$headers = "From: $from";
 
 		mail($to,$subject,$msg,$headers);
-		echo '<center><b>Спасибо за Ваш отзыв! Письмо было отправлено.</b><br><br>';
+		echo '<center><b>The message has been sent.</b><br><br>';
   	}
 ?>
 
@@ -46,24 +45,26 @@ get_header();
 
 <div>
 <center><table style="width:40%;">
-<tr> <td>E-mail адрес *:</td><td><input type="text" name="frommail" /></td></tr>
-<tr><td>Имя *:</td><td><input type="text" name="fromname" /></td></tr>
-<tr><td>Тема *:</td><td><input type="text" name="subject" /></td></tr>
-<tr><td>Ваше сообщение *:</td><td><textarea rows="4" cols="23" name="msg"></textarea></td></tr>
-<tr><td colspan="2"> <input type="submit" value="Отправить" /></td></tr>
+<tr> <td>E-mail address *:</td><td><input type="text" name="frommail" /></td></tr>
+<tr><td>Your Name *:</td><td><input type="text" name="fromname" /></td></tr>
+<tr><td>Subject *:</td><td><input type="text" name="subject" /></td></tr>
+<tr><td>ВашеYour message *:</td><td><textarea rows="4" cols="23" name="msg"></textarea></td></tr>
+<tr><td colspan="2"> <input type="submit" value="Send" /></td></tr>
 </table></center>
 
 <?php get_footer(); ?>
 ```
 
 
-Этот код нужно сохранить `%папка_темы%/page-templates/contact-form.php`.
+It has to be saved into the `%theme_folder%/page-templates/contact-form.php`.
 
 Дальше заходим в админку, создаем еще одну страницу. Название выберите на Ваше усмотрение. Прокручиваем страницу вниз в правой части экрана в разделе `Атрибуты страницы` выбираем шаблон `Contact Form`. Сохраняем. Радуемся.
 
+Next go to the admin panel and create new page. Scroll down the page on the right side of the screen in the `Page Attributes` section, select the `Contact Form` template. Hit save.
+
 [<img src="/wp-content/uploads/2014/03/Screenshot-from-2014-03-12-031118.png" alt="Screenshot from 2014-03-12 03:11:18" width="283" height="180" class="aligncenter size-full wp-image-640" />](/wp-content/uploads/2014/03/Screenshot-from-2014-03-12-031118.png)
 
-Не забудьте поменять **your@mail.com** на адрес Вашего почтового ящика.
+Don't forget to change **your@mail.com** to your email address.
 
-На выходе получаем вот такую форму, с помощью которой люди могут войти в контакт с Вами:  
+Result looks like the following:
 [<img src="/wp-content/uploads/2014/03/Screenshot-from-2014-07-11-160728.png" alt="Screenshot from 2014-07-11 16:07:28" width="591" height="397" class="aligncenter size-full wp-image-1215" srcset="/wp-content/uploads/2014/03/Screenshot-from-2014-07-11-160728.png 591w, /wp-content/uploads/2014/03/Screenshot-from-2014-07-11-160728-170x114.png 170w, /wp-content/uploads/2014/03/Screenshot-from-2014-07-11-160728-300x201.png 300w" sizes="(max-width: 591px) 100vw, 591px" />](/wp-content/uploads/2014/03/Screenshot-from-2014-07-11-160728.png)
