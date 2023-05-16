@@ -135,6 +135,29 @@ resource "google_compute_firewall" "foo" {
 }
 ```
 
+## Create list from map indexes
+```terraform
+locals {
+  test_map = {
+    "key1" = {
+      "var1" = "val1"
+    },
+    "key2" = {
+      "var2" = "val2"
+    },
+    "key3" = {
+      "var3" = "val3"
+    }
+  }
+
+  test_map_keys = [for k, v in local.test_map : k]
+}
+
+output "test_map_keys" {
+  value = local.test_map_keys
+}
+```
+
 External links:
 * [HashiCorp Terraform 0.12 Preview: For and For-Each](https://www.hashicorp.com/blog/hashicorp-terraform-0-12-preview-for-and-for-each)
 * [Terraform For Each Examples – How to use for_each](https://www.middlewareinventory.com/blog/terraform-for-each-examples/)
