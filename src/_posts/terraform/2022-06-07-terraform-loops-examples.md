@@ -158,6 +158,30 @@ output "test_map_keys" {
 }
 ```
 
+## Output instance ids
+Let's say you created the list of instances with for_each loop
+
+```terraform
+resource "aws_instance" "ec2" {
+  for_each      = local.map_of_instances
+  ....
+}
+```
+Possible output options are the following:
+### key=>value map
+```terraform
+output instance_ids {
+  value = { for key, value in aws_instance.this : key => value.id }
+}
+```
+
+### list of IDs
+```terraform
+output instance_ids {
+  value =  [ for instance in aws_instance.this : instance.id ]
+}
+```
+
 External links:
 * [HashiCorp Terraform 0.12 Preview: For and For-Each](https://www.hashicorp.com/blog/hashicorp-terraform-0-12-preview-for-and-for-each)
 * [Terraform For Each Examples – How to use for_each](https://www.middlewareinventory.com/blog/terraform-for-each-examples/)
