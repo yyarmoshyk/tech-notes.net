@@ -171,14 +171,14 @@ Possible output options are the following:
 ### key=>value map
 ```terraform
 output instance_ids {
-  value = { for key, value in aws_instance.this : key => value.id }
+  value = { for key, value in aws_instance.ec2 : key => value.id }
 }
 ```
 
 ### list of IDs
 ```terraform
 output instance_ids {
-  value =  [ for instance in aws_instance.this : instance.id ]
+  value =  [ for instance in aws_instance.ec2 : instance.id ]
 }
 ```
 
