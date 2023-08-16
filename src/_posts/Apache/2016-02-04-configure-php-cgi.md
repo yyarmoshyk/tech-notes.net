@@ -1,8 +1,8 @@
 ---
 id: 3118
-title: Переклчаем PHP в режим CGI для одной папки
+title: Switching PHP to CGI mode for a specific folder.
 date: 2016-02-04T10:08:43+00:00
-author: admin
+author: yaroslav.yarmoshyk
 
 guid: http://www.tech-notes.net/?p=3118
 permalink: /configure-php-cgi/
@@ -13,17 +13,17 @@ categories:
 tags:
   - php-cgi
 ---
-На днях столкнулся с проблемой: phpmyadmin ругался на отсутствие модуля `mcrypt` в php. Странность заключалась в том, что в консольном выводе `php -i` модуль `mcrypt` присутствовал:
-
+Recently, I came across an issue: `phpMyAdmin` was complaining about the absence of the `mcrypt` module in `PHP`. The strange thing was that when I ran `php -m` in the console, the `mcrypt` module was present:
 ```bash
 php -m |grep mcrypt
 ```
 
-Я немного потупил, и до меня дошло, что на сервере было 2 инсталляции php, обе собраны из исходников, при этом модуль для apache присутствовал только в одной из них, а `mcrypt` - в другой.
+I scratched my head for a moment, and then it dawned on me that there were two installations of `PHP` on the server, both were built from source. Interestingly, the `mcrypt` module was only present in one of them, and the `Apache module` was only in the other.
 
-Ситуация бредовая, но именно она сподвигла меня на создание это записи о том, как настроить PHP работать в режиме CGI для одной папки на примере phpmyadmin.
+The situation was quite absurd, but it's precisely what prompted me to create this post on how to configure PHP to work in CGI mode for a specific folder, using `phpMyAdmin` as an example.
 
-Для этого нужно отредактировать файл конфигурации следующими строками:
+To achieve this, you need to edit the configuration file with the following lines:
+
 
 ```bash
 ScriptAlias /php/ /usr/bin/
@@ -34,4 +34,4 @@ ScriptAlias /php/ /usr/bin/
 </Directory>
 ```
 
-Вместо phpmyadmin может быть папка сайта.
+Instead of phpMyAdmin, it could be a website folder.

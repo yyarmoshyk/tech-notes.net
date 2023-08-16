@@ -1,8 +1,8 @@
 ---
 id: 2810
-title: Затыкаем слабые места в настройках SSL Apache
+title: Securing Weak Points in Apache SSL Configuration
 date: 2016-01-06T13:48:54+00:00
-author: admin
+author: yaroslav.yarmoshyk
 
 guid: http://www.tech-notes.net/?p=2810
 permalink: /forward-secrecy-rc4-poodle-sslcompression/
@@ -16,32 +16,30 @@ tags:
   - RC4
   - SSLCompression
 ---
-В протоколе SSL, который позволяет обмениваться шифрованным трафиком между сервером и клиентом, периодически находят слабые места. Собственно предполагается, что злоумышленники могут тем или иным образом дешифровать ssl трафик. Паниковать не стоит, но тем не менее лучше не рисковать.
+Vulnerabilities are occasionally found in the SSL protocol, which enables encrypted traffic exchange between a server and a client. These vulnerabilities potentially allow malicious actors to decrypt SSL traffic. While there's no need to panic, it's wise to avoid unnecessary risks.
 
-Эту статью я обновляю по мере появления новых уязвиимостей.
+I'm updating this article as new vulnerabilities emerge.
 
-Дальше речь пойдет о том, что и куда нужно вписать, что бы защитить сервер.
+Next, let's talk about what needs to be done and where to do it to protect your server.
 
-Для начала предлагаю воспользоваться утилитой [SslTest от SslLabs](https://www.ssllabs.com/ssltest) и проверить на сколько Ваш сервер подвержен уязвимостям.
+First, I recommend using the [SslTest от SslLabs](https://www.ssllabs.com/ssltest) utility to assess how vulnerable your server is.
 
-На первом проходе я получил следующую картину:  
+On my initial run, I observed the following situation:  
 [<img src="/wp-content/uploads/2015/08/before_ssl_update.png" alt="before_ssl_update" width="916" height="643" class="aligncenter size-full wp-image-2811" srcset="/wp-content/uploads/2015/08/before_ssl_update.png 916w, /wp-content/uploads/2015/08/before_ssl_update-170x119.png 170w, /wp-content/uploads/2015/08/before_ssl_update-300x211.png 300w" sizes="(max-width: 916px) 100vw, 916px" />](/wp-content/uploads/2015/08/before_ssl_update.png)
 
-Дальше открываем файл с настройками openssl для Apache и начинаем его редактировать:
-
+Next, open the OpenSSL configuration file for Apache and start editing it:
 ```bash
 vim /etc/httpd/conf.d/ssl.conf
 ```
 
-## Poodle
-Уязвимость **Poodle** устраняется отключением поддержки протокола шифрования SSL v.3. С недавнего времени уязвимым считается все, кроме TLSv1.1 и TLSv1.2:
-
+## Poodle Vulnerability
+To mitigate the `Poodle` vulnerability, you should disable `SSL v3` encryption protocol support. Nowadays, anything other than `TLSv1.1` and `TLSv1.2` is considered vulnerable
 ```bash
 SSLProtocol -ALL +TLSv1.1 +TLSv1.2
 ```
 
-## Forward Secrecy
-Поддержка **Forward Secrecy** включается приоритизированием шифра `kEDH`. Шифр '**RC4**' уже сто лет считается дырой, и его нужно выключать. Также не рекомендуется использование `Diffie-Hellman`:
+## Enabling Forward Secrecy
+Enable `Forward Secrecy` by prioritizing the `kEDH` cipher. The `RC4` cipher has been considered weak for quite some time and should be turned off. It's also not recommended to use `Diffie-Hellman`:
 
 ```bash
 SSLHonorCipherOrder on  
@@ -49,31 +47,28 @@ SSLCipherSuite kEDH:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:
 ```
 
 ## CRIME: Attack SSL/TLS  
-Признаться честно, я слабо представляю как работает сжатие ssl данных, но считается, что злоумышленник может внедрить вредоносный код в пакет до сжатия и отправки клиенту. Именно поэтому сжатие данных нужно отключать. На современных осях это делается следующей строчкой в конфиге:
-
+Honestly, I have a weak understanding of how SSL data compression works, but it's believed that an attacker can inject malicious code into a packet before it's compressed and sent to the client. That's why data compression should be disabled. On modern systems, you can achieve this by adding the following line to the configuration:
 ```bash
 SSLCompression off
 ```
-Если же у Вас установлен `apache 2.2` и `OpenSSL` какой-то бородатой версии, тогда вы увидите следующую ошибку при перезапуске apache:
-
+However, if you're running `apache 2.2` and an older version of `OpenSSL`, you'll encounter the following error when you restart apache:
 ```bash
 Invalid command 'SSLCompression', perhaps misspelled or defined by a module not included in the server configuration
 ```
-В Linux системах семейства RedHat нужно отредактировать `/etc/sysconfig/httpd` файл следующими строками:
-
+For Linux systems in the RedHat family, you need to edit the `/etc/sysconfig/httpd` file with the following line:
 ```bash
 export OPENSSL_NO_DEFAULT_ZLIB=1
 ```
 
-Теперь можно перезапускать apache и возвращаться в [SslTest от SslLabs](https://www.ssllabs.com/ssltest)
+You can now restart Apache and return to the [SslTest от SslLabs](https://www.ssllabs.com/ssltest)
 
 ```bash
 service httpd restart
 ```
 
-При повторном выполнении теста Вы должны увидеть красивую зеленку:  
+Upon retesting, you should see a pleasing green result:  
 [<img src="/wp-content/uploads/2015/08/after_ssl_update.png" alt="after_ssl_update" width="899" height="510" class="aligncenter size-full wp-image-2812" srcset="/wp-content/uploads/2015/08/after_ssl_update.png 899w, /wp-content/uploads/2015/08/after_ssl_update-170x96.png 170w, /wp-content/uploads/2015/08/after_ssl_update-300x170.png 300w" sizes="(max-width: 899px) 100vw, 899px" />](/wp-content/uploads/2015/08/after_ssl_update.png)
 
-Упоминания по теме:  
+References:  
 * [ivoras.net/perfect-forward-secrecy-pfs.html](http://ivoras.net/blog/tree/2013-10-21.apache-2.2-and-perfect-forward-secrecy-pfs.html)
 * [serverfault.com/disable-sslcompression-on-apache](http://serverfault.com/questions/455450/how-to-disable-sslcompression-on-apache-httpd-2-2-15-defense-against-crime-bea)

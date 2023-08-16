@@ -1,8 +1,8 @@
 ---
 id: 602
-title: Установка Apache mod_evasive.
+title: Install Apache mod_evasive.
 date: 2016-02-29T09:09:38+00:00
-author: admin
+author: yaroslav.yarmoshyk
 
 guid: http://www.tech-notes.net/?p=602
 permalink: /apache-mod_evasive/
@@ -10,29 +10,33 @@ image: /wp-content/uploads/2016/02/images.jpg
 categories:
   - Apache
 ---
-`Mod_evasive`, ранее известный как `mod_dosevasive`, помогает защититься от атак `DoS`, `DDoS` (распределенный отказ в обслуживании), и атак типа `brute force` на веб-сервере `Apache`. Это может обеспечить отвлекающее действие во время атаки и сообщать о атаке по электронной почте. Модуль работает путем создания встроенной динамической таблицы IP-адресов и URI, а также блокировку IP-адреса из в случае выполнения следующих действий:
-  * Запрашивающая ту же страницу больше, чем несколько раз в секунду
-  * Создание более 50 одновременных запросов на того же ребенка в секунду
-  * Внесение каких-либо запросов в то время как временно занесен в черный список
+## Description
+`Mod_evasive`, formerly known as `mod_dosevasive`, helps to safeguard your `Apache` web server against `DoS`, `DDoS` (Distributed Denial of Service), and brute force attacks. It's designed to take action during an attack and even alert you via email.
 
-Для установки в среде RHEL/CentOS воспользуйтесь yum:
+The module works by creating an internal dynamic table of IP addresses and URIs, as well as blocking IP addresses based on the following actions:
+* Requesting the same page more than a few times per second.
+* Creating more than 50 concurrent requests to the same child per second.
+* Making any requests while temporarily blacklisted.
 
+## Installation
+To install mod_evasive on RHEL/CentOS systems, use the following command:
 ```bash
 yum install mod_evasive
 ```
-Для установки в среде Debian/Ubuntu воспользуйтесь apt:
 
+If you're using Debian/Ubuntu, you can install mod_evasive with the following command
 ```bash
 apt-get install libapache2-mod-evasive
 ```
 
-Конфигурационный файл (mod_evasive.conf) находится в папке web сервера, на пример:
+## Configuration
+The configuration file for mod_evasive is named mod_evasive.conf and can be found in your web server's configuration directory. For instance:
 
 ```bash
 /etc/httpd/conf.d/mod_evasive.conf
 ```
-Выглядит следующим образом:
 
+Here's an example of the configuration settings:
 ```bash
 <ifmodule mod_evasive20.c>
   DOSHashTableSize 3097
@@ -47,18 +51,19 @@ apt-get install libapache2-mod-evasive
 ```
 
 
-Немного поянений:
-  * **DOSHashTableSize** - размер хэш таблыцы, который указывает максимальное количество нод для каждой дочерней таблицы. Увеличение этого значения приведет к приросту производительности, поскольку уменьшится количество итераций для поиска нужной записи, но при этом увеличится выделение памяти.
-  * **DOSPageCount** - максимально допустимое количество запросов к одной странице с одного ip за заданый промежуток времени.
-  * **DOSPageInterval** - интервал времени для DOSPageCount. По умолчанию 1 секунда.
-  * **DOSSiteCount** - максимально допустимое количество запросов к сайту с одного ip за заданый промежуток времени.
-  * **DOSSiteInterval**- интервал времени для DOSSiteCount. По умолчанию 1 секунда.
-  * **DOSBlockingPeriod** - время, на которое блокируется атакующий ip.
-  * **DOSEmailNotify** - куда слать уведомления.
-  * **DOSLogDir** - куда писать логи
-  * **DOSWhitelist** - список исключенных ip адресов.
+Explanation of Configuration Parameters
+* **DOSHashTableSize**: This sets the size of the hash table used to store IP addresses and URIs.
+* **DOSPageCount**: Defines the maximum number of requests allowed from a single IP to a single page within a specific time interval.
+* **DOSPageInterval**: The time interval considered for DOSPageCount.
+* **DOSSiteCount**: Specifies the maximum number of requests allowed from a single IP to the entire site within a specific time interval.
+* **DOSSiteInterval**: The time interval considered for DOSSiteCount.
+* **DOSBlockingPeriod**: This determines the time duration an attacking IP is blocked.
+* **DOSEmailNotify**: You can set an email address here to receive notifications about attacks.
+* **DOSLogDir**: This is the directory where logs will be stored.
+* **DOSWhitelist**: You can provide a list of IP addresses that are exempt from these protective measures.
 
-Для проверки воспользуемся скриптом, который предоставляется с исходниками:
+## Testing
+To assess the effectiveness of mod_dosevasive, you can use the `Perl` script provided below:
 ```perl
 #!/usr/bin/perl
 # test.pl: small script to test mod_dosevasive's effectiveness  
@@ -75,3 +80,4 @@ for(0..100) {
   close($SOCKET);
 }
 ```
+This script simulates a series of requests to evaluate how the module reacts to them.

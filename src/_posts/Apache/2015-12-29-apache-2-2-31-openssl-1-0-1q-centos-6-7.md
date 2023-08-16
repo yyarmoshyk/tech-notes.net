@@ -1,8 +1,8 @@
 ---
 id: 3042
-title: Apache 2.2.31 OpenSSL 1.0.1q на CentOS 6.7
+title: Upgrading Apache 2.2.31 OpenSSL 1.0.1q on CentOS 6.7
 date: 2015-12-29T09:05:45+00:00
-author: admin
+author: yaroslav.yarmoshyk
 
 guid: http://www.tech-notes.net/?p=3042
 permalink: /apache-2-2-31-openssl-1-0-1q-centos-6-7/
@@ -15,65 +15,57 @@ tags:
   - centos
   - openssl
 ---
-В последнее время все чаще стал сталкиваться с тем, что на серверах нужно каким-то образом обновлять openssl до последней версии.
+In recent times, I've increasingly encountered the need to update OpenSSL to its latest version on servers. Unfortunately, so much relies on the OpenSSL libraries within the server that replacing them entirely isn't feasible – or if attempted, it could yield disastrous results. I once managed to compile an RPM package of `OpenSSL 1.0.1n` for CentOS 6.5, successfully replacing `OpenSSL 1.0.1e`. However, post-replacement, both Apache and MySQL daemons stopped working. They continued to search for libraries from `OpenSSL 1.0.1e` and couldn't recognize 1.0.1n.
 
-К сожалению от библиотек OpenSSL зависит очень многое на сервере, поэтому глобально его заменить не получится. Вернее получится, но это приведет к плачевным результатам. Мне как-то удалось собрать rpm пакет `OpenSSL 1.0.1n` для `CentOS 6.5`, который успешно заменил OpenSSL 1.0.1e, но после этого на сервере перестали работать демоны Apache и MySQL. Они упорно продолжали искать библиотеки от OpenSSL 1.0.1e и не понимали что такое 1.0.1n.
+Recently, the issue caught up with me, and I decided to find a solution to this problem.
 
-Пару дней назад меня все же добили, и я решил вернуться к поискам решения этой проблемы.
+As it turns out, clarity often comes when cigarettes are set aside. A non-smoking version of myself realized that there was no need to completely replace the system OpenSSL libraries. Instead, I could compile the latest OpenSSL version using source code, while leaving the system OpenSSL in place. From this base, I could create an Apache module. Fortunately (though I was unhappy at the time), the client also required the latest version of Apache 2.2, which wasn't available in CentOS 6.7 repositories.
 
-Без сигарет мозг работает лучше, как оказывается. И вот уже некурящий я понял, что не обязательно переписывать системные библиотеки OpenSSL. Можно скомпилировать последний OpenSSL используя пакет с исходным кодом, при этом оставить системный OpenSSL. На основе его уже создать модуль для Apache. К моему счастью (как потом оказалось. изначально я был несчастлив) клиенту нужен был еще и Apache последней версии ветки 2.2, который в репозитариях CentOS 6.7 недоступен.
-
-На подготовительном этапе установим пару пакетов:
-
+To begin, let's install a couple of packages:
 ```bash
 yum install gcc make zlib-devel wget
 ```
 
-Дальше я буду работать в папке `/usr/local/src`. Вы можете выбрать любую другую на свое усмотрение.
+Next, I'll work in the `/usr/local/src` folder, though you can choose any location you prefer.
 
-## Начинаем мы с OpenSSL.
+## Starting with OpenSSL.
 
-На момент написания этой статьи заменой для 1.0.1e был 1.0.1q. Его и качаем:
-
+At the time of writing this article, the replacement for `1.0.1e` was `1.0.1q`. Let's download it
 ```bash
 wget https://www.openssl.org/source/openssl-1.0.1q.tar.gz
 ```
 
-Все собирается очень просто. Главное - не забыть создать `shared` библиотеку:
-
+Compiling is straightforward. The key is to remember to create a shared library:
 ```bash
 ./config -prefix=/opt/openssl -openssldir=/opt/openssl/openssl -shared  
 make  
 make install
 ```
 
-После этого все компоненты, будут лежать в папке `/opt/openssl`.
+After this, all components will reside in the `/opt/openssl` directory.
 
-Некоторые люди любят использовать префикс `/usr/local`. В таком случае все файлы после компиляции будут расположены в следующих папках:
-  * /usr/local/bin
-  * /usr/local/include
-  * /usr/local/lib
-  * /usr/local/openssl
+Some people prefer using the prefix `/usr/local`. In that case, after compilation, files will be located in the following folders:
+* /usr/local/bin
+* /usr/local/include
+* /usr/local/lib
+* /usr/local/openssl
 
-Любой другой пакет OpenSSL можно собрать по аналогии.
+You can compile any other OpenSSL package similarly.
 
-Для удобства использования можно слинковать бинарник в папку из переменного окружения $PATH:
-
+For ease of use, you can symlink the binary to a folder within the $PATH environment variable
 ```bash
 ln -s /opt/openssl/bin/openssl /usr/bin/openssl101q
 ```
 
-Для коректной работы openssl требует Perl модуль &#8216;WWW::Curl::Easy&#8217;.
-
+To ensure proper functionality, OpenSSL requires the Perl module `WWW::Curl::Easy`:
 ```bash
 yum install perl-WWW-Curl.x86_64
 ```
 
 ## Apache
+The Apache version is not critical. I needed the latest version from the 2.2 branch.
 
-Версия Apache не критична. У меня в требованиях было использование последней версии ветки 2.2.
-
-Скачиваем и распаковываем:
+Download and extract it:
 
 ```bash
 wget http://ftp.ps.pl/pub/apache/httpd/httpd-2.2.31.tar.gz  
@@ -81,85 +73,75 @@ tar xf httpd-2.2.31.tar.gz
 cd httpd-2.2.31
 ```
 
-Минимальный набор опций для скрипта configure будет следующим:
-
+The minimal set of options for the configure script will be:
 ```bash
 ./configure -prefix=/opt/httpd2 -with-included-apr **-enable-ssl=shared -with-ssl=/opt/openssl -enable-ssl-staticlib-deps**
 ```
 
-Полный набор модулей будет собран с помощью следующей комбинации опций для configure, при этом каждый модуль будет представлен в виде отдельного файла с расширением `so`:
-
+The full set of modules can be compiled using the following combination of configure options. Each module will be represented as a separate `.so` file:
 ```bash
 ./configure -prefix=/opt/httpd2 -enable-ssl=shared -with-ssl=/opt/openssl -enable-ssl-staticlib-deps=shared -enable-mods-static=ssl=shared -enable-exception-hook=shared -enable-maintainer-mode=shared -enable-pie=shared -enable-authn-dbm=shared -enable-authn-anon=shared -enable-authn-dbd=shared -enable-authn-alias=shared -enable-isapi=shared -enable-file-cache=shared -enable-cache=shared -enable-disk-cache=shared -enable-mem-cache=shared -enable-dbd=shared -enable-reqtimeout=shared -enable-ext-filter=shared -enable-substitute=shared -enable-charset-lite=shared -enable-deflate=shared -enable-log-forensic=shared -enable-logio=shared -enable-mime-magic=shared -enable-cern-meta=shared -enable-expires=shared -enable-headers=shared -enable-ident=shared -enable-usertrack=shared -enable-unique-id=shared -enable-proxy=shared -enable-proxy-connect=shared -enable-proxy-http=shared -enable-proxy-scgi=shared -enable-proxy-ajp=shared -enable-proxy-balancer=shared -enable-optional-hook-export=shared -enable-optional-hook-import=shared -enable-optional-fn-import=shared -enable-optional-fn-export=shared -enable-dav=shared -enable-info=shared -enable-suexec=shared -enable-cgi=shared -enable-cgid=shared -enable-dav-fs=shared -enable-dav-lock=shared -enable-vhost-alias=shared -enable-imagemap=shared -enable-speling=shared -enable-rewrite=shared -enable-so -enable-http
 ```
 
-Если Вы получили слудеющую ошибку, значит `zlib-devel` отсутствует в системе:
-
+If you encounter the following error, it means `zlib-devel` is missing in the system:
 ```bash
 mod_deflate... configure: error: mod_deflate has been requested but can not be built due to prerequisite failures
 ```
 
-Осталось дело за малым:
-
+The finishing touch:
 ```bash
 make  
 make install
 ```
 
-По завершении компиляции все файлы будут лежать в папке `/opt/httpd2`.  
-Осталось создать init скрипт и добавить сервис на автозагрузку.
-
+Once compilation is complete, files will be in the `/opt/httpd2` directory. To finalize, create an init script and add the service to auto-start.
 ```bash
 wget -O /etc/init.d/httpd2 /wp-content/uploads/2015/12/httpd2  
 chmod +x /etc/init.d/httpd2  
 chkconfig httpd2 on
 ```
 
-Во время сборки нужные библиотеки не были скопированы в папку Apache, поэтому демон откажется запускаться. Выполните следующее:
-
+During the build, necessary libraries were not copied to the Apache folder, causing the daemon to fail to start. Execute the following:
 ```bash
 ln -s /opt/openssl/lib/libcrypto.so.1.0.0 /opt/httpd2/lib/  
 ln -s /opt/openssl/lib/libssl.so.1.0.0 /opt/httpd2/lib/
 ```
 
-Теперь можно запускать:
-
+Now, let's start it
 ```bash
 /etc/init.d/httpd2 start
 ```
 
-Линкуем apachectl:
-
+Link `apachectl`:
 ```bash
 ln -s /opt/httpd2/bin/apachectl /usr/sbin/apachectl2
 ```
 
-Для проверки можно воспользоваться утилитой telnet. Будучи в косоли сервера выполните:
-
+You can use the `telnet` utility for verification. While in the server console, run
 ```bash
 telnet localhost 80
 ```
 
-После того как увидие приветствие от сервера apache, выполните:
+Once you receive the greeting from the `Apache` server, execute:
 
 ```bash
 HEAD / HTTP/1.0
 ```
 
-По умолчанию Apache настроен показывать все заголовки, поэтому в ответ вы должны увидеть следующее:  
+By default, Apache is configured to display all headers, so you should see the following in response:  
 <img src="/wp-content/uploads/2015/12/apach-openssl.png" alt="apach-openssl" width="548" height="225" class="aligncenter size-full wp-image-3053" srcset="/wp-content/uploads/2015/12/apach-openssl.png 548w, /wp-content/uploads/2015/12/apach-openssl-170x70.png 170w, /wp-content/uploads/2015/12/apach-openssl-300x123.png 300w" sizes="(max-width: 548px) 100vw, 548px" />
 
-## Послесловие
+## Conclusion
 
-После этого Вы можете без лишней головной боли обновлять как `Apache` так и `OpenSSL` по мере выхода новых версий.
+Following this, you can update both `Apache` and `OpenSSL` effortlessly as new versions are released.
 
-Полезными могут быть следующие статьи:
-  * [Затыкаем слабые места в настройках SSL Apache](/forward-secrecy-rc4-poodle-sslcompression/)
-  * [Установка PHP из исходников](/compile-php-5-5-10-from-sources/)
-  * [Установка mod_security для Apache](/install-modsecurity-for-apache/)
-  * [Установка mod_geoip](/mod_geoip-from-sources-apache/)
-  * [Создаем безопасный WEB сервер](/create-secure-web-server/)
+The following articles can be useful:
+  * [Securing Weak Points in SSL Apache Settings](/forward-secrecy-rc4-poodle-sslcompression/)
+  * [Compiling PHP from Source](/compile-php-5-5-10-from-sources/)
+  * [Installing mod_security for Apache](/install-modsecurity-for-apache/)
+  * [Installing mod_geoip](/mod_geoip-from-sources-apache/)
+  * [Creating a Secure Web Server](/create-secure-web-server/)
 
-При написании статьи использовались следующие ресурсы:  
+The following resources were used in writing the article:  
 * [blog.ivanristic.com](http://blog.ivanristic.com/2013/08/compiling-apache-with-static-openssl.html)
 * [dan.drydog.com](http://dan.drydog.com/apache2php.html)

@@ -2,7 +2,7 @@
 id: 2586
 title: Use mod_substitute in Apache
 date: 2015-05-15T14:48:43+00:00
-author: admin
+author: yaroslav.yarmoshyk
 
 guid: http://www.tech-notes.net/?p=2586
 permalink: /use-mod_substitute-in-apache2/
@@ -10,7 +10,7 @@ image: /wp-content/uploads/2015/05/SearchReplaceSheet.png
 categories:
   - Apache
 tags:
-  -mod_substitute
+  - mod_substitute
 ---
 The essence [mod_substitute](http://httpd.apache.org/docs/2.4/mod/mod_substitute.html) is to replace the text in the body of the response from the web server. With it you can change for example links to one domain with links to another domain without interfering with the site code.
 
