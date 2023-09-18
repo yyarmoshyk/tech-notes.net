@@ -4,7 +4,8 @@ title: Virtual users in Pure-Ftp
 date: 2014-10-08T14:43:23+00:00
 author: admin
 
-guid: http://www.tech-notes.net/?p=1865
+canonical_url: 'https://www.tech-notes.net/pure-ftpd-virtual-users/'
+
 permalink: /pure-ftpd-virtual-users/
 image: /wp-content/uploads/2014/10/pure-ftpd-logo.png
 categories:

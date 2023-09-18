@@ -4,7 +4,8 @@ title: Using virtual users in Vsftpd
 date: 2014-09-15T12:54:12+00:00
 author: admin
 
-guid: http://www.tech-notes.net/?p=1699
+canonical_url: 'https://www.tech-notes.net/create-virtual-users-in-vsftpd/'
+
 permalink: /create-virtual-users-in-vsftpd/
 image: /wp-content/uploads/2014/09/vsftpd_logo.png
 categories:

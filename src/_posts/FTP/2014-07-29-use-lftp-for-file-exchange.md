@@ -6,6 +6,8 @@ author: admin
 
 guid: http://www.tech-notes.net/?p=1325
 permalink: /use-lftp-for-file-exchange/
+canonical_url: 'https://www.tech-notes.net/use-lftp-for-file-exchange'
+
 image: /wp-content/uploads/2014/07/ftp-logo_thumb2.jpg
 categories:
   - FTP

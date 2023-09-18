@@ -4,7 +4,8 @@ title: Certificate verification error in Lftp
 date: 2015-01-28T14:29:39+00:00
 author: admin
 
-guid: http://www.tech-notes.net/?p=2330
+canonical_url: 'https://www.tech-notes.net/lftp-certificate-verification-error/'
+
 permalink: /lftp-certificate-verification-error/
 image: /wp-content/uploads/2014/09/thinknook-new-logo3.png
 categories:
