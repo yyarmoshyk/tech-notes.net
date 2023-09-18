@@ -5,7 +5,6 @@ date: 2023-09-18T00:00:00+00:00
 author: admin
 
 permalink: /git-cheatsheet/
-image: /wp-content/uploads/2014/07/ftp-logo_thumb2.jpg
 categories:
   - git
 tags:
