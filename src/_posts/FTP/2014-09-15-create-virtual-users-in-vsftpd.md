@@ -1,6 +1,6 @@
 ---
 id: 1699
-title: Использование виртуальных пользователей в Vsftpd
+title: Using virtual users in Vsftpd
 date: 2014-09-15T12:54:12+00:00
 author: admin
 
@@ -12,15 +12,14 @@ categories:
 tags:
   - vsftpd
 ---
-Эта заметка поведает о том, как создать виртуальных пользователей в vsftpd.  
+This post will show you how to create virtual users in vsftpd.
 
-Для начала сделаем резервную копию конфигурационного файла:
-
+First, let's make a backup copy of the configuration file:
 ```bash
 cp /etc/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf.bak$(date +%m-%d-%Y)
 ```
 
-Теперь редактиреум `/etc/vsftpd/vsftpd.conf`. Вам нужно удостоваериться, что следующие директивы выставлены верно:
+Now edit the `/etc/vsftpd/vsftpd.conf`. You need to make sure that the following directives are set correctly:
 
 ```bash
 chown_uploads=YES
@@ -49,7 +48,7 @@ chroot_local_user=YES
 hide_ids=YES
 ```
 
-Редактируем файл `/etc/pam.d/vsftpd` слудющими строками:
+Edit the file `/etc/pam.d/vsftpd` with the following:
 
 ```bash
 @include common-session  
@@ -58,13 +57,12 @@ account required pam_userdb.so db=/etc/vsftpd/virtual_users
 session required pam_loginuid.so
 ```
 
-В случае с Linux Ubuntu в файле могут присутствовать другие строки. Их нужно закоментировать иначе не заработает. В логах при этом будет появляться следующее сообщение при доступе к серверу:
-
+In the case of Linux Ubuntu there might be otherconfiguration lines in the file. They need to be commented out, otherwise it won’t work. The following message will appear in the logs when accessing the server:
 ```bash
 vsftpd: pam_unix(vsftpd:auth): authentication failure; logname= uid=0 euid=0 tty=ftp
 ```
 
-Создаем файл `/root/ftp_users.txt` и вносим в него имена пользователей и их пароли построчно:
+Create `/root/ftp_users.txt` and enter user names and passwords into it line by line:
 
 ```bash
 ftpuser  
@@ -72,10 +70,11 @@ userpassword
 ```
 
 Создаем базу виртуальных пользователей, предварительно сделав резервную копию текущей:
+Next create a database of virtual users. Make sure to backup the current one:
 
 ```bash
 cp /etc/vsftpd/virtual_users.db /etc/vsftpd/virtual_users.db.bak$(date +%m-%d-%Y)  
 db_load -T -t hash -f /root/ftp_users.txt /etc/vsftpd/virtual_users.db
 ```
 
-Перезапускаем демон `vsftpd` что бы исменения вступили в силу.
+Restart the `vsftpd` daemon for the changes to take effect.

@@ -1,6 +1,6 @@
 ---
 id: 1325
-title: Использование lftp для обмена файлами с ftp сервером в Linux
+title: Usage of lftp to work with files on ftp server from Linux
 date: 2014-07-29T09:09:44+00:00
 author: admin
 
@@ -12,10 +12,9 @@ categories:
 tags:
   - lftp
 ---
-`lftp` - утилита командной строки, которая позволяет обмениваться данными с ftp и http серверами. lftp имеет функционал зеркалирования, который позволяет загружать или рекурсивно обновлять дерево каталогов. Она также имеет функционал обратного зеркалирования (mirror -R), который позволяет рекурсивно обновлять обновлять дерево каталогов на удаленном сервере. Зеркалирование также позволяет синхронизировать папки между двумя удаленными серверами.
+`lftp` is a command line utility that allows you to exchange data with ftp and http servers. `lftp` has mirroring functionality that allows you to load or recursively update a directory tree. It also has reverse mirroring functionality (`mirror -R`), which allows you to recursively update a directory tree on a remote server. Mirroring also allows you to synchronize folders between two remote servers.
 
-Синтакс использования:
-
+Usage syntax:
 ```bash
 mirror  
 mirror options  
@@ -23,171 +22,130 @@ mirror -c
 mirror -R
 ```
 
-На пример: Как загрузить все файлы с удаленного сервера?
+## For example: How to download all files from a remote server?
 
-Для начала устанавливаем соединение с сервером:
-
+Establish connection:
 ```bash
 lftp ftp.server.com
 ```
 
-Вводим имя пользователя и пароль:
-
+Enter login and password:
 ```bash
 lftp ftp.server.com:~> user username@ftp.server.com  
 Password:
 ```
 
-В результате получаем:
-
+The expected responce from the server is the following:
 ```bash
 lftp username@ftp.server.com:~>  
 Type ls command to see a list of files:
 ```
 
-Вводим `ls` для просмотра содержимого каталога:
-
+Use `ls` to list the contexts of the current catalogue:
 ```bash
 lftp ftp.server.com:~> ls
 ```
 
-В результате получаем листинг каталога:
-
+Expected response:
 ```bash
 -rw-r-r- 1 80 www 36809419 Jun 24 23:59 file1.ext  
 -rw-r-r- 1 80 www 100912271 Jun 25 23:59 file2.ext  
 -rw-r-r- 1 80 www 102926055 Jun 26 23:59 file3.ext
 ```
 
-Для того что бы скопировать все файлы к себе в текущий каталог введите `mirror`:
-
+Use `mirror` to download all files to the current folder:
 ```bash
 lftp ftp.server.com:~> mirror
 ```
 
-Вы можете указать исходный каталог и папку, в которой нужно разместить скачанные файлы (каталог назначения). Если каталог назначения заканчивается символом `/` (слэш), тогда к нему будет дописано имя исходного каталога.
-
+You can specify the source directory and the folder where you want to place the downloaded files (destination directory). If the destination directory ends with a `/` (slash) character, then the name of the source directory will be appended to it.
 ```bash
 lftp ftp.server.com:~> mirror source target
 ```
 
-или
-
+or
 ```bash
 lftp ftp.server.com:~> mirror logs/ /data/wwwlogs
 ```
 
-В этом случае все файлы из папки `logs` на исходном сервере будут скопированы в папку `/data/wwwlogs` на текущем.  
-При использовании следующего синтаксиса, все файлы из папки `logs` будут скопированы в папку `/data/wwwlogs/logs`
+In this case, all files from the `logs` folder on the source server will be copied to the `/data/wwwlogs` folder on the current one.
 
+With the following syntax all files from the `logs` folder will be copied to the `/data/wwwlogs/logs` folder
 ```bash
 lftp ftp.server.com:~> mirror logs/ /data/wwwlogs/
 ```
 
-Рекомендуется использовать mirror с включенной опцией продолжения загрузки, в этом случае не придется заново загружать все файлы в случае разрыва соединения или прерывания трансфера данных:
-
+## Resume download
+It is recommended to use mirror with the resume download option enabled, in this case you will not have to re-download all files if the connection is lost or the data transfer is interrupted:
 ```bash
 lftp ftp.server.com:~> mirror -c source target
 ```
 
-или
-
+or
 ```bash
 lftp ftp.server.com:~> mirror -continue
 ```
 
-Для того что бы скачать только новые/обновленные файлы используем ключ `only-newer`:
-
+## Download only new/updated files
+In order to download only new/updated files, use the `only-newer` key:
 ```bash
 lftp ftp.server.com:~> mirror -only-newer
 ```
 
-или
-
+or
 ```bash
 lftp ftp.server.com:~> mirror -n
 ```
 
-Можно ускорить операцию зеркалирования, включив параллельную загрузку или загрузку файлов в несколько потоков:
-
+## Parallel downloads
+You can speed up the mirroring operation by enabling parallel downloads or downloading files into multiple threads:
 ```bash
 lftp ftp.server.com:~> mirror -P
 ```
 
-Для того что бы загрузить параллельно 10 файлов можно воспользоваться следующей командой:
-
+Parallel download of 10 files:
 ```bash
 lftp ftp.server.com:~> mirror -parallel=10
 ```
 
-Для того что бы загрузить только новые файлы с сервера в 10 потоков:
 
-```bash
-mirror -continue -only-newer -parallel=5 имя_папки имя_папки
-```
+## Publish/upload files to remote
 
-Пример 2: Как загрузить локальные файлы на удаленный сервер?
+Use the key `-R` or `-reverse`
 
-Для заливки файлов на сервер нужно использовать ключ -R или -reverse
-
-Для начала устанавливаем соединение с сервером:
-
-```bash
-lftp ftp.server.com
-```
-
-Вводим имя пользователя и пароль:
-
-```bash
-lftp ftp.server.com:~> user username@ftp.server.com  
-Password:
-```
-
-В результате получаем:
-
-```bash
-lftp username@ftp.server.com:~>  
-Type ls command to see a list of files:
-```
-
-Переходим в папку /home/project/website/version5/:
+Go to desired folder (in this example it is `/home/project/website/version5/`):
 
 ```bash
 lftp ftp.server.com:~> lcd /home/project/website/version5/
 ```
 
-Вывод:
-
+Expected output is the following:
 ```bash
 lcd ok, local cwd=/home/project/website/version5
 ```
 
-Для того, что бы загрузить файлы на сервер, используйте следующий синтаксис:
-
+Upload syntax:
 ```bash
 lftp ftp.server.com:~> mirror -R
 ```
 
-Можно указать локальный и удаленный каталог:
+You can specify local and remote folder:
 
 ```bash
 lftp ftp.server.com~> mirror -R /home/user/projects/website /var/www/html
 ```
 
-Одной командой:
-
+Oneliner command in bash:
 ```bash
 lftp -e 'mirror -parallel=10 -R /home/user/projects/website /var/www/html' -u логин,пароль адрес_сервера
 ```
 
-Если в ходе работы с удаленным сервером вы получили следующую ошибку:
-
+If you receive the following error while working with a remote server
 ```bash
 521 Data connection cannot be opened with this PROT setting.
 ```
 
-Тогда выполните следующие команды и повторите последнюю операцию:
-
+Than do the following and re-try the operation:
 ```bash
 set ftp:ssl-force true  
 set ftp:ssl-protect-data true
