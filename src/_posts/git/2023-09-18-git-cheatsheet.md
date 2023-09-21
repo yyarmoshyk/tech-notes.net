@@ -39,3 +39,12 @@ find the commit sha from the previous command:
 ```bash
 git checkout **COMMIT_SHA**
 ```
+alternative way to roll back to the previous commit:
+```bash
+git reset **COMMIT_SHA**
+```
+In this case all the files will remain modified. So you nedd to reset the changes and force push to remote:
+```bash
+git reset --hard
+git push -ff
+```
