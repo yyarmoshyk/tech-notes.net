@@ -1,6 +1,6 @@
 ---
 id: 3230
-title: Как настроить Exim использовать SendGrid для отправки почты
+title: How to configure Exim to use SendGrid to send mail
 date: 2016-03-01T13:26:31+00:00
 author: admin
 
@@ -8,61 +8,60 @@ guid: http://www.tech-notes.net/?p=3230
 permalink: /configure-exim-to-use-sendgrid/
 image: /wp-content/uploads/2016/03/exim-logo.png
 categories:
-  - Почта
+  - Email
 tags:
   - Exim
   - Sendgrid
   - WHM
 ---
-Продолжаю линейку статей о почтовых сервисах пока не улетучилось вдохновление от недавно решенных проблем.
+I continue my series of articles about email services until the inspiration from the recently solved problems wears off.
 
-Я уже описывал как [настроить PostFix отправлять почту через MailGun](http://www.tech-notes.net/configure-postfix-use-mailgun/).
+I have already described how to [configure PostFix to send mail via MailGun](http://www.tech-notes.net/configure-postfix-use-mailgun/).
 
-В этой статье речь пойдет о настройке `Exim` для ипользования сервиса доставки почты [SendGrid](https://sendgrid.com/).
+This article will discuss how to configure `Exim` to use the [SendGrid](https://sendgrid.com/) mail delivery service.
 
-Очень удачно совпадает описание настройки разных почтовых сервисов на разных почтовых демонах.
+The description of setting up different mail services on different mail daemons coincides very well.
 
-У меня есть сервер с панелью WHM + Exim. Я зарегистрировал бесплатную учетную запись в SendGrid.
+I have a server with WHM + Exim panel. I signed up for a free account with SendGrid.
 
-Приступаем к настройке. Для начала в панель WHM найдите `Exim Configuration Manager`  
-<img src="/wp-content/uploads/2016/03/Screenshot-from-2016-03-01-135938.png" alt="Screenshot from 2016-03-01 13:59:38" width="412" height="301" class="aligncenter size-full wp-image-3232" srcset="/wp-content/uploads/2016/03/Screenshot-from-2016-03-01-135938.png 412w, /wp-content/uploads/2016/03/Screenshot-from-2016-03-01-135938-170x124.png 170w, /wp-content/uploads/2016/03/Screenshot-from-2016-03-01-135938-300x219.png 300w" sizes="(max-width: 412px) 100vw, 412px" />
+First, in the WHM panel, find `Exim Configuration Manager`
+<img src="/wp-content/uploads/2016/03/Screenshot-from-2016-03-01-135938.png" alt="Screenshot from 2016-03-01 13:59:38" width="412 " height="301" class="aligncenter size-full wp-image-3232" srcset="/wp-content/uploads/2016/03/Screenshot-from-2016-03-01-135938.png 412w, /wp -content/uploads/2016/03/Screenshot-from-2016-03-01-135938-170x124.png 170w, /wp-content/uploads/2016/03/Screenshot-from-2016-03-01-135938-300x219 .png 300w" sizes="(max-width: 412px) 100vw, 412px" />
 
-Переходим на вкладку ``Advanced Editor`` и ищем секцию ``Section: AUTH``. В текстовое поле нужно вставить информацию для авторизацци в sendgrid:
+Go to the ``Advanced Editor`` tab and look for the ``Section: AUTH`` section. In the text field you need to insert information for authorization in sendgrid:
 
 ```bash
 sendgrid_login:
-  driver = plaintext
-  public_name = LOGIN
-  client_send = : <strong>login@email.com</strong> : %password%
+   driver = plaintext
+   public_name = LOGIN
+   client_send = : login@email.com : %password%
 ```
 
 
-Дальше ищем секцию ``Section: ROUTERSTART``. Вставляем в нее слудующее:
+Next we look for the section ``Section: ROUTERSTART``. We insert the following into it:
 
 ```bash
 send_via_sendgrid:
-  driver = manualroute
-  domains = ! +local_domains
-  transport = sendgrid_smtp
-  route_list = "* smtp.sendgrid.net::587 byname"
-  host_find_failed = defer
-  no_more
+   driver=manualroute
+   domains = ! +local_domains
+   transport = sendgrid_smtp
+   route_list = "* smtp.sendgrid.net::587 byname"
+   host_find_failed = defer
+   no_more
 ```
 
 
-Осталось указать транспорт. Для этого находим ``Section: TRANSPORTSTART`` и прописываем в текстовом поле следующее:
-
+All that remains is to specify the transport. To do this, find ``Section: TRANSPORTSTART`` and enter the following in the text field:
 ```bash
 sendgrid_smtp:
-  driver = smtp
-  hosts = smtp.sendgrid.net
-  hosts_require_auth = smtp.sendgrid.net
-  hosts_require_tls = smtp.sendgrid.net
+   driver = smtp
+   hosts = smtp.sendgrid.net
+   hosts_require_auth = smtp.sendgrid.net
+   hosts_require_tls = smtp.sendgrid.net
 
 ```
 
 
-Если вы хотите [использовать DKIM](http://www.tech-notes.net/use-dkim-to-sign-outgoing-mail/) тогда `TRANSPORTSTART` - именно то место, в которое нужно добавить конфигурацию:
+If you want to [use DKIM](http://www.tech-notes.net/use-dkim-to-sign-outgoing-mail/) then `TRANSPORTSTART` is exactly the place to add the configuration:
 
 ```bash
 DKIM_CANON = relaxed
